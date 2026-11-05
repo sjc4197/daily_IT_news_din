@@ -101,3 +101,11 @@ source: TechCrunch
 url: https://techcrunch.com/2026/11/03/data-centers-are-turning-to-old-jet-engines-as-the-wait-for-power-grows/
 summary: 전력망 연결과 신규 터빈 대기가 수년씩 걸리자 xAI, Crusoe 등이 천연가스용으로 개조한 제트엔진으로 자체 발전에 나섰다.
 효율과 배출 면에서 불리하지만 속도가 우선인 AI 인프라 경쟁의 단면이다.
+---
+title: OpenAI, 에이전트 시대 대응 Git 호환 백엔드 Pando 공개
+category: IT
+importance: 3
+source: OpenAI
+url: https://openai.com/index/scaling-git-at-openai/
+summary: Codex 같은 코딩 에이전트가 병렬로 푸시·CI 페치를 쏟아내자 OpenAI가 Git 호환 서버 백엔드 Pando를 직접 만들어 메인 모노레포에 적용했다. 브랜치별 독립 조정과 불변 팩 저장 구조로 운영 환경의 중앙값 푸시 지연을 약 80% 줄였다고 밝혔다.
+AI 에이전트가 늘면 저장소·CI 인프라가 새 병목이 된다는 점을 보여주는 사례다.
