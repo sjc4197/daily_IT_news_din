@@ -1,0 +1,103 @@
+title: CISA, WordPress 코어 업그레이드 중 레이스 컨디션 취약점 실제 악용 확인
+category: IT
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/cisa-confirms-hackers-exploiting.html
+summary: WordPress 코어 전체 패키지 업그레이드 시 예측 가능한 스테이징 경로를 노린 TOCTOU 취약점(CVE-2026-119977, CVSS 8.1)이 CISA KEV에 등재됐다.
+인증 없이 서버에서 코드 실행이 가능하고 공개 직후 수만 건의 공격 시도가 관측돼, 운영 중인 WordPress는 즉시 패치가 필요하다.
+---
+title: Debian·Ubuntu APT 재시도 로직 취약점, MitM으로 검증된 패키지 바꿔치기 후 root 실행
+category: IT
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/debian-and-ubuntu-apt-flaw-lets-mitm.html
+summary: APT가 실패한 다운로드를 재시도할 때 HTTP 다운로드를 조작할 수 있는 공격자가 악성 패키지를 끼워 넣을 수 있다(CVE-2026-109518). Debian 12, Ubuntu 22.04 이상이 기본 영향권이다.
+서버·CI 이미지의 APT 업데이트와 HTTPS 미러 사용 여부를 바로 점검해야 한다.
+---
+title: OpenAI 에이전트 파이프라인, 30시간 만에 Linux 권한 상승 익스플로잇 948개 생성
+category: AI
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/openai-ai-pipeline-generates-948-linux.html
+summary: OpenAI가 차기 보안 특화 모델 기반 파이프라인으로 Linux 취약점 1,724건을 재현하고 실제 동작하는 로컬 권한 상승 익스플로잇 948개를 만들었다고 밝혔다. 비용은 약 120만 달러였고 사람 검토를 거쳐 메인테이너에 보고됐다.
+AI가 취약점 발견·악용 속도를 크게 끌어올리고 있어 패치 주기 단축이 더 절실해졌다.
+---
+title: Rails Active Storage 치명적 취약점, ImageMagick 업로드로 서버 파일 쓰기 가능
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/critical-rails-flaw-lets-attackers.html
+summary: 인증 없이 조작된 업로드 파일로 서버에 임의 파일을 쓸 수 있는 CVSS 9.8 취약점(GHSA-f3w6-w445-fwh9)이 공개됐다. 8.1.4.1, 8.0.5.2에서 수정됐고 mini_magick 사용 시 5.1 이상도 필요하다.
+구버전 시리즈는 수정되지 않으므로 업그레이드 계획을 세워야 한다.
+---
+title: Xen 하이퍼바이저 grant-copy 취약점, 악성 VM이 다른 VM과 dom0 메모리 읽기·쓰기
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/xen-hypervisor-flaws-let-one-malicious.html
+summary: XSA-523(CVE-2026-102703, CVE-2026-102704)으로 Xen 4.6 이상 전 버전이 영향을 받는다. 4.17~4.19 계열과 XCP-ng, Qubes OS에 패치가 나왔지만 4.6~4.16은 업스트림 패치가 없다.
+멀티테넌트 가상화 환경의 격리를 무너뜨리는 유형이라 인프라 운영자는 우선 대응해야 한다.
+---
+title: Google 11월 Android 보안 패치, 사용자 개입 없는 원격 코드 실행 취약점 수정
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/google-patches-critical-android-flaw.html
+summary: FrameDecoder.cpp의 힙 버퍼 오버플로(CVE-2026-58868)로 Android 14~17이 영향을 받으며 2026-11-01 패치 레벨부터 수정된다.
+제조사·통신사 배포 일정에 따라 적용 시점이 달라지므로 사내 단말 패치 레벨 확인이 필요하다.
+---
+title: Binance 64억 달러 탈취 경위 공개, 트로이목마 Homebrew 설치와 가짜 채용 면접이 시작점
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/binance-reveals-how-fake-job-interviews.html
+summary: AI 도구를 찾던 엔지니어가 오염된 Homebrew 패키지를 설치했고, 이후 가짜 면접 과제 저장소 실행과 내부 AI 도구 악용, 탈취한 컨테이너 배포 토큰으로 공격이 이어졌다.
+개발자 PC와 배포 토큰이 곧 최대 공격면이라는 점을 보여주는 사례다.
+---
+title: Revolut, 자체 호스팅 GLM 모델로 전환해 AI 코딩 비용 약 90% 절감
+category: AI
+importance: 4
+source: The Register
+url: https://www.theregister.com/ai-and-ml/2026/11/03/british-fintech-revolut-slashes-ai-coding-costs-10x-by-cutting-out-claude-and-going-self-hosted/5307345
+summary: Revolut이 엔지니어 약 2,000명에게 GLM-5.3을 Nvidia B200 56장으로 자체 서빙해 기본 코딩 모델로 쓰고 있다고 밝혔다. 코딩 시간 60%, 리드 타임 70% 개선을 주장했다.
+상용 API 대신 오픈 가중치 모델 자체 호스팅이 비용 측면에서 현실적 대안이 되고 있다는 신호다.
+---
+title: OpenAI Codex 탈옥 툴킷에 숨은 프롬프트 애드웨어 발견
+category: AI
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/researchers-uncover-prompt-adware.html
+summary: Check Point가 Haiou 탈옥 번들이 Codex 설정 파일을 몰래 수정해 응답에 제3자 LLM 게이트웨이 광고를 삽입하는 수법을 확인했다.
+서드파티 AI 스킬·설정 파일도 소프트웨어 공급망 위험이 될 수 있다는 점에서 주의가 필요하다.
+---
+title: Anthropic, 출력이 특정 모델에서 나왔음을 증명하는 FlashProve 공개
+category: AI
+importance: 3
+source: TechCrunch
+url: https://techcrunch.com/2026/11/03/anthropic-is-working-on-a-system-to-prove-ai-models-identity/
+summary: 모델 가중치를 공개하지 않고도 암호학적 지문으로 출력의 출처 모델을 검증하는 오픈소스 provable inference 시스템이다. 스펙과 코드는 GitHub에 공개됐지만 실제 배포 계획은 없다.
+API 뒤에서 모델이 바뀌는 문제를 검증할 수단이 생긴다는 점에서 의미가 있다.
+---
+title: OpenAI, ChatGPT Images 2.6 출시와 API용 이미지 모델 2종 공개
+category: AI
+importance: 3
+source: AI Weekly
+url: https://aiweekly.co/alerts/openai-ships-chatgpt-images-26-with-gifs-and-faster-api-models
+summary: 애니메이션 GIF 생성과 참조 이미지 재사용 기능이 추가됐고, API에는 속도형 GPT-Image-2.6 Flare와 품질형 Sunburst가 나왔다. OpenAI는 생성 속도가 50% 빨라졌다고 밝혔다.
+이미지 생성 기능을 서비스에 붙이는 경우 모델 선택지가 늘었다.
+---
+title: AI 추론 스타트업 Fal, 13억 달러 유치하며 기업가치 160억 달러로 두 배
+category: AI
+importance: 3
+source: TechCrunch
+url: https://techcrunch.com/2026/11/03/ai-inference-startup-fal-doubles-its-valuation-to-16b-as-demand-surges/
+summary: 이미지·영상·오디오 모델 추론을 제공하는 Fal이 Bessemer 주도 시리즈 F로 4월 대비 기업가치를 두 배로 키웠다.
+추론 인프라 수요가 급증하는 반면 컴퓨팅 비용 탓에 마진은 얇다는 업계 구조를 보여준다.
+---
+title: 전력 대기 길어지자 데이터센터들 퇴역 제트엔진 발전기 도입
+category: IT
+importance: 2
+source: TechCrunch
+url: https://techcrunch.com/2026/11/03/data-centers-are-turning-to-old-jet-engines-as-the-wait-for-power-grows/
+summary: 전력망 연결과 신규 터빈 대기가 수년씩 걸리자 xAI, Crusoe 등이 천연가스용으로 개조한 제트엔진으로 자체 발전에 나섰다.
+효율과 배출 면에서 불리하지만 속도가 우선인 AI 인프라 경쟁의 단면이다.
