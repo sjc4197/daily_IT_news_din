@@ -13,6 +13,10 @@
 </p>
 
 <p align="center">
+  <b>페이지:</b> <a href="https://sjc4197.github.io/daily_IT_news_din/">https://sjc4197.github.io/daily_IT_news_din/</a>
+</p>
+
+<p align="center">
   <a href="https://sjc4197.github.io/daily_IT_news_din/"><img src="https://img.shields.io/badge/GitHub%20Pages-열기-1b6a7a?style=flat-square&logo=github" alt="GitHub Pages"></a>
   <a href="https://github.com/sjc4197/daily_IT_news_din/commits/main"><img src="https://img.shields.io/github/last-commit/sjc4197/daily_IT_news_din?style=flat-square&label=%EB%A7%88%EC%A7%80%EB%A7%89%20%EC%8A%A4%ED%81%AC%EB%9E%A9&color=b3261e" alt="last commit"></a>
   <a href="FORMAT.md"><img src="https://img.shields.io/badge/%ED%8C%8C%EC%9D%BC%20%EC%96%91%EC%8B%9D-FORMAT.md-6e685c?style=flat-square" alt="FORMAT.md"></a>
