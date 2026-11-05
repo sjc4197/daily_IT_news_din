@@ -1,0 +1,49 @@
+title: [예시] 오픈소스 LLM, 주요 벤치마크에서 상용 모델과 격차 1% 이내로
+category: AI
+importance: 5
+source: 예시 매체
+url: https://example.com/article/1
+summary: 공개 가중치 모델이 코딩·추론 벤치마크에서 상용 최상위 모델에 근접했다.
+사내 모델 선택 기준에 직접 영향을 주므로 필독.
+---
+title: [예시] 주요 클라우드, GPU 인스턴스 가격 20% 인하
+category: IT
+importance: 4
+source: 예시 매체
+url: https://example.com/article/2
+summary: 신형 가속기 공급이 풀리면서 학습·추론 비용이 내려간다. 내년 인프라 예산 재산정 필요.
+---
+title: [예시] 에이전트 프레임워크 1.0 정식 출시, 도구 호출 표준 채택
+category: AI
+importance: 4
+source: 예시 매체
+url: https://example.com/article/3
+summary: 여러 벤더가 같은 도구 호출 규격을 쓰기로 해 에이전트 간 호환성이 좋아진다.
+---
+title: [예시] 국내 통신 3사, 데이터센터 전력 공동 조달 계약
+category: IT
+importance: 3
+source: 예시 매체
+url: https://example.com/article/4
+summary: AI 수요 급증으로 데이터센터 전력 확보가 업계 공통 과제가 됐다.
+---
+title: [예시] 코드 리뷰 자동화 도구, 오탐률 절반으로 감소
+category: AI
+importance: 3
+source: 예시 매체
+url: https://example.com/article/5
+summary: 정적 분석과 LLM을 결합해 리뷰 코멘트의 정확도를 높였다.
+---
+title: [예시] 브라우저 신버전, 서드파티 쿠키 기본 차단
+category: IT
+importance: 2
+source: 예시 매체
+url: https://example.com/article/6
+summary: 웹 광고·분석 도구 영향이 있으나 당장 조치할 항목은 없다.
+---
+title: [예시] 개발자 설문: 원격 근무 비율 3년 연속 감소
+category: IT
+importance: 1
+source: 예시 매체
+url: https://example.com/article/7
+summary: 하이브리드 근무가 표준이 됐다는 내용의 연례 설문 결과.

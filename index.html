@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DIN · Daily IT News</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: single reading column, masthead + toolbar on top, articles sorted by importance */
+:root{
+  --bg:#f6f3ec; --surface:#fffdf8; --ink:#1b1a17; --muted:#6e685c; --rule:#d9d2c3;
+  --accent:#b3261e; --ai:#4b3c9e; --it:#1b6a7a; --star-off:#cfc7b5;
+  --display:"Noto Serif KR",serif; --body:"Noto Sans KR",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#171614; --surface:#1f1e1b; --ink:#ebe6da; --muted:#a39d8f; --rule:#37342d;
+  --accent:#e3604f; --ai:#a697e6; --it:#6cc3d4; --star-off:#45413a; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#171614; --surface:#1f1e1b; --ink:#ebe6da; --muted:#a39d8f; --rule:#37342d;
+  --accent:#e3604f; --ai:#a697e6; --it:#6cc3d4; --star-off:#45413a; color-scheme:dark }
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:15px; line-height:1.6;
+  padding-block:0 48px; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+.wrap{max-width:780px; margin:0 auto}
+
+/* masthead */
+.masthead{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  padding-block:28px 14px; border-bottom:3px double var(--ink)}
+.brand{display:flex; flex-direction:column; gap:2px}
+.logo{font-family:var(--display); font-weight:900; font-size:52px; line-height:1; letter-spacing:-.02em; display:inline-flex; align-items:baseline}
+.logo .dot{display:inline-block; width:.18em; height:.18em; background:var(--accent); margin-left:.06em}
+.tagline{font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted)}
+.dateline{display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:13px}
+.dateline button{background:none; border:1px solid var(--rule); color:var(--ink); border-radius:4px; width:30px; height:30px; cursor:pointer; font-size:14px}
+.dateline button:disabled{opacity:.35; cursor:default}
+.dateline .cur{min-width:11ch; text-align:center; font-weight:600; font-variant-numeric:tabular-nums}
+
+/* toolbar */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; align-items:center; padding-block:12px; border-bottom:1px solid var(--rule)}
+.toolbar select,.toolbar input{font:inherit; font-size:13px; color:var(--ink); background:var(--surface); border:1px solid var(--rule); border-radius:4px; padding:6px 8px}
+.toolbar input{flex:1 1 180px; min-width:0}
+.chips{display:flex; gap:4px}
+.chip{font:inherit; font-size:12px; font-weight:500; padding:5px 11px; border-radius:999px; border:1px solid var(--rule); background:transparent; color:var(--muted); cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+
+/* articles */
+main{padding-block:8px}
+.status{padding-block:40px; text-align:center; color:var(--muted); font-size:14px}
+.status code{font-family:var(--mono); font-size:12px}
+.day-head{font-family:var(--mono); font-size:12px; letter-spacing:.1em; color:var(--muted); margin:28px 0 4px; display:flex; justify-content:space-between}
+.day-head:first-child{margin-top:8px}
+.art{display:grid; grid-template-columns:1fr; gap:6px; padding-block:18px; border-bottom:1px solid var(--rule)}
+.art:last-child{border-bottom:0}
+.meta{display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-family:var(--mono); font-size:11.5px; letter-spacing:.04em}
+.cat{font-weight:600; padding:1px 7px; border:1px solid currentColor; border-radius:3px}
+.cat.AI{color:var(--ai)} .cat.IT{color:var(--it)}
+.stars{letter-spacing:.08em; color:var(--ink)} .stars .off{color:var(--star-off)}
+.imp-label{color:var(--muted)}
+.art[data-imp="5"] .stars{color:var(--accent)}
+.art[data-imp="5"] .imp-label{color:var(--accent); font-weight:600}
+.title{font-family:var(--display); font-weight:700; line-height:1.3; margin:0; text-wrap:balance}
+.title a{text-decoration:none}
+.title a:hover{text-decoration:underline; text-decoration-thickness:1.5px; text-underline-offset:3px}
+.art[data-imp="5"] .title{font-size:26px; font-weight:900}
+.art[data-imp="4"] .title{font-size:21px}
+.art[data-imp="3"] .title{font-size:18px}
+.art[data-imp="2"] .title,.art[data-imp="1"] .title{font-size:16px; font-weight:700}
+.art[data-imp="1"]{color:var(--muted)}
+.summary{margin:0; max-width:65ch; white-space:pre-line; color:var(--ink)}
+.art[data-imp="1"] .summary,.art[data-imp="2"] .summary{font-size:14px; color:var(--muted)}
+.src{color:var(--muted)}
+footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1px solid var(--rule); padding-block:14px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media (max-width:520px){ .logo{font-size:42px} .art[data-imp="5"] .title{font-size:22px} .art[data-imp="4"] .title{font-size:19px} }
+@media (prefers-reduced-motion:no-preference){ .art{animation:in .25s ease both} @keyframes in{from{opacity:.2;transform:translateY(4px)} to{opacity:1;transform:none}} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="brand">
+      <span class="logo" aria-label="DIN">DIN<i class="dot"></i></span>
+      <span class="tagline">Daily IT · AI News</span>
+    </div>
+    <div class="dateline">
+      <button id="prevBtn" title="이전 날짜" aria-label="이전 날짜">&lsaquo;</button>
+      <span class="cur" id="curDate">&mdash;</span>
+      <button id="nextBtn" title="다음 날짜" aria-label="다음 날짜">&rsaquo;</button>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <select id="dateSel" aria-label="날짜 선택"></select>
+    <div class="chips" id="catChips" role="group" aria-label="분류">
+      <button class="chip" data-cat="" aria-pressed="true">전체</button>
+      <button class="chip" data-cat="AI" aria-pressed="false">AI</button>
+      <button class="chip" data-cat="IT" aria-pressed="false">IT</button>
+    </div>
+    <select id="impSel" aria-label="중요도">
+      <option value="1">중요도 전체</option>
+      <option value="3">★3 이상</option>
+      <option value="4">★4 이상</option>
+      <option value="5">필독만</option>
+    </select>
+    <input id="q" type="search" placeholder="검색 (모든 날짜)" aria-label="검색">
+  </div>
+
+  <main id="main"><div class="status">불러오는 중…</div></main>
+  <footer><span id="footLeft"></span><span id="footRight"></span></footer>
+</div>
+
+<script>
+(function(){
+  const REPO = 'sjc4197/daily_IT_news_din';
+  const BRANCH = 'main';
+  const DIR = 'news';
+  const IMP = {5:'필독', 4:'중요', 3:'보통', 2:'참고', 1:'가벼움'};
+  const KEYS = new Set(['title','category','importance','source','url','summary']);
+
+  const $ = s => document.querySelector(s);
+  const main = $('#main'), dateSel = $('#dateSel'), impSel = $('#impSel'), q = $('#q');
+  const prevBtn = $('#prevBtn'), nextBtn = $('#nextBtn'), curDate = $('#curDate');
+
+  let files = [];            // [{date, name, dl}] newest first
+  const cache = new Map();   // date -> items
+  const state = { date: null, cat: '', minImp: 1, q: '' };
+
+  function parse(txt){
+    const blocks = txt.replace(/\r\n?/g, '\n').split(/^\s*-{3,}\s*$/m);
+    const out = [];
+    for (const b of blocks){
+      const o = {}; let k = null;
+      for (const raw of b.split('\n')){
+        const line = raw.trimEnd();
+        const m = line.match(/^([A-Za-z_]+)\s*:\s?(.*)$/);
+        if (m && KEYS.has(m[1].toLowerCase())){ k = m[1].toLowerCase(); o[k] = m[2].trim(); }
+        else if (k && line.trim()){ o[k] = (o[k] ? o[k] + '\n' : '') + line.trim(); }
+      }
+      if (!o.title) continue;
+      let imp = parseInt(o.importance, 10); if (!(imp >= 1 && imp <= 5)) imp = 3;
+      o.importance = imp;
+      o.category = (o.category || '').trim().toUpperCase() === 'AI' ? 'AI' : 'IT';
+      out.push(o);
+    }
+    return out;
+  }
+
+  async function listFiles(){
+    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${DIR}?ref=${BRANCH}`, {headers:{Accept:'application/vnd.github+json'}});
+    if (!r.ok) throw new Error(r.status === 403 ? 'GitHub API 요청 한도를 넘었습니다. 잠시 후 새로고침하세요.' : `목록을 불러오지 못했습니다 (${r.status})`);
+    const j = await r.json();
+    return j.filter(f => f.type === 'file' && /^\d{4}-\d{2}-\d{2}\.txt$/.test(f.name))
+            .map(f => ({date: f.name.slice(0,10), name: f.name, dl: f.download_url}))
+            .sort((a,b) => b.date.localeCompare(a.date));
+  }
+
+  async function loadDay(f){
+    if (cache.has(f.date)) return cache.get(f.date);
+    let txt;
+    try { const r = await fetch(`${DIR}/${f.name}`, {cache:'no-cache'}); if (!r.ok) throw 0; txt = await r.text(); }
+    catch { const r = await fetch(f.dl, {cache:'no-cache'}); txt = await r.text(); }
+    const items = parse(txt).map((it, i) => ({...it, date: f.date, idx: i}));
+    cache.set(f.date, items);
+    return items;
+  }
+
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const stars = n => '<span class="stars" aria-hidden="true">' + '★'.repeat(n) + '<span class="off">' + '★'.repeat(5-n) + '</span></span>';
+  const fmtDate = d => { const [y,m,dd] = d.split('-'); const w = '일월화수목금토'[new Date(+y, m-1, +dd).getDay()]; return `${y}.${m}.${dd} (${w})`; };
+
+  function artHTML(a){
+    let host = ''; try { host = new URL(a.url).hostname.replace(/^www\./,''); } catch {}
+    return `<article class="art" data-imp="${a.importance}" data-cat="${a.category}">
+      <div class="meta">
+        <span class="cat ${a.category}">${a.category}</span>
+        ${stars(a.importance)}<span class="imp-label">${IMP[a.importance]}</span>
+        <span class="src">${esc(a.source || '')}${host ? ' · ' + esc(host) : ''}</span>
+      </div>
+      <h2 class="title">${a.url ? `<a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.title)}</a>` : esc(a.title)}</h2>
+      ${a.summary ? `<p class="summary">${esc(a.summary)}</p>` : ''}
+    </article>`;
+  }
+
+  const pass = a => (!state.cat || a.category === state.cat) && a.importance >= state.minImp;
+  const sortImp = (a,b) => b.importance - a.importance || a.idx - b.idx;
+
+  async function render(){
+    const idx = files.findIndex(f => f.date === state.date);
+    prevBtn.disabled = idx >= files.length - 1; nextBtn.disabled = idx <= 0;
+    curDate.textContent = state.date ? fmtDate(state.date) : '—';
+    dateSel.value = state.date || '';
+    if (state.date) history.replaceState(null, '', '#' + state.date);
+
+    if (state.q){
+      main.innerHTML = '<div class="status">전체 날짜에서 검색 중…</div>';
+      const all = await Promise.all(files.map(loadDay));
+      const needle = state.q.toLowerCase();
+      let html = '', total = 0;
+      all.forEach((items, i) => {
+        const hit = items.filter(pass).filter(a => [a.title, a.summary, a.source].join(' ').toLowerCase().includes(needle)).sort(sortImp);
+        if (!hit.length) return;
+        total += hit.length;
+        html += `<div class="day-head"><span>${fmtDate(files[i].date)}</span><span>${hit.length}건</span></div>` + hit.map(artHTML).join('');
+      });
+      main.innerHTML = html || `<div class="status">"${esc(state.q)}" 검색 결과가 없습니다.</div>`;
+      $('#footLeft').textContent = `검색 "${state.q}" · ${total}건`;
+      $('#footRight').textContent = `${files.length}일치 스크랩`;
+      return;
+    }
+
+    const f = files[idx]; if (!f) return;
+    main.innerHTML = '<div class="status">불러오는 중…</div>';
+    try {
+      const items = (await loadDay(f)).filter(pass).sort(sortImp);
+      main.innerHTML = items.map(artHTML).join('') || '<div class="status">조건에 맞는 기사가 없습니다.</div>';
+      const must = items.filter(a => a.importance === 5).length;
+      $('#footLeft').textContent = `${items.length}건${must ? ` · 필독 ${must}` : ''}`;
+      $('#footRight').innerHTML = `<code>${DIR}/${f.name}</code>`;
+    } catch (e) {
+      main.innerHTML = `<div class="status">파일을 읽지 못했습니다: <code>${esc(f.name)}</code></div>`;
+    }
+  }
+
+  // events
+  dateSel.addEventListener('change', () => { state.date = dateSel.value; q.value = state.q = ''; render(); });
+  prevBtn.addEventListener('click', () => { const i = files.findIndex(f => f.date === state.date); if (i < files.length - 1){ state.date = files[i+1].date; render(); } });
+  nextBtn.addEventListener('click', () => { const i = files.findIndex(f => f.date === state.date); if (i > 0){ state.date = files[i-1].date; render(); } });
+  $('#catChips').addEventListener('click', e => {
+    const b = e.target.closest('.chip'); if (!b) return;
+    state.cat = b.dataset.cat;
+    document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b ? 'true' : 'false'));
+    render();
+  });
+  impSel.addEventListener('change', () => { state.minImp = +impSel.value; render(); });
+  let t; q.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { state.q = q.value.trim(); render(); }, 200); });
+  window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (files.some(f => f.date === h) && h !== state.date){ state.date = h; render(); } });
+
+  (async () => {
+    try {
+      files = await listFiles();
+      if (!files.length){ main.innerHTML = `<div class="status"><code>${DIR}/</code> 폴더에 아직 파일이 없습니다.</div>`; return; }
+      dateSel.innerHTML = files.map(f => `<option value="${f.date}">${fmtDate(f.date)}</option>`).join('');
+      const h = location.hash.slice(1);
+      state.date = files.some(f => f.date === h) ? h : files[0].date;
+      render();
+    } catch (e) {
+      main.innerHTML = `<div class="status">${esc(e.message)}</div>`;
+    }
+  })();
+})();
+</script>
+</body>
+</html>
