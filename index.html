@@ -6,7 +6,7 @@
 <title>DIN · Daily IT News</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 /* Layout: single reading column, masthead + toolbar on top, articles sorted by importance */
 :root{
@@ -32,8 +32,8 @@ a{color:inherit}
 .masthead{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap;
   padding-block:28px 14px; border-bottom:3px double var(--ink)}
 .brand{display:flex; flex-direction:column; gap:2px}
-.logo{font-family:var(--display); font-weight:900; font-size:52px; line-height:1; letter-spacing:-.02em; display:inline-flex; align-items:baseline}
-.logo .dot{display:inline-block; width:.18em; height:.18em; background:var(--accent); margin-left:.06em}
+.logo{display:block; height:58px; width:auto; color:var(--ink); overflow:visible}
+.logo .rule{fill:var(--accent)}
 .tagline{font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted)}
 .dateline{display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:13px}
 .dateline button{background:none; border:1px solid var(--rule); color:var(--ink); border-radius:4px; width:30px; height:30px; cursor:pointer; font-size:14px}
@@ -76,7 +76,7 @@ main{padding-block:8px}
 .src{color:var(--muted)}
 footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1px solid var(--rule); padding-block:14px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
 :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
-@media (max-width:520px){ .logo{font-size:42px} .art[data-imp="5"] .title{font-size:22px} .art[data-imp="4"] .title{font-size:19px} }
+@media (max-width:520px){ .logo{height:48px} .art[data-imp="5"] .title{font-size:22px} .art[data-imp="4"] .title{font-size:19px} }
 @media (prefers-reduced-motion:no-preference){ .art{animation:in .25s ease both} @keyframes in{from{opacity:.2;transform:translateY(4px)} to{opacity:1;transform:none}} }
 </style>
 </head>
@@ -84,7 +84,12 @@ footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1
 <div class="wrap">
   <header class="masthead">
     <div class="brand">
-      <span class="logo" aria-label="DIN">DIN<i class="dot"></i></span>
+      <svg class="logo" viewBox="0 0 196 80" role="img" aria-label="DIN">
+        <path d="M8 6 H150 L186 42 V74 H8 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M150 6 V42 H186" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+        <text x="24" y="54" font-family="Fraunces, 'Noto Serif KR', Georgia, serif" font-weight="900" font-size="42" fill="currentColor">DIN</text>
+        <rect class="rule" x="24" y="60" width="46" height="3"/>
+      </svg>
       <span class="tagline">Daily IT · AI News</span>
     </div>
     <div class="dateline">
