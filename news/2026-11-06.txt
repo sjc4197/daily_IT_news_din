@@ -1,83 +1,203 @@
-title: Apache OFBiz 보안 취약점 46개 공개, 인증 전 원격 코드 실행 포함
+title: OpenAI, 사이버보안 전용 모델 GPT-6 Cyber 공개... Firefox 신규 취약점 81개 발견
+category: AI
+importance: 5
+source: CyberScoop
+url: https://cyberscoop.com/openai-gpt-6-cyber-security-model/
+summary: OpenAI가 레드팀·취약점 발견·패치용 GPT-6 Cyber를 Daybreak Red 일부 고객에게 먼저 공개했다.
+detail: OpenAI가 레드팀, 취약점 탐지, 패치 작성에 특화한 GPT-6 Cyber를 발표했다. 회사는 GPT-5.6 Cyber 대비 큰 도약이며, 거부하지 않는 조건에서도 대부분의 사이버 과제에서 GPT-6 Astra보다 낫다고 밝혔다.
+- 초기 접근은 공격형 레드팀용 비공개 모델을 제공하는 Daybreak Red 프로그램의 소수 고객으로 제한된다.
+- Mozilla Firefox에서 신규 취약점 최소 81개를 찾았고, Linux 커널 취약점 948개에 대한 익스플로잇을 만들었으며, 압축 라이브러리 Brotli의 치명적 원격 코드 실행 취약점도 검증했다고 밝혔다. 모두 소유자에게 알려 패치됐다.
+- 신원 확인 강화, 고위험 요청 시 확인 절차 추가, 규칙 위반 모니터링 등 안전장치를 넣었고 OT 보안 기업 Dragos와 제휴했다.
+- 이달 말부터 개인 계정의 Daybreak Blue 세션 데이터를 오남용 방지 개선에 쓰겠다고 해 반발도 나왔다.
+TechCrunch는 이와 별도로 한 개발자가 Daybreak Blue로 약 2시간 만에 Ubuntu 서버 장악이 가능한 취약점(CVE-2026-109518)을 찾아 Debian이 패치했다고 전했다.
+AI가 오픈소스 취약점을 대량으로 찾아내는 속도가 빨라지는 만큼, 우리 쪽도 OS·라이브러리 보안 패치 반영 주기를 더 짧게 가져가야 한다.
+---
+title: MariaDB, 에이전트 워크로드용 Enterprise Platform 2027 정식 출시
 category: IT
 importance: 5
+source: Unite.AI
+url: https://unite.ai/mariadb-launches-enterprise-platform-2027-for-agent-workloads
+summary: Enterprise Server 12.3을 중심으로 에이전트 메모리·시맨틱 캐시·벡터 검색을 묶은 플랫폼이 11월 4일 GA됐다.
+detail: MariaDB가 트랜잭션, 분석, 인메모리, AI 기능을 합친 Enterprise Platform 2027을 정식 출시했다. 구성 요소는 Enterprise Server 12.3, Exa, GridGain, MaxScale, Enterprise Manager, Enterprise Kubernetes Operator다.
+- Agent Memory는 에이전트 상태를 단계마다 저장하고 세션 간에 공유하며, LangGraph를 기본 지원한다.
+- Semantic Cache는 표현만 다른 같은 의미의 질문에 저장된 응답을 돌려줘 응답 시간과 토큰 비용을 줄인다.
+- AI Retrieval은 문서 파싱·청킹·임베딩·리랭킹을 처리하고, 자연어 질문을 읽기 전용 SQL로 바꾼다.
+- Raft Cluster가 GA되어 과반수 노드 확인 후 커밋하며, Kubernetes Operator를 통해 FIPS 140-3도 지원한다.
+- 후원 벤치마크에서 12.3이 11.8 대비 최대 처리량 56% 향상(분당 신규 주문 약 265만 건 대 170만 건)을 보였다고 한다. 다만 바이너리 로그와 내구성 커밋을 끈 조건이라 실제 운영 수치와는 차이가 날 수 있다.
+MariaDB를 쓰는 입장에서 12.3 업그레이드 로드맵과 K8s Operator 도입을 검토할 만하지만, 벤치마크 수치는 그대로 믿지 말고 자체 부하 테스트로 확인해야 한다.
+---
+title: Apache OFBiz 보안 취약점 46개 패치, 인증 전 원격 코드 실행 포함
+category: IT
+importance: 4
 source: The Hacker News
 url: https://thehackernews.com/2026/11/threatsday-apache-ofbiz-rce-dreamhost.html
-summary: Apache OFBiz 메인테이너가 46개 취약점을 공개했고, CVE-2026-68524는 인증 없이 원격 코드 실행이 가능하며 CVE-2026-109928은 계정 탈취로 이어진다. 24.09.08에서 수정됐다. Java 기반 ERP를 외부에 노출해 운영 중이라면 즉시 업데이트가 필요하다.
+summary: Java 기반 오픈소스 ERP Apache OFBiz가 24.09.08에서 인증 전 RCE를 포함한 취약점 46개를 고쳤다.
+detail: Apache OFBiz 메인테이너들이 보안 취약점 46개를 한 번에 수정한 24.09.08 버전을 내놨다.
+- CVE-2026-68524는 인증 없이 원격 코드 실행이 가능한 취약점이다.
+- CVE-2026-109928은 인증 알고리즘을 잘못 구현해 계정 전체 탈취로 이어질 수 있다.
+- OFBiz는 과거에도 인증 전 RCE가 실제 공격에 악용된 이력이 있어, 공개 직후 스캐닝이 시작될 가능성이 높다.
+- 인터넷에 노출된 인스턴스는 즉시 24.09.08로 올리는 것이 권장된다.
+Java·Groovy 기반 업무 시스템을 운영한다면 같은 유형의 인증 우회·역직렬화 취약점이 없는지 점검하는 계기로 삼을 만하다.
 ---
-title: Zyxel GS1900 스위치, 기존 패치 우회하는 root 명령 실행 취약점 발견
+title: Docker Sandboxes 심볼릭 링크 취약점, AI 에이전트가 샌드박스 밖 파일 읽기 가능
 category: IT
 importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/threatsday-apache-ofbiz-rce-dreamhost.html
+summary: Docker Sandboxes의 sbx cp 명령이 접근 제한을 적용하지 않아 심볼릭 링크로 클라우드 자격 증명 등이 새어 나갈 수 있었다.
+detail: AI 코딩 에이전트를 격리 실행하는 Docker Sandboxes에서 CVE-2026-103916 취약점이 수정됐다.
+- 파일 복사 명령 sbx cp가 샌드박스 접근 제한을 강제하지 않는 것이 원인이다.
+- 에이전트가 허용된 워크스페이스 안에 심볼릭 링크를 만들어 두면, 이후 복사 작업이 샌드박스 경계 밖의 파일을 읽게 된다.
+- 이 경로로 호스트의 클라우드 자격 증명 같은 민감 파일이 노출될 수 있다.
+- Docker Sandboxes 0.51.0에서 수정됐다.
+에이전트를 컨테이너에 가뒀다고 안심하면 안 된다는 사례로, 개발 PC에서 에이전트를 돌린다면 Sandboxes 버전 확인과 함께 홈 디렉터리의 자격 증명 파일 노출 범위를 줄여 두는 게 좋다.
+---
+title: METR, "Anthropic의 AI 연구 속도 이전 대비 약 2배로 가속" 평가
+category: AI
+importance: 4
+source: METR
+url: https://metr.org/blog/2026-11-05-anthropic-ai-rd-acceleration-assessment/
+summary: METR가 Anthropic 내부 데이터를 받아 평가한 결과, AI 연구 진척 속도가 이전 대비 약 2배이고 그중 약 80%가 AI 덕분이라고 추정했다.
+detail: 외부 평가 기관 METR가 2026년 8월 12일부터 10월 29일까지 Anthropic의 AI R&D 가속 정도를 평가한 보고서를 공개했다.
+- Anthropic 내부 벤치마크, 자체 능력 지표(AECI), 학습 컴퓨트, 사내 설문, 직원 약 15명 인터뷰 자료를 받았지만 미공개 모델 접근은 없었다.
+- 2025년 10월 이후 AECI 상승 속도가 이전의 약 1.9배(95% 신뢰구간 1.5~2.8배)로 추정됐다.
+- METR는 현재 가속의 약 80%가 AI 활용에서 비롯됐다고 보지만 불확실성이 크다고 밝혔다. 학습 컴퓨트 증가가 원인은 아니라고 확신했다.
+- 다른 회사 최전선 모델까지 포함하면 추정치는 약 1.4배로 낮아진다.
+- Anthropic이 가장 중요한 근거 자료 상당 부분을 비공개 처리해, 대중은 METR 판단에 크게 의존해야 한다는 한계도 명시했다.
+AI가 AI 개발 자체를 빠르게 만드는 흐름이 수치로 확인되기 시작했다는 점에서, 도구 교체 주기가 앞으로 더 짧아질 것을 염두에 둘 필요가 있다.
+---
+title: Moonshot AI, 2.8조 파라미터 멀티모달 모델 Kimi K3.1 Pro 공개
+category: AI
+importance: 4
+source: Hugging Face
+url: https://huggingface.co/moonshotai/Kimi-K3.1-Pro
+summary: 활성 파라미터 104B, 100만 토큰 컨텍스트의 MoE 모델이 가중치와 함께 Hugging Face에 올라왔다.
+detail: 중국 Moonshot AI가 Kimi K3.1 Pro를 Hugging Face에 공개했다.
+- 전체 2.8조 파라미터의 MoE 구조로 전문가 896개 중 토큰당 16개와 공유 전문가 2개를 쓰며, 활성 파라미터는 104B다.
+- 컨텍스트 길이는 약 100만 토큰(1,048,576)이고 텍스트와 이미지를 입력받는다.
+- 양자화 인지 학습으로 MXFP4 가중치와 MXFP8 활성값을 적용했다.
+- 회사 자체 발표 기준 Terminal-Bench 4.0 65.7, GPQA-Diamond 94.2, DeepSWE v1.1 75.5 등을 기록했고, Claude Opus 5.5·GPT-6 Astra와 비교해 일부 항목은 앞서고 일부는 뒤진다.
+- 표준 오픈소스가 아닌 자체 Kimi K3.1 Pro License로 배포된다.
+가중치는 공개됐지만 규모가 커서 사내 자체 호스팅은 현실적으로 어렵고, 상용 이용 전 라이선스 조건을 꼭 확인해야 한다.
+---
+title: Cognition, 코딩 에이전트용 경량 모델 SWE-2 Flash 출시
+category: AI
+importance: 3
+source: Unite.AI
+url: https://www.unite.ai/cognition-launches-swe-2-flash-for-faster-lower-cost-coding-agents/
+summary: SWE-2 대비 약 3배 빠르고 가격은 5분의 1인 코딩 모델로, 11월 30일까지 Devin에서 무료로 쓸 수 있다.
+detail: Devin 개발사 Cognition이 11월 4일 일상적인 에이전트 작업용 코딩 모델 SWE-2 Flash를 내놨다.
+- 자동화, 코드 리뷰, 기능 개발, 문서 갱신 같은 반복 업무를 겨냥했다.
+- 상위 모델 SWE-2보다 약 3배 빠르고 가격은 5분의 1 수준이라고 밝혔다.
+- 전체 276B, 활성 12B 파라미터 MoE이며 Thinking Machines Lab의 공개 모델 Inkling-Small을 기반으로 했다.
+- 회사 발표 기준 DeepSWE 1.1에서 60.1점(SWE-2는 73.0), Terminal-Bench 4.0에서 20.0점(SWE-2는 27.3)을 기록했다.
+- 보안 악용 우려로 가중치는 공개하지 않고, 신뢰할 수 있는 파트너 대상 공유 프로그램을 준비 중이다.
+리뷰·문서화처럼 단순한 작업은 저가 모델로 돌리고 어려운 작업만 상위 모델에 맡기는 모델 분업이 비용 절감의 기본 전략이 되고 있다.
+---
+title: Anthropic, Claude에 은행 계좌 연동 Personal Finance 기능 베타 출시
+category: AI
+importance: 3
+source: TechCrunch
+url: https://techcrunch.com/2026/11/05/claude-can-now-analyze-your-spending-with-its-new-personal-finance-tool/
+summary: Plaid로 은행·카드 계좌를 읽기 전용 연결해 지출 분석과 이상 결제 탐지를 해주는 기능이 미국 유료 사용자에게 열렸다.
+detail: Anthropic이 11월 5일 Claude의 Personal Finance 기능을 발표했다.
+- 사용자는 Plaid를 통해 은행과 신용카드 계좌를 연결하고, Claude에 지출 관련 질문을 할 수 있다.
+- 접근은 읽기 전용이며 송금, 자산 관리, 투자는 할 수 없다.
+- 잔액, 신용 한도, 최대 2년치 거래 내역을 보고 카테고리별 지출 합계를 내며, 중복 결제나 예상치 못한 수수료, 계속 오르는 요금을 찾아낸다.
+- 이 기능의 대화는 모델 학습에 쓰지 않고, 광고나 금융상품 추천도 없다고 밝혔다.
+- 미국 Pro, Max, Ultra 요금제 사용자 대상 베타이며, OpenAI가 5월 ChatGPT에 낸 비슷한 기능을 뒤쫓는 성격이다.
+금융 데이터 연동형 AI 서비스가 늘면서 읽기 전용 권한 설계와 데이터 학습 제외 정책이 서비스 신뢰의 기본 조건이 되고 있다.
+---
+title: Meta, 병렬 AI 코딩 에이전트 스타트업 Conductor 인수
+category: AI
+importance: 3
+source: TechCrunch
+url: https://techcrunch.com/2026/11/04/meta-acquires-ai-coding-startup-conductor/
+summary: 여러 코딩 에이전트를 병렬 워크스페이스에서 돌리는 도구 Conductor가 Meta에 인수됐고, 클라우드 서비스는 11월 20일 종료된다.
+detail: Meta가 AI 코딩 스타트업 Conductor를 인수했다. Axios가 처음 보도했고 Meta는 인수 사실만 확인했다.
+- Conductor는 개발자가 프로젝트의 서로 다른 부분에 여러 에이전트를 병렬로 돌릴 수 있게 해주는 도구로, 클라우드·로컬·휴대폰에서 실행할 수 있다.
+- 에이전트 자체는 Anthropic, OpenAI 등 외부 연구소 모델을 쓴다.
+- 2024년 창업해 2025년 여름 핵심 제품을 출시했다.
+- 핵심 기능은 내년 초까지 유지되지만, 클라우드 서비스는 11월 20일 종료되고 이후 사용자 클라우드 데이터는 삭제된다.
+- Meta는 8월 자체 코딩 에이전트 Muse Code를 내놨고, 이번 인수로 개발자 도구 경쟁을 강화한다.
+외부 AI 개발 도구를 쓸 때는 인수·서비스 종료로 데이터가 사라질 수 있으니, 중요한 작업 이력은 로컬이나 Git에 남겨 두는 습관이 필요하다.
+---
+title: Anthropic, Claude 활용해 원핵생물 vault 단백질 입자의 첫 3D 구조 규명
+category: AI
+importance: 2
+source: Unite.AI
+url: https://www.unite.ai/anthropic-uses-claude-to-show-bacterial-and-phage-proteins-form-vaults/
+summary: Claude로 약 150억 개 예측 단백질을 탐색해 세균·파지 단백질이 vault 입자를 이룬다는 사실을 확인했다.
+detail: Anthropic이 Claude Science를 활용한 생물학 연구 결과를 11월 4일 공개했다.
+- 약 150억 개의 예측 단백질을 탐색해 세균 29개 문과 고세균 4개 문에서 vault 단백질 유사체를 찾았다.
+- 실험한 후보 24개 중 15개가 수용성 단백질을 만들었고 그중 7개가 vault 형태 입자를 이뤘으며, 극저온 전자현미경으로 4개를 확인했다.
+- 파지 유래 L05 입자 구조를 3.2옹스트롬 해상도로 얻어, 원핵세포 vault 입자의 첫 3D 구조라고 설명했다.
+- Claude가 DNA 설계와 정제 절차(기존 약 3일에서 약 90분으로 단축)를 도왔지만, Claude가 낸 오류로 2주가 지연되기도 했다.
+- 기술 보고서는 bioRxiv에 제출됐다.
+AI가 실험 과학 보조 도구로 실질적인 성과를 내지만 검증 없이 맡기면 오류 비용도 크다는 점은 개발 업무에서도 똑같이 적용된다.
+---
+title: Zyxel GS1900 스위치, 기존 패치를 우회하는 root 명령 실행 취약점 발견
+category: IT
+importance: 3
 source: The Hacker News
 url: https://thehackernews.com/2026/11/zyxel-gs1900-patch-fails-to-block-zero.html
-summary: CISA KEV에 오른 CVE-2026-7273의 수정판(2.90 Patch 2)이 새 취약점 CVE-2026-107441을 막지 못해 인증 없이 root 권한 명령 실행이 가능하다. GS1900 10개 모델이 영향을 받으며 2.90 Patch 3으로 업데이트해야 한다. 대체 우회책이 없어 사내 L2 스위치 펌웨어 점검이 필요하다.
----
-title: CISA, APT29가 악용한 Apple PAC 우회 취약점 KEV 등재
-category: IT
-importance: 4
-source: The Hacker News
-url: https://thehackernews.com/2026/11/hackers-exploit-patched-apple-flaw-to.html
-summary: 2024년에 패치된 CVE-2024-27834가 APT29 연계 캠페인에서 정보 탈취 악성코드 배포에 쓰인 것으로 확인돼 CISA가 KEV에 추가했다. 감염된 정상 사이트와 Plerdy SEO 트래커 공급망 공격으로 악성 JavaScript가 유포됐다. 구버전 iOS·macOS 단말이 남아 있는지 점검해야 한다.
+summary: 실제 악용된 취약점의 기존 패치가 공격을 막지 못해 새 CVE가 발급됐고 2.90 Patch 3에서 수정됐다.
+detail: 보안 기업 Binarly가 Zyxel GS1900 스위치의 기존 패치가 실제 공격에 쓰인 익스플로잇을 막지 못한다는 사실을 밝혔다.
+- 기존 취약점 CVE-2026-7273은 2.90 Patch 2에서 고쳐졌고 CISA KEV에도 등재됐었다.
+- 새 취약점 CVE-2026-107441은 인증 없이 웹 관리 화면을 통해 root 권한 명령 실행을 허용하며, 2.90 Patch 3에서 수정됐다.
+- 심각도는 Binarly 기준 CVSS 9.8, Zyxel 기준 8.8이다.
+- GS1900-8, -24, -48 등 10개 모델이 영향을 받으며, 업데이트 못 하는 장비에 대한 우회책은 없다.
+- GreyNoise는 8월 무렵 스위치 996대에서 데이터가 탈취됐고 그중 564대가 공장 기본 계정을 쓰고 있었다고 밝혔다.
+사무실·전산실 네트워크 장비도 펌웨어 업데이트와 기본 계정 변경, 관리 화면 외부 노출 차단을 정기 점검 항목에 넣어야 한다.
 ---
 title: SonicWall, 지원 종료된 GMS의 파일 읽기·SQL 인젝션 취약점 패치 안 한다
 category: IT
 importance: 3
 source: The Hacker News
 url: https://thehackernews.com/2026/11/sonicwall-wont-patch-eol-gms-flaws-that.html
-summary: GMS 9.5.2 이하에서 인증 없는 파일 읽기(CVE-2026-109593, CVSS 9.1)와 인증 후 SQL 인젝션(CVE-2026-109594)이 발견됐지만 EoL 제품이라 수정이 없다. SonicWall은 NSM으로의 전환을 권고했다. EoL 보안 장비를 계속 쓰는 것이 얼마나 위험한지 보여주는 사례다.
+summary: GMS 9.5.2 이하의 CVSS 9.1 취약점 등에 대해 SonicWall이 패치 없이 NSM 전환만 권고했다.
+detail: SonicWall이 지원 종료(EoL)된 Global Management System(GMS) 9.5.2 이하에서 발견된 취약점 2개를 고치지 않겠다고 밝혔다.
+- CVE-2026-109593(CVSS 9.1)은 인증 없이 GMS 내부 파일을 읽을 수 있는 취약점이다.
+- CVE-2026-109594(CVSS 6.8)는 인증 후 SQL 인젝션으로 GMS 데이터베이스를 조회하거나 바꿀 수 있다.
+- SonicWall은 Network Security Manager(NSM)로 업그레이드할 것을 강력히 권고했다.
+- 별도로 최근 패치된 CVE-2026-102255(CVSS 10.0) SSRF 취약점은 10월 9일 이후 2,541건의 공격 시도가 기록되는 등 실제 악용 중이다.
+EoL 제품은 취약점이 나와도 패치가 없다는 점을 다시 보여준 사례로, 사내 장비·미들웨어의 지원 종료 일정을 미리 관리해야 한다.
 ---
-title: DreamHost 웹 파일 매니저 침해, FTP/SFTP 계정 정보 유출
+title: Synology NAS 노린 랜섬웨어 공격, 구버전 DSM 취약점 악용
 category: IT
 importance: 3
 source: The Hacker News
-url: https://thehackernews.com/2026/11/threatsday-apache-ofbiz-rce-dreamhost.html
-summary: 공격자가 8월부터 10월 23일까지 files.dreamhost.com 파일 매니저 서버에 접근해 로그인한 사용자의 FTP/SFTP 자격 증명을 탈취했고 일부 웹메일 세션도 노출됐다. 제어판 로그인과 결제 정보 접근 증거는 없다고 밝혔다. 호스팅 사용자는 자격 증명 교체가 필요하다.
+url: https://thehackernews.com/2026/11/synology-nas-devices-targeted-in.html
+summary: Synology가 업데이트 안 된 DSM을 노린 데이터 암호화 공격을 확인하고 즉시 업데이트를 촉구했다.
+detail: Synology가 구버전 DiskStation Manager(DSM)를 쓰는 NAS를 노린 랜섬웨어 공격을 확인하고 업데이트를 촉구했다.
+- Synology는 구체적 취약점을 밝히지 않았지만 CVSS 9.8 원격 코드 실행 CVE-2024-10441을 포함한 권고문 Synology_SA_24_20을 안내했다.
+- 사용자들은 파일 확장자가 .L0CK3D로 바뀌는 C3RB3R 랜섬웨어 감염을 보고했다.
+- Qihoo 360은 이 랜섬웨어가 9월 패치된 CVSS 9.8 취약점 CVE-2026-13684, CVE-2026-13639를 악용한다고 분석했다.
+- 수정 버전은 DSM 7.2.2-72806-1, 7.1.1-42962-7 이상 등이며, 자동 업데이트 활성화가 권장된다.
+백업용 NAS가 랜섬웨어에 당하면 백업 자체가 사라지므로, 오프라인 사본과 NAS 외부 노출 차단을 함께 챙겨야 한다.
 ---
-title: Docker Sandboxes 심볼릭 링크 취약점, AI 에이전트가 샌드박스 밖 파일 접근 가능
+title: Dropbox, AI 인프라 강화 위해 Tigris Data를 3억5천만 달러에 인수
 category: IT
-importance: 4
-source: The Hacker News
-url: https://thehackernews.com/2026/11/threatsday-apache-ofbiz-rce-dreamhost.html
-summary: Docker Sandboxes의 copy 명령에서 심볼릭 링크 처리 결함(CVE-2026-103916)으로 AI 에이전트가 샌드박스 외부 파일에 닿을 수 있었고 0.51.0에서 수정됐다. 코딩 에이전트 격리를 컨테이너 샌드박스에 의존하는 팀은 버전 확인이 필요하다.
----
-title: Meta, 병렬 AI 코딩 에이전트 스타트업 Conductor 인수
-category: AI
-importance: 4
+importance: 3
 source: TechCrunch
-url: https://techcrunch.com/2026/11/04/meta-acquires-ai-coding-startup-conductor/
-summary: Meta가 여러 AI 에이전트를 병렬 작업 공간에서 돌려 소프트웨어를 만드는 도구 Conductor를 인수했다. Conductor 클라우드 서비스는 11월 20일 종료되고 이후 사용자 클라우드 데이터는 삭제된다. 빅테크의 AI 코딩 도구 경쟁이 인수전으로 번지고 있다.
+url: https://techcrunch.com/2026/11/05/dropbox-acquires-tigris-data-for-350m-to-bolster-its-ai-iinfrastructure/
+summary: Dropbox 사상 최대 인수로, S3 호환 객체 스토리지 기반의 AI 에이전트용 플랫폼 DBX Agent Cloud를 준비한다.
+detail: Dropbox가 클라우드 스토리지 기업 Tigris Data를 3억5천만 달러에 인수한다고 11월 5일 발표했다. Dropbox 역대 최대 규모이며 4분기 중 마무리될 예정이다.
+- 인수는 AI 모델·에이전트를 만드는 기업과 개발자를 위한 새 스토리지 플랫폼 DBX Agent Cloud를 뒷받침하기 위한 것이다.
+- 출시 시점에는 Amazon S3용 기존 도구와 호환되는 독립형 객체 스토리지를 제공한다.
+- 이후 문서·이미지·오디오·영상 지원과, 에이전트가 세션을 넘어 파일을 관리할 수 있는 파일시스템 기능을 추가할 계획이다.
+- Tigris는 전 Uber 스토리지 엔지니어들이 세운 회사로, 데이터를 사용자와 컴퓨트 가까이 배치해 리전 간 접근 속도를 높이는 기술을 갖고 있다.
+S3 호환 스토리지 선택지가 늘어나는 만큼, 파일 업로드 모듈을 S3 API 기준으로 추상화해 두면 벤더 교체가 쉬워진다.
 ---
-title: OpenAI, Codex에 쓰이는 Git 인프라 스타트업 Pierre Computer 인수 추진
-category: AI
-importance: 4
-source: The Neuron
-url: https://www.theneuron.ai/news/openai-pierre-deal-github-ai-coding/
-summary: Axios 보도에 따르면 OpenAI가 임베드 가능한 Git 인프라 Code Storage를 만든 Pierre Computer를 인수한다. Pierre 기술은 이미 Codex 내부에서 쓰이고 있으며, 이틀 전 공개한 Pando와 함께 에이전트 시대 코드 저장소 경쟁에서 GitHub를 겨냥하는 행보로 읽힌다.
----
-title: Anthropic, AP와 첫 유료 뉴스 라이선스 계약 체결
-category: AI
-importance: 3
-source: Adweek
-url: https://www.adweek.com/media/anthropic-licensing-deal-ap-election/
-summary: Anthropic이 중간선거 직전 AP와 콘텐츠·데이터 라이선스 계약을 맺어 Claude가 AP 출처 선거 데이터를 보여줄 수 있게 됐다. 그동안 공정 이용을 내세워 라이선스 계약을 피해 왔던 기조에서 처음 벗어난 사례다. 실시간 뉴스 대응력이 AI 어시스턴트 경쟁 요소가 되고 있다.
----
-title: Moonshot AI, 2.8조 파라미터 멀티모달 모델 Kimi K3.1 Pro 공개
-category: AI
-importance: 3
-source: Hugging Face
-url: https://huggingface.co/moonshotai/Kimi-K3.1-Pro
-summary: 총 2.8T 파라미터 MoE 구조로 토큰당 약 104B가 활성화되고 약 100만 토큰 컨텍스트를 지원한다. 자체 라이선스로 가중치가 공개됐다. 중국 공개 가중치 모델의 규모 경쟁이 계속되고 있다.
----
-title: Tencent, 비전·컴퓨터 사용 기능 갖춘 770B 모델 Hy4 출시
-category: AI
-importance: 3
-source: TechNode
-url: https://technode.com/2026/11/04/tencent-launches-hy4-with-vision-and-computer-use-capabilities/
-summary: Hy4는 차트·문서 이해와 CLI·GUI 조작이 가능하며 Blender·CAD 작업에 특화 학습됐다. 입력 100만 토큰당 0.834달러 수준이고 OpenRouter에서도 제공되며 가중치 공개를 예고했다. 저가 컴퓨터 사용 에이전트 모델 선택지가 늘었다.
----
-title: Uber, AI 에이전트 경유 차량 호출은 최대 성수기 주간에 단 4건
-category: AI
+title: Google, 와이오밍에 170억 달러 규모 AI 데이터센터 건설
+category: IT
 importance: 2
-source: TechCrunch
-url: https://techcrunch.com/2026/11/04/almost-no-one-uses-ai-agents-to-book-their-uber-company-says/
-summary: 약 3억 2천만 건의 이동·주문 중 AI 에이전트 경유는 차량 4건, Uber Eats 500건에 그쳤다. 앱에서 직접 하는 것이 이미 충분히 빨라 에이전트 이점이 작다는 분석이다. 에이전트 커머스 기대와 실제 사용 간 격차를 보여준다.
+source: Google Blog
+url: https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/wyoming-data-center/
+summary: 탄소 포집 연계 702MW 천연가스 연료전지로 전력을 공급하는 Google의 첫 와이오밍 데이터센터가 발표됐다.
+detail: Google이 와이오밍주 Laramie 카운티 Cheyenne 인근에 170억 달러를 장기 투자해 주 내 첫 데이터센터를 짓는다고 11월 5일 발표했다.
+- 전력은 AEP와 계약한 702MW 규모 연료전지 프로젝트로 공급하며, 천연가스를 쓰되 탄소 포집·저장(CCS)을 적용한다. 연료전지는 Bloom Energy가 공급한다.
+- 이번 계약으로 Google의 CCS 계약 용량은 약 1GW에 이른다.
+- 물 사용을 줄이기 위해 공랭식으로 설계한다.
+- 건설 기간 8,800개 이상, 운영 기간 연 3,700개 이상 일자리 창출을 예상한다.
+AI 데이터센터 전력 확보가 업계 최대 과제가 되면서 클라우드 사업자들이 자체 발전원까지 확보하는 흐름이 굳어지고 있다.
