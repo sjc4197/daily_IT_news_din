@@ -74,6 +74,15 @@ main{padding-block:8px}
 .summary{margin:0; max-width:65ch; white-space:pre-line; color:var(--ink)}
 .art[data-imp="1"] .summary,.art[data-imp="2"] .summary{font-size:14px; color:var(--muted)}
 .src{color:var(--muted)}
+.detail{margin-top:4px; max-width:65ch}
+.detail summary{display:inline-flex; align-items:center; gap:6px; cursor:pointer; list-style:none; font-family:var(--mono); font-size:12px; color:var(--muted); padding:3px 0; user-select:none}
+.detail summary::-webkit-details-marker{display:none}
+.detail summary::before{content:""; width:6px; height:6px; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:rotate(-45deg); transition:transform .15s}
+.detail[open] summary::before{transform:rotate(45deg)}
+.detail summary:hover{color:var(--ink)}
+.detail[open] summary{color:var(--ink)}
+.detail-body{margin-top:8px; padding:12px 14px; border-left:2px solid var(--rule); background:var(--surface); font-size:14.5px; line-height:1.7; white-space:pre-line; color:var(--ink)}
+.art[data-imp="1"] .detail-body,.art[data-imp="2"] .detail-body{font-size:14px}
 footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1px solid var(--rule); padding-block:14px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
 :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 @media (max-width:520px){ .logo{height:48px} .art[data-imp="5"] .title{font-size:22px} .art[data-imp="4"] .title{font-size:19px} }
@@ -125,7 +134,7 @@ footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1
   const BRANCH = 'main';
   const DIR = 'news';
   const IMP = {5:'필독', 4:'중요', 3:'보통', 2:'참고', 1:'가벼움'};
-  const KEYS = new Set(['title','category','importance','source','url','summary']);
+  const KEYS = new Set(['title','category','importance','source','url','summary','detail']);
 
   const $ = s => document.querySelector(s);
   const main = $('#main'), dateSel = $('#dateSel'), impSel = $('#impSel'), q = $('#q');
@@ -188,6 +197,7 @@ footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1
       </div>
       <h2 class="title">${a.url ? `<a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.title)}</a>` : esc(a.title)}</h2>
       ${a.summary ? `<p class="summary">${esc(a.summary)}</p>` : ''}
+      ${a.detail ? `<details class="detail"><summary>상세 요약 보기</summary><div class="detail-body">${esc(a.detail)}</div></details>` : ''}
     </article>`;
   }
 

@@ -83,7 +83,10 @@ importance: 5
 source: TechCrunch
 url: https://techcrunch.com/...
 summary: 공개 가중치 모델이 코딩·추론 벤치마크에서 상용 최상위 모델에 근접했다.
-사내 모델 선택 기준에 직접 영향을 주므로 필독.
+detail: 연구팀이 공개한 신규 모델이 코딩·수학·추론 벤치마크에서 상용 최상위 모델과 1% 이내 격차를 기록했다.
+- 가중치와 학습 레시피를 모두 공개해 자체 호스팅과 파인튜닝이 가능하다.
+- 동일 성능 기준 추론 비용이 상용 API 대비 약 1/5 수준으로 추정된다.
+사내에서 상용 API를 쓰는 서비스는 자체 호스팅 전환을 검토할 시점이다.
 ---
 title: 국내 통신 3사, 데이터센터 전력 공동 조달 계약
 category: IT
@@ -91,7 +94,12 @@ importance: 3
 source: 한국경제
 url: https://hankyung.com/...
 summary: AI 수요 급증으로 데이터센터 전력 확보가 업계 공통 과제가 됐다.
+detail: 통신 3사가 신규 데이터센터용 전력을 공동 조달하는 장기 계약을 체결했다.
+- 계약 규모는 5년간 총 1GW 수준, 재생에너지 비중을 단계적으로 확대.
+당장 영향은 없지만 중장기 클라우드 요금 인상 요인이다.
 ```
+
+`summary`는 목록에서 항상 보이는 한 줄이고, `detail`은 "상세 요약 보기"를 눌렀을 때 펼쳐지는 긴 요약입니다.
 
 ## Claude Cowork 지시문
 
@@ -100,7 +108,8 @@ summary: AI 수요 급증으로 데이터센터 전력 확보가 업계 공통 �
 - 파일명은 오늘 날짜로 news/YYYY-MM-DD.txt
 - 양식은 FORMAT.md를 그대로 따라. 기사 사이는 --- 한 줄로 구분.
 - 기사 8~15건, category는 AI 또는 IT, importance는 1~5 (5=필독은 하루 3건 이내).
-- title/summary는 한국어, url은 원문 링크(utm 파라미터 제거).
+- summary는 한 줄 요약, detail은 기사를 안 읽어도 되게 5~10문장 또는 불릿으로 상세 요약.
+- title/summary/detail은 한국어, url은 원문 링크(utm 파라미터 제거).
 - 저장 후 git add → commit("news: YYYY-MM-DD") → push origin main.
 ```
 
