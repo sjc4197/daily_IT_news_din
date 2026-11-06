@@ -1,0 +1,83 @@
+title: Apache OFBiz 보안 취약점 46개 공개, 인증 전 원격 코드 실행 포함
+category: IT
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/threatsday-apache-ofbiz-rce-dreamhost.html
+summary: Apache OFBiz 메인테이너가 46개 취약점을 공개했고, CVE-2026-68524는 인증 없이 원격 코드 실행이 가능하며 CVE-2026-109928은 계정 탈취로 이어진다. 24.09.08에서 수정됐다. Java 기반 ERP를 외부에 노출해 운영 중이라면 즉시 업데이트가 필요하다.
+---
+title: Zyxel GS1900 스위치, 기존 패치 우회하는 root 명령 실행 취약점 발견
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/zyxel-gs1900-patch-fails-to-block-zero.html
+summary: CISA KEV에 오른 CVE-2026-7273의 수정판(2.90 Patch 2)이 새 취약점 CVE-2026-107441을 막지 못해 인증 없이 root 권한 명령 실행이 가능하다. GS1900 10개 모델이 영향을 받으며 2.90 Patch 3으로 업데이트해야 한다. 대체 우회책이 없어 사내 L2 스위치 펌웨어 점검이 필요하다.
+---
+title: CISA, APT29가 악용한 Apple PAC 우회 취약점 KEV 등재
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/hackers-exploit-patched-apple-flaw-to.html
+summary: 2024년에 패치된 CVE-2024-27834가 APT29 연계 캠페인에서 정보 탈취 악성코드 배포에 쓰인 것으로 확인돼 CISA가 KEV에 추가했다. 감염된 정상 사이트와 Plerdy SEO 트래커 공급망 공격으로 악성 JavaScript가 유포됐다. 구버전 iOS·macOS 단말이 남아 있는지 점검해야 한다.
+---
+title: SonicWall, 지원 종료된 GMS의 파일 읽기·SQL 인젝션 취약점 패치 안 한다
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/sonicwall-wont-patch-eol-gms-flaws-that.html
+summary: GMS 9.5.2 이하에서 인증 없는 파일 읽기(CVE-2026-109593, CVSS 9.1)와 인증 후 SQL 인젝션(CVE-2026-109594)이 발견됐지만 EoL 제품이라 수정이 없다. SonicWall은 NSM으로의 전환을 권고했다. EoL 보안 장비를 계속 쓰는 것이 얼마나 위험한지 보여주는 사례다.
+---
+title: DreamHost 웹 파일 매니저 침해, FTP/SFTP 계정 정보 유출
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/threatsday-apache-ofbiz-rce-dreamhost.html
+summary: 공격자가 8월부터 10월 23일까지 files.dreamhost.com 파일 매니저 서버에 접근해 로그인한 사용자의 FTP/SFTP 자격 증명을 탈취했고 일부 웹메일 세션도 노출됐다. 제어판 로그인과 결제 정보 접근 증거는 없다고 밝혔다. 호스팅 사용자는 자격 증명 교체가 필요하다.
+---
+title: Docker Sandboxes 심볼릭 링크 취약점, AI 에이전트가 샌드박스 밖 파일 접근 가능
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/threatsday-apache-ofbiz-rce-dreamhost.html
+summary: Docker Sandboxes의 copy 명령에서 심볼릭 링크 처리 결함(CVE-2026-103916)으로 AI 에이전트가 샌드박스 외부 파일에 닿을 수 있었고 0.51.0에서 수정됐다. 코딩 에이전트 격리를 컨테이너 샌드박스에 의존하는 팀은 버전 확인이 필요하다.
+---
+title: Meta, 병렬 AI 코딩 에이전트 스타트업 Conductor 인수
+category: AI
+importance: 4
+source: TechCrunch
+url: https://techcrunch.com/2026/11/04/meta-acquires-ai-coding-startup-conductor/
+summary: Meta가 여러 AI 에이전트를 병렬 작업 공간에서 돌려 소프트웨어를 만드는 도구 Conductor를 인수했다. Conductor 클라우드 서비스는 11월 20일 종료되고 이후 사용자 클라우드 데이터는 삭제된다. 빅테크의 AI 코딩 도구 경쟁이 인수전으로 번지고 있다.
+---
+title: OpenAI, Codex에 쓰이는 Git 인프라 스타트업 Pierre Computer 인수 추진
+category: AI
+importance: 4
+source: The Neuron
+url: https://www.theneuron.ai/news/openai-pierre-deal-github-ai-coding/
+summary: Axios 보도에 따르면 OpenAI가 임베드 가능한 Git 인프라 Code Storage를 만든 Pierre Computer를 인수한다. Pierre 기술은 이미 Codex 내부에서 쓰이고 있으며, 이틀 전 공개한 Pando와 함께 에이전트 시대 코드 저장소 경쟁에서 GitHub를 겨냥하는 행보로 읽힌다.
+---
+title: Anthropic, AP와 첫 유료 뉴스 라이선스 계약 체결
+category: AI
+importance: 3
+source: Adweek
+url: https://www.adweek.com/media/anthropic-licensing-deal-ap-election/
+summary: Anthropic이 중간선거 직전 AP와 콘텐츠·데이터 라이선스 계약을 맺어 Claude가 AP 출처 선거 데이터를 보여줄 수 있게 됐다. 그동안 공정 이용을 내세워 라이선스 계약을 피해 왔던 기조에서 처음 벗어난 사례다. 실시간 뉴스 대응력이 AI 어시스턴트 경쟁 요소가 되고 있다.
+---
+title: Moonshot AI, 2.8조 파라미터 멀티모달 모델 Kimi K3.1 Pro 공개
+category: AI
+importance: 3
+source: Hugging Face
+url: https://huggingface.co/moonshotai/Kimi-K3.1-Pro
+summary: 총 2.8T 파라미터 MoE 구조로 토큰당 약 104B가 활성화되고 약 100만 토큰 컨텍스트를 지원한다. 자체 라이선스로 가중치가 공개됐다. 중국 공개 가중치 모델의 규모 경쟁이 계속되고 있다.
+---
+title: Tencent, 비전·컴퓨터 사용 기능 갖춘 770B 모델 Hy4 출시
+category: AI
+importance: 3
+source: TechNode
+url: https://technode.com/2026/11/04/tencent-launches-hy4-with-vision-and-computer-use-capabilities/
+summary: Hy4는 차트·문서 이해와 CLI·GUI 조작이 가능하며 Blender·CAD 작업에 특화 학습됐다. 입력 100만 토큰당 0.834달러 수준이고 OpenRouter에서도 제공되며 가중치 공개를 예고했다. 저가 컴퓨터 사용 에이전트 모델 선택지가 늘었다.
+---
+title: Uber, AI 에이전트 경유 차량 호출은 최대 성수기 주간에 단 4건
+category: AI
+importance: 2
+source: TechCrunch
+url: https://techcrunch.com/2026/11/04/almost-no-one-uses-ai-agents-to-book-their-uber-company-says/
+summary: 약 3억 2천만 건의 이동·주문 중 AI 에이전트 경유는 차량 4건, Uber Eats 500건에 그쳤다. 앱에서 직접 하는 것이 이미 충분히 빨라 에이전트 이점이 작다는 분석이다. 에이전트 커머스 기대와 실제 사용 간 격차를 보여준다.
