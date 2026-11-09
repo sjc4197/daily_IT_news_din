@@ -1,0 +1,206 @@
+title: Claude Code '다시 묻지 않기' 설정 파일로 GitHub 공개 저장소 1,122곳에 비밀번호·키 노출
+category: IT
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/claude-codes-dont-ask-again-file.html
+summary: Claude Code가 승인한 셸 명령을 .claude/settings.local.json에 평문 저장하면서, 공개 저장소에서 DB 비밀번호·SSH 계정·클라우드 키 등 1,379개 비밀이 발견됐다.
+detail: 보안업체 Apiiro 조사에 따르면 Claude Code에서 셸 명령에 "Yes, and don't ask again"을 고르면 명령 전체가 비밀번호·토큰까지 포함된 채 .claude/settings.local.json에 평문으로 저장될 수 있다.
+- 이 파일은 사용자 전역 git excludes에는 추가되지만 프로젝트 .gitignore에는 들어가지 않아, 이미 커밋된 경우 보호되지 않는다.
+- GitHub 공개 저장소 103,617곳에서 파일 104,185개를 찾았고, 그중 1,122개에 비밀 1,379개가 들어 있었다. DB 비밀번호 379개, SSH 로그인 43개, GitHub/GitLab/npm 토큰 42개, AWS 키 23개 등이다.
+- 과거 커밋·포크·공유 설정 파일·채팅 로그까지 합치면 저장소 1,994곳에서 비밀 2,539개가 확인됐다.
+- gitleaks와 TruffleHog 모두 215개를 놓쳤는데, 명령어 안에 직접 친 비밀번호는 키 형식이 아니라 스캐너가 잡지 못하기 때문이다.
+- 관련 버그 리포트는 자동화 봇이 "not planned"로 닫았고 Anthropic의 답변은 없었다고 연구진은 밝혔다.
+권고 사항은 노출된 자격증명 즉시 교체, git rm --cached로 추적 해제 후 .gitignore 추가, 비밀은 환경변수로 참조, 단일 명령 대신 패턴 단위 승인이다.
+Claude Code를 쓰는 팀이라면 오늘 바로 저장소와 git 히스토리에서 .claude 폴더를 검색하고, MariaDB 접속 정보처럼 명령에 직접 넣은 비밀번호가 없는지 점검해야 한다.
+---
+title: Anthropic, 기술주 급락에도 추수감사절 전 IPO 강행... 기업가치 눈높이 낮춰
+category: AI
+importance: 5
+source: The Decoder
+url: https://the-decoder.com/anthropic-pushes-ahead-with-pre-thanksgiving-ipo-despite-tech-selloff-accepts-lower-valuation/
+summary: Financial Times 보도에 따르면 Anthropic은 1조2,500억~1조7,500억 달러 가치로 800억~1,000억 달러를 조달하는 IPO를 추수감사절 전에 추진한다.
+detail: Financial Times가 인용한 투자자들에 따르면 Anthropic은 기술주 매도세에도 추수감사절 전 상장을 밀어붙이고 있다.
+- 조달 규모는 800억~1,000억 달러, 기업가치는 1조2,500억~1조7,500억 달러로 거론된다. 현재 평가액 9,650억 달러보다는 높지만 낙관론자들이 기대한 2조 달러에는 못 미친다.
+- 연환산 매출은 약 810억 달러로, 7월 말 약 650억 달러에서 늘었다.
+- 이번 주 금리 상승과 막대한 AI 투자 계획, 데이터센터 건설 속도 조절을 공약한 민주당의 중간선거 승리가 겹치며 Nasdaq 100이 목요일 하루 6.4% 하락했다.
+- 경쟁사 OpenAI도 투자 라운드 목표 가치를 1조4,000억 달러에서 1조2,500억 달러로 낮춘 것으로 전해졌다.
+AI 업계 최대급 IPO가 시장 냉각기와 맞물리면서, 향후 AI API 가격 정책과 투자 속도에도 영향을 줄 수 있어 지켜볼 만하다.
+---
+title: OpenAI, 보안 연구 전용 모델 GPT-6 Cyber 공개... Firefox 고위험 취약점 81개 발견
+category: AI
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/openai-launches-gpt-6-cyber-after-ai.html
+summary: OpenAI가 취약점 탐지·수정에 특화한 GPT-6 Cyber를 Daybreak Red 프로그램 고객에게 API와 Codex로 제한 공개했다.
+detail: OpenAI가 보안 연구용 신규 모델 GPT-6 Cyber를 발표했으며, 자체 Preparedness Framework에서 사이버보안 위험도를 "Critical"로 분류했다.
+- 자율 파이프라인으로 Linux 로컬 권한 상승 익스플로잇 948개, Mozilla Firefox의 미공개 고위험 취약점 81개, Brotli 치명적 취약점 CVE-2026-111497(CVSS 9.2)을 찾아냈다.
+- 알려진 취약점을 실제 익스플로잇으로 만드는 ExploitGym 벤치마크에서 48.5%를 기록해 GPT-5.6 Cyber(32.1%)를 크게 앞섰다.
+- 안전 프롬프트 없이도 범위 밖 서비스 공격을 99.93% 회피했고, 프롬프트 적용 시 100% 범위를 지켰다고 OpenAI는 밝혔다.
+- 초기에는 Daybreak Red 프로그램의 일부 고객에게만 API와 Codex로 제공된다.
+- 11월 29일부터는 개인 계정의 Daybreak Blue 세션 내용이 학습 설정과 무관하게 모델 개선에 쓰일 수 있다.
+AI가 익스플로잇을 대량 생산하는 시대라 패치 지연의 대가가 커지고 있으니, 운영 중인 서버의 OS·라이브러리 패치 주기를 더 짧게 가져가야 한다.
+---
+title: Ruby on Rails Active Storage 치명적 취약점, ImageMagick 업로드로 서버 파일 쓰기 가능
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/critical-rails-flaw-lets-attackers.html
+summary: 인증 없이 조작된 업로드만으로 서버에 임의 파일을 쓸 수 있는 CVSS 9.8 취약점이 Rails 8.1.4.1, 8.0.5.2에서 수정됐다.
+detail: Rails가 Active Storage의 치명적 취약점(GHSA-f3w6-w445-fwh9, CVSS 9.8)을 공개하고 패치를 배포했다. GMO Flatt Security의 RyotaK가 HackerOne으로 제보했다.
+- 업로드된 SVG가 분석 과정에서 ImageMagick의 MSL 코더에 도달해, 파일을 첨부하는 것만으로 공격이 성립한다. Disk 서비스를 쓰는 앱은 임의 파일 읽기도 가능하다.
+- ImageMagick 사용, 해당 코더를 막지 않는 정책(Debian·Ubuntu 기본 정책 포함), 비신뢰 사용자 업로드 허용이라는 세 조건이 모두 맞으면 영향을 받는다.
+- 업로드 확장자가 디코더 선택에 영향을 주는 두 번째 취약점(CVSS 8.8)도 함께 고쳐졌고, 이번 릴리스에서 총 21건의 보안 이슈가 수정됐다.
+- 수정 버전은 8.1.4.1과 8.0.5.2이며, 8.0 미만은 지원 종료라 패치가 없다. Rails 8.0 보안 지원도 11월 7일로 끝났다.
+- 업그레이드가 어렵다면 시스템 ImageMagick policy.xml에서 MSL, Ghostscript 코더, gs delegate를 차단하고, Disk 서비스 사용 시 secret_key_base 등 비밀을 교체해야 한다.
+Rails를 쓰지 않더라도 Spring 서비스에서 업로드 이미지를 ImageMagick으로 처리한다면 같은 원리의 공격이 가능하니, 서버의 ImageMagick 정책을 점검할 만하다.
+---
+title: AI 코딩 에이전트, 실제 수정 요청 과제의 약 4분의 3에서 사람 손이 필요
+category: AI
+importance: 3
+source: The Decoder
+url: https://the-decoder.com/ai-coding-agents-still-need-human-cleanup-on-nearly-three-out-of-four-tasks-in-a-real-world-test/
+summary: Alibaba 등 연구진의 Co-Design Bench에서 1위 GPT-6 Astra도 과제의 26.4%만 완전히 해결했다.
+detail: Alibaba와 아시아 대학 연구진이 실제 사용자 변경 요청을 바탕으로 만든 벤치마크 Co-Design Bench로 코딩 에이전트 10종을 평가한 결과를 arXiv에 공개했다.
+- 1위 GPT-6 Astra는 요구사항을 평균 약 70% 충족했지만 완전히 맞힌 과제는 26.4%에 그쳤다. 저장소 단위 과제의 완전 해결률은 18%에 못 미쳤다.
+- Claude Opus 5와 Qwen3.8-Max가 뒤를 이었고 Grok 4.6이 최하위였다. 대규모 개편 과제에서는 작은 모델 Qwen3.8-27B가 2위에 오르기도 했다.
+- 기존 벤치마크(WebCompass-edit)에서 99% 이상을 기록하는 모델들과 35%포인트 넘는 격차가 났다.
+- 레이아웃·디자인·인터랙션·콘텐츠 변경이 서너 가지 겹칠수록 모든 모델의 성능이 떨어졌고, 연산량을 늘려도 개선되지 않았다.
+- 실행 환경(harness)에 따라 결과가 크게 달라져, 모델과 환경을 함께 보고해야 한다고 연구진은 권고했다.
+AI 에이전트가 짠 코드는 여전히 세부 누락이 잦으니, 리뷰와 테스트 단계를 생략하지 않는 개발 프로세스가 필요하다.
+---
+title: 오픈·클로즈드 AI 모델의 사이버 공격 능력 격차, 4~7개월로 좁혀져
+category: AI
+importance: 3
+source: The Decoder
+url: https://the-decoder.com/the-gap-between-open-and-closed-ai-models-in-cyber-capabilities-keeps-shrinking/
+summary: Vals AI 측정에서 공개 가중치 DeepSeek V4.1 Flash가 공격 목표 72.8%를 달성해 GPT-6 Sol Daybreak(80.8%)를 바짝 추격했다.
+detail: Vals AI가 모의 기업 네트워크를 대상으로 한 CyberOffense 벤치마크 결과를 공개했다. 에이전트는 공개 웹 주소 하나에서 출발해 단독으로 공격을 수행한다.
+- 전체 공격 목표 달성률은 GPT-6 Sol Daybreak 80.8%, 공개 가중치 모델 DeepSeek V4.1 Flash 72.8%였다.
+- 실행 비용은 DeepSeek 약 3달러, GPT-6 Sol Daybreak 약 22달러로 7배 이상 차이 났다.
+- DeepSeek는 처음 2,500만 토큰 동안 성과가 없다가 1억 토큰 이후 대부분을 달성해, 짧은 테스트는 공개 모델을 과소평가할 수 있다.
+- 영국 AI Security Institute는 2025년 6~10개월이던 사이버 능력 격차가 4~7개월로 줄었다고 분석했고, 공개 모델의 안전장치는 대체로 효과가 없었다고 밝혔다.
+누구나 저비용으로 공격 에이전트를 돌릴 수 있게 된 만큼, 외부에 노출된 서비스와 관리 포트를 줄이는 기본기가 더 중요해졌다.
+---
+title: OpenAI, 자사 해킹에 성공했던 Hacktron과 보안 파트너십 체결
+category: AI
+importance: 3
+source: explainx.ai
+url: https://explainx.ai/blog/openai-hacktron-partnership-daybreak-red-third-party-testing-2026
+summary: OpenAI가 지난 7월 계정 탈취 취약점을 찾아낸 보안업체 Hacktron과 손잡고 외부 서비스 연동 구간을 집중 점검한다.
+detail: OpenAI가 11월 6일 보안업체 Hacktron과의 파트너십을 발표했다.
+- 양측 엔지니어가 고위험 영역을 함께 선정해 테스트하며, 특히 OpenAI 시스템과 서드파티 서비스의 상호작용에 초점을 맞춘다.
+- Hacktron은 Daybreak 프로그램을 통해 OpenAI의 사이버 특화 모델에 더 넓은 접근 권한을 받는다.
+- Hacktron은 7월 25일 community.openai.com 이미지 처리 취약점과 SSO 약점을 엮어, 포럼 로그인과 연결된 ChatGPT·Codex 계정을 탈취할 수 있음을 보였다.
+- 직원의 Codex 세션으로 내부 모노레포에 무해한 PR을 여는 데까지 도달했으며, 익스플로잇 개발에는 Claude Opus 모델을 썼다고 밝혔다.
+- OpenAI는 최초 보고 약 14시간 만에 수정했고 버그 바운티로 6,500달러를 지급했다.
+SSO와 외부 서비스 연동 지점은 대형 서비스에서도 뚫리는 단골 경로라, 사내 인증 연동 구간도 같은 관점으로 점검할 필요가 있다.
+---
+title: 엔비디아, 네이버에 1조3,412억원 투자 완료... 지분 4.13%로 3대 주주
+category: AI
+importance: 3
+source: 아이뉴스24
+url: https://inews24.com/view/2022296
+summary: 엔비디아의 10억 달러 투자가 원화 약 1조3,412억원으로 확정돼 네이버 신주 655만여 주를 인수했다.
+detail: 엔비디아의 네이버 투자금이 환율을 반영해 약 1조3,412억원으로 확정됐고, 6일 납입이 이뤄졌다.
+- 엔비디아는 주당 20만4,500원에 신주 655만8,435주를 인수해 지분 약 4.13%를 확보, 국민연금(9.49%)과 블랙록(7.09%)에 이은 3대 주주가 된다.
+- 환율 변동으로 원화 투자금은 잠정치보다 약 1,397억원 줄었고, 지분율도 예상치 4.54%에서 낮아졌다. 달러 기준 투자액은 그대로다.
+- 이해진 의장 지분율은 4.03%에서 약 3.8%로 희석될 전망이다.
+- 양사는 'AI 팩토리'로 불리는 AI 인프라 사업을 공동 추진하며, 네이버가 데이터센터 구축·운영을, 엔비디아가 GPU 공급을 맡는다. 브룩필드도 참여한다.
+국내에서 GPU 인프라 공급이 늘어나면 공공·SI 프로젝트에서도 국산 클라우드 기반 AI 서비스를 도입할 선택지가 넓어질 수 있다.
+---
+title: AWS, 코드 취약점 검증·자동 수정 서비스 Continuum 정식 출시
+category: IT
+importance: 3
+source: InfoQ
+url: https://infoq.com/news/2026/11/aws-continuum-ga
+summary: 취약점을 샌드박스에서 실제 익스플로잇으로 검증하고 수정 PR까지 만들어 주는 AWS Continuum이 미국 2개 리전에서 GA됐다.
+detail: AWS가 6월 프리뷰로 공개했던 Continuum의 코드 취약점 기능을 약 4개월 만에 정식 출시했다.
+- 저장소와 주변 AWS 환경으로 컨텍스트 그래프를 만들고, 격리된 샌드박스에서 익스플로잇을 실행해 실제 도달 가능한 취약점인지 확인한 뒤 PoC와 재현 절차를 첨부한다.
+- 공격 경로와 영향 범위(blast radius)를 함께 제시하고, 수정안은 패치나 PR 형태로 전달한다.
+- 모든 수정은 사람이 승인해야 반영되는 모드로 시작하며, 신뢰도 기준을 충족한 일부 유형은 추후 자동 적용을 허용할 계획이다.
+- 가격은 보호 코드 100만 줄당 월 200달러부터의 컨텍스트 요금과 추론 단위당 10달러의 추론 요금으로 구성된다. AWS 예시로 100만 줄·취약점 100건이면 1,200달러다.
+- 현재 US East(버지니아)와 US West(오레곤)에서만 제공되며 지원 언어는 공개되지 않았다.
+SAST 결과의 오탐 정리에 시간을 쓰는 팀이라면, 도달 가능성 검증형 도구가 리뷰 부담을 어떻게 줄이는지 비교해 볼 만하다.
+---
+title: AWS CEO "2027년 대형 약정 용량 대부분 매진"... 클라우드 용량 확보 경쟁 심화
+category: IT
+importance: 3
+source: InfoQ
+url: https://www.infoq.com/news/2026/11/aws-capacity-sold-out/
+summary: Andy Jassy가 AWS의 대규모 약정 용량이 2027년분까지 사실상 소진됐다고 밝혀, 중소 고객의 용량 확보 우려가 커지고 있다.
+detail: Amazon CEO Andy Jassy는 a16z 팟캐스트에서 AWS의 대규모 약정 용량이 2027년분까지 "largely sold out"이며 2028년분도 상당 부분 배정됐다고 말했다.
+- 2026년 용량은 이미 소진됐고, Amazon은 올해 전체 설비투자로 약 2,200억 달러를 계획하고 있다.
+- AWS는 1월 ML용 Capacity Blocks 요금을 전 리전에서 약 15% 올렸다. P5en, P5e, P5, P4d, Trn2, Trn1 인스턴스가 대상이다.
+- 다만 On-Demand, EC2, Bedrock용 여유 용량은 별도로 확보해 두고 있다고 한다.
+- 클라우드 분석가 David Linthicum은 장기 예약 블록과 일상적으로 할당 가능한 용량은 다르다며 헤드라인이 과장됐다고 반박했다.
+- 반면 일반 EC2 On-Demand 용량 확보가 어려워졌다는 실무자 경험담도 이어지고 있다.
+CI나 운영 클러스터를 클라우드에서 돌린다면 사용하는 리전·가용 영역의 실제 가용성을 확인하고 용량 부족 시나리오를 미리 계획해 두는 게 좋다.
+---
+title: Google 11월 Android 보안 패치, 사용자 개입 없는 원격 코드 실행 취약점 포함 216건 수정
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/google-patches-critical-android-flaw.html
+summary: Android 14~17에 영향을 주는 치명적 취약점 CVE-2026-58868 등 216건(치명적 23건)이 11월 보안 업데이트로 고쳐졌다.
+detail: Google의 2026년 11월 Android 보안 공지는 총 216개 취약점을 다루며, 그중 23개가 치명적 등급이다.
+- 대표 취약점 CVE-2026-58868은 FrameDecoder.cpp의 힙 버퍼 오버플로로, 사용자 조작 없이 원격 악용이 가능하며 Android 14~17에 영향을 준다.
+- CVE-2026-58882는 WAP Push SMS 하나로 전화 앱을 강제 종료시켜 긴급전화를 포함한 통화를 끊을 수 있는 원격 서비스 거부 취약점이다.
+- 커널에서도 치명적 취약점 6건이 나왔고 그중 2건은 Bluetooth 관련이며, MediaTek 모뎀과 Qualcomm 비공개 컴포넌트 취약점도 포함됐다.
+- 11월 4일 기준 실제 악용 보고는 없고 CISA KEV 목록에도 없다.
+- 전체 수정을 받으려면 보안 패치 수준 2026-11-05 이상이 필요하며, 설정의 Android 버전 정보에서 확인할 수 있다.
+업무용 Android 단말을 쓴다면 보안 패치 수준을 확인하고, MDM으로 관리 중이라면 업데이트 강제 정책을 점검할 때다.
+---
+title: CISA, 2024년 패치된 Apple 취약점이 정보 탈취 악성코드 유포에 악용 중이라고 경고
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/hackers-exploit-patched-apple-flaw-to.html
+summary: CISA가 Pointer Authentication 우회 취약점 CVE-2024-27834를 KEV에 추가했으며, Sekoia는 APT29를 배후로 지목했다.
+detail: 미국 CISA가 11월 4일 Apple의 CVE-2024-27834(CVSS 5.5)를 실제 악용 취약점(KEV) 목록에 추가했다.
+- 이 취약점은 Pointer Authentication을 우회할 수 있는 부적절한 인증 문제로, 2024년 3월 Pwn2Own에서 시연된 뒤 같은 해 5월 iOS 17.5, macOS Sonoma 14.5, Safari 17.5 등에서 패치됐다.
+- 보안업체 Sekoia는 러시아 연계 APT29가 WebKit 원격 코드 실행 취약점과 이 우회 취약점을 엮은 제로클릭 체인을 쓴 것으로 중·고 신뢰도로 판단했다.
+- 감염 경로는 침해된 정상 웹사이트, 유명 사이트를 사칭한 가짜 사이트, Plerdy SEO Tracker 공급망 공격이다.
+- 공격 스크립트는 방문자 기기를 프로파일링한 뒤 브라우저 쿠키를 훔치는 페이로드를 배포한다.
+- 미국 연방기관은 11월 18일까지 패치해야 한다.
+2년 전 패치된 취약점이 지금 악용된다는 건 업데이트 안 된 기기가 여전히 많다는 뜻이니, 사내 맥·아이폰의 OS 버전부터 확인하자.
+---
+title: 엔비디아 이사회, 젠슨 황 CEO와 中 스파이 의혹 인물 관계 독립 조사 착수
+category: IT
+importance: 3
+source: TechCrunch
+url: https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/
+summary: 엔비디아 이사회가 젠슨 황이 중국 정보기관 공작 대상이었다는 보도와 관련해 사외이사 주도의 독립 조사를 발표했다.
+detail: 엔비디아 이사회는 11월 8일 젠슨 황 CEO가 중국 스파이 공작의 표적이 됐다는 보도와 관련해 독립 조사에 착수한다고 밝혔다.
+- 블룸버그 등은 황 CEO가 사내 메시지에서 싱가포르 칩 기업 Megaspeed 임원 Alice Huang과의 부적절한 관계를 인정했다고 보도했다.
+- 올해 초 미국 정책 당국자들 사이에 돈 메모에는 이 인물이 중국 국가안전부에 포섭돼 황 CEO를 감시했다는 주장이 담겼다.
+- 이사회는 국가안보나 회사 기밀이 유출됐다고 볼 이유는 없다며 황 CEO와 경영진을 신뢰한다고 밝혔다.
+- 조사는 사외이사들이 외부 법률 자문과 함께 진행하며, 황 CEO도 협조하기로 했다.
+AI 반도체 공급의 핵심 기업 리더십 리스크라는 점에서 GPU 공급망과 업계 투자 심리에 미칠 영향을 지켜볼 필요가 있다.
+---
+title: Karpathy, Claude Code로 주말 만에 Hacker News 기반 영상 큐레이션 사이트 HackerTube 구축
+category: AI
+importance: 2
+source: The Decoder
+url: https://the-decoder.com/andrej-karpathy-built-a-curated-video-platform-in-a-weekend-using-claude-and-20-years-of-hacker-news/
+summary: Andrej Karpathy가 20년치 Hacker News 댓글 4,300만 건을 분석해 반복 추천된 영상 6,454개를 모은 HackerTube를 공개했다.
+detail: Andrej Karpathy가 Claude Opus 5.5와 Claude Code로 주말 동안 영상 큐레이션 사이트 HackerTube(hackertube.org)를 만들었다.
+- 20년간의 Hacker News 댓글 4,300만 건을 분석해 꾸준히 추천된 영상 6,454개를 추렸다.
+- 데이터 분석부터 서버 구축까지 거의 모든 작업을 Claude Code가 수행했고, 그는 Google Cloud API 키, 서버 임대, 도메인 구매만 직접 했다.
+- 로그인이 필요 없고, 최적화된 썸네일 대신 영상 중간 프레임 한 장을 보여주며, 상태는 브라우저에만 저장한다.
+- 후속으로 Tristan Hume의 채널 목록에서 영상 4만7,000개를 모은 TristanTube도 3분 만에 만들었다고 밝혔다.
+- Karpathy는 예전엔 몇 주 걸리던 프로젝트를 이제 몇 시간 만에 끝낼 수 있다고 말했다.
+사이드 프로젝트나 사내 도구 프로토타입을 AI 에이전트로 빠르게 만들어 보는 연습이 실무 생산성에도 바로 연결되는 시기다.
+---
+title: OpenAI, 이미지 생성 Images 2.6 출시... 속도 50% 개선, API는 Flare·Sunburst 두 모델
+category: AI
+importance: 2
+source: APIYI
+url: https://docs.apiyi.com/en/live/2026-11/gpt-image-2-6-launch
+summary: OpenAI가 생성 속도를 평균 50% 높인 Images 2.6을 ChatGPT·Codex·API에 출시했고, API는 속도형 Flare와 품질형 Sunburst로 나뉜다.
+detail: OpenAI가 11월 4일 이미지 생성 모델 Images 2.6을 출시했다.
+- 평균 생성 속도가 50% 빨라졌고, 이미지로 GIF를 만드는 기능이 추가됐다.
+- API에서는 빠른 생성용 gpt-image-2.6-flare와 디테일·다회 편집 일관성을 높인 gpt-image-2.6-sunburst 두 모델을 제공한다.
+- Flare는 저품질 초안을 최소 6초 만에 만들 수 있다.
+- 토큰당 가격은 텍스트 입력 100만 토큰당 5달러, 이미지 입력 8달러, 이미지 출력 30달러로 기존과 같다.
+- SVG 출력과 주석 기반 편집 기능도 함께 제공된다.
+화면 시안이나 아이콘이 필요한 사내 프로젝트라면 SVG 출력 기능을 디자인 초안 작업에 활용해 볼 만하다.
