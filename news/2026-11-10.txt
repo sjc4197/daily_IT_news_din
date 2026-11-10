@@ -1,0 +1,163 @@
+title: Anthropic, Claude Fable 5.2·Mythos 5.2 출시... 응답 최대 30% 빨라지고 코딩·에이전트 벤치마크 대폭 상승
+category: AI
+importance: 5
+source: Anthropic
+url: https://www.anthropic.com/claude-fable-and-mythos-5-2
+summary: Anthropic이 최상위 모델 Fable 5.2와 보안 특화 Mythos 5.2를 11월 9일 공개했다. 이전 버전보다 최대 30% 빠르고 SWE v2 등에서 Opus 5.5를 크게 앞선다.
+detail: Fable과 Mythos는 같은 기반 모델로, Fable은 사이버·생물 안전장치를 강화해 일반 사용자에게, Mythos는 검증된 기관에만 제공된다.
+- 벤치마크(Fable 5.2 vs Opus 5.5): SWE v2 69.9% 대 62.3%, FrontierCode 2.0 49.1% 대 45.5%, OSWorld 2.1 89.3% 대 87.2%, Humanity's Last Exam(도구 사용) 74.2% 대 67.7%.
+- 가격은 입력 100만 토큰당 8달러, 출력 40달러이며 최대 2.5배 빠른 Fast 모드는 16달러·80달러다. API 모델 ID는 claude-fable-5-2.
+- AWS, Google Cloud, Microsoft Azure 등 주요 플랫폼에서 바로 쓸 수 있고, Pro·Team 표준 좌석은 주간 한도의 최대 50%까지 Fable을 쓸 수 있다.
+- Mythos 5.2는 내부 CVE 재발견 평가에서 Opus 5.5보다 취약점을 약 10.2% 더 찾았고, Fable 5.2의 안전 분류기는 정상 요청 차단을 이전 대비 약 55% 줄였다.
+- Anthropic은 일상적인 코딩·업무엔 Opus 5.5를, 가장 어려운 과제에만 Fable·Mythos를 권장한다.
+단가가 높으므로 사내 코드 리뷰·리팩터링 자동화는 Opus로 돌리고 대규모 마이그레이션 같은 난제에만 Fable을 쓰는 식으로 비용을 나누는 게 현실적이다.
+---
+title: 엔비디아·리벨리온·SK텔레콤, NVLink Fusion으로 한국형 소버린 AI 인프라 협력
+category: AI
+importance: 4
+source: NVIDIA (GlobeNewswire)
+url: https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Rebellions-and-SK-Telecom-Announce-Collaboration-to-Advance-Sovereign-AI-Infrastructure-With-NVIDIA-NVLink-Fusion/default.aspx
+summary: 리벨리온의 차세대 NPU R200을 NVLink Fusion으로 엔비디아 플랫폼에 연결해 SKT AI 데이터센터에 배치한다. 2028년 배치 목표다.
+detail: 엔비디아 AI 데이 서울 첫날인 11월 9일, 세 회사가 과기정통부 지원 아래 한국 소버린 AI 인프라 협력을 발표했다.
+- 리벨리온은 Rebel R200 NPU를 NVLink Fusion으로 엔비디아 플랫폼에 연결하고, 전력·냉각 등을 공유하는 MGX 랙 구조를 채택한다.
+- R200은 수조 파라미터급 MoE 모델의 저지연·고효율 추론을 겨냥하며, 2028년 배치 준비가 목표다.
+- SKT는 GPU가 프리필(prefill)을, NPU가 디코드(decode)를 맡는 분리형(disaggregated) 추론 구조를 자사 AI 데이터센터에 적용할 계획이다.
+- 해당 인프라는 SKT의 A.X K2 모델과 'AI for All' 공공 서비스에 쓰인다.
+- 성능·전력 수치나 계약 금액은 공개되지 않았다.
+국산 NPU가 엔비디아 생태계에 편입되면 향후 국내 공공·클라우드 AI 추론 인프라 선택지가 넓어질 수 있다.
+---
+title: 엔비디아, 사람 영상으로 학습한 로봇 파운데이션 모델 GR00T 2 공개
+category: AI
+importance: 4
+source: The Next Web
+url: https://thenextweb.com/news/nvidia-gr00t-2-robots-human-video-corl
+summary: 엔비디아가 CoRL에서 행동 결과를 미리 예측하는 '월드 액션 모델' GR00T 2와 Isaac Lab 3.0을 공개했다.
+detail: 엔비디아가 11월 9일 미국 오스틴에서 열린 로봇 학습 학회 CoRL에서 개방형 로봇 모델 GR00T 2를 발표했다.
+- GR00T 2는 움직이기 전에 자신의 행동이 카메라 화면을 어떻게 바꿀지 예측하는 '월드 액션 모델'이다.
+- 로봇 데이터와 사람 영상으로 학습했으며, 1인칭 시점 영상 10만 시간 분량을 공개 데이터로 푼다.
+- 사전 학습하지 않은 50개 과제 중 40개를 최소 1회 성공했고, 시연 1회로 평균 71%, 5회로 95% 성공률을 냈다. 다만 평가 과제가 학습하기 쉬운 것 위주로 선정됐다는 점은 논문에도 명시돼 있다.
+- Foxconn, Siemens, Nexuni가 초기 테스트에 참여했지만 아직 실제 생산 투입을 밝힌 곳은 없다.
+- 함께 공개된 시뮬레이션 학습 도구 Isaac Lab 3.0은 특정 테스트에서 학습 속도가 최대 2.5배 빨라졌다.
+백엔드 실무와는 거리가 있지만, 로봇·제조 분야에서도 대규모 영상 기반 사전학습이 표준이 되는 흐름을 보여준다.
+---
+title: Google, 1년 새 TPU 4종 출시... 기밀 컴퓨팅용 TPU 8tx·메모리 확장형 8i Max 추가
+category: AI
+importance: 4
+source: The Decoder
+url: https://the-decoder.com/google-ships-four-tpu-variants-in-one-year-as-it-ramps-up-competition-with-nvidia/
+summary: Google이 8세대 TPU 라인업에 TPU 8tx와 TPU 8i Max를 더하고 PyTorch를 TPU에서 돌리는 TorchTPU를 오픈소스로 공개했다.
+detail: Google이 8세대 TPU 제품군에 두 가지 시스템을 추가하며 처음으로 한 해에 TPU 시스템 4종을 내놓았다.
+- TPU 8tx는 연산 중에도 데이터와 모델 가중치를 보호·격리하는 기밀 컴퓨팅용이다.
+- TPU 8i Max는 TPU 8i 칩 2개를 한 패키지에 넣어 같은 랙 규격에서 연산·메모리·메모리 대역폭을 두 배로 늘렸다.
+- 두 제품 모두 새 칩이 아니라 기존 실리콘의 패키징·네트워크·메모리 구성을 바꾼 것이다.
+- PyTorch 코드를 최소 수정으로 TPU에서 실행하는 TorchTPU를 오픈소스로 공개했고, vLLM과 SGLang도 지원한다.
+- Google은 외부 TPU 고객이 100곳 가까이 된다고 밝혔다.
+엔비디아 GPU 공급난이 계속되는 가운데, 클라우드에서 모델을 서빙할 때 TPU가 현실적인 대안으로 자리 잡아 가고 있다.
+---
+title: Meta, 에이전트 반복 작업용 초소형 모델 Muse Ember 출시... 입력 100만 토큰당 0.1달러
+category: AI
+importance: 3
+source: The Decoder
+url: https://the-decoder.com/meta-launches-muse-ember-a-small-ai-model-built-for-the-repetitive-work-agents-actually-do/
+summary: Meta가 도구 호출·라우팅·데이터 추출 같은 에이전트의 반복 작업을 겨냥한 가장 작고 효율적인 모델 Muse Ember를 공개했다.
+detail: Meta가 11월 9일 자사 모델 중 가장 작고 효율적인 Muse Ember를 출시했다.
+- 도구 호출, 작은 코딩 작업, 요청 라우팅, 데이터 추출, 긴 문서 처리 등 에이전트의 일상 작업을 겨냥했다.
+- 텍스트·이미지·오디오·영상을 다루며 컨텍스트는 최대 100만 토큰이다.
+- Artificial Analysis 지능 지수 36점, 작업당 약 0.14달러로, 상위 모델 Muse Spark 1.3(37점, 작업당 2.39달러)과 점수 차는 1점뿐이다.
+- 다만 실전 코딩 벤치마크 FrontierCode 2.0-AA에서는 27.2%로 Claude Haiku(34.9%)에 뒤졌다.
+- 가격은 입력 100만 토큰당 0.10달러, 출력 0.50달러이며 Meta Model API와 Muse Code로 제공된다.
+라우팅·분류처럼 단순한 단계는 초저가 모델에 맡기고 핵심 단계만 상위 모델을 쓰는 다단 구성이 비용 절감의 기본 패턴이 되고 있다.
+---
+title: Disney·Adobe 다년 전략 제휴... Firefly Foundry로 디즈니 전용 맞춤 AI 모델 구축
+category: AI
+importance: 2
+source: The Decoder
+url: https://the-decoder.com/disney-bets-on-adobes-firefly-to-create-brand-safe-ai-models-for-its-entertainment-empire/
+summary: Adobe MAX에서 Disney가 Adobe와 손잡고 자사 캐릭터·스타일로 학습한 상업적으로 안전한 AI 모델을 만들기로 했다.
+detail: Disney와 Adobe가 Adobe MAX 행사에서 다년 전략 파트너십을 발표했다.
+- Adobe는 Firefly Foundry로 Disney의 캐릭터, 배경, 시각 스타일을 학습한 맞춤 모델을 만들어 상업적으로 안전한 제작용 결과물을 내는 것이 목표다.
+- Disney는 테마파크, 크루즈, ESPN 콘텐츠에 쓸 Adobe 신기술을 먼저 받아 볼 수 있다.
+- Walt Disney Studios의 StudioLAB과 ESPN 혁신 조직 ESPN Edge도 협력 범위에 포함돼 스포츠 아카이브 활용을 모색한다.
+- Disney는 앞서 OpenAI와의 계약에서 발을 뺀 바 있으며, Bloomberg는 Disney가 수천 명 감원과 연 20% 비용 절감을 계획 중이라고 보도했다.
+저작권 리스크 때문에 대형 IP 보유 기업이 범용 모델 대신 자사 데이터 전용 맞춤 모델로 가는 흐름이 뚜렷해지고 있다.
+---
+title: OpenSSH 'SSHole' 취약점, 공개 9시간 만에 실제 공격... Alpine Linux 허니팟 root 탈취
+category: IT
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/hackers-exploited-openssh-sshole-flaw.html
+summary: musl 기반·PAM 미사용 환경의 OpenSSH 인증 우회 취약점 CVE-2026-123158이 공개 직후부터 악용되고 있어 10.6p2 패치가 시급하다.
+detail: OpenSSH 인증 우회 취약점 SSHole(CVE-2026-123158, CVSS 8.1)이 공개 9시간도 안 돼 실제 공격에 쓰이기 시작했다.
+- 영향 대상은 musl C 라이브러리 위에서 PAM 없이 도는 OpenSSH로, Alpine Linux 기본 sshd 설정이 여기에 해당한다. glibc 배포판, Dropbear, PAM 인증 시스템은 영향이 없다.
+- 257~1,024바이트 길이의 비밀번호를 보내면 해시 계산 실패 값이 비활성 계정 표시값 '*'와 일치해 로그인이 허용된다. 비밀번호 해시가 '*'인 계정이 하나라도 있어야 한다.
+- 최초 공격은 한 IP에서 8회 시도해 Alpine 허니팟의 root 권한을 얻었고, 11월 8일 기준 13개 IP에서 20회 시도가 확인됐다.
+- 조치는 OpenSSH 10.6p2 또는 배포판 패치 설치 후 sshd 재시작이며, 로그에서 비밀번호 로그인이 없어야 할 계정의 'Accepted password for' 기록을 점검해야 한다.
+Alpine 베이스 이미지에 sshd를 띄운 Docker 컨테이너나 K8s 디버그용 파드가 있다면 즉시 이미지 재빌드와 패치 여부를 확인하라.
+---
+title: CISA, SonicWall SonicOS SSL-VPN MFA 우회 취약점 악용 목록 추가
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/cisa-flags-sonicwall-sonicos-mfa-bypass.html
+summary: SonicOS SSL-VPN에서 SAML 인증과 MFA를 우회할 수 있는 CVE-2026-19868이 KEV 목록에 올라 11월 20일까지 패치가 권고됐다.
+detail: 미국 CISA가 11월 6일 SonicWall SonicOS의 CVE-2026-19868을 실제 악용 취약점(KEV) 목록에 추가했다.
+- SSL-VPN 서비스의 인증 강제 결함으로, 다른 인증 방식의 유효한 자격 증명을 가진 사용자가 SAML 인증 통제를 우회할 수 있다.
+- 이 경우 SAML로 강제한 MFA까지 무력화될 수 있다.
+- SonicWall은 악용 가능성 보고를 조사했다고 밝혔지만 공격 세부 내용이나 배후는 공개하지 않았다.
+- 같은 업데이트에서 관리 인터페이스 취약점 2건(CVSS 8.8)과 SSL-VPN 인증 전 힙 버퍼 오버플로(CVSS 7.5)도 수정됐다.
+- 미 연방 기관에는 11월 20일까지 패치가 권고됐다.
+사내 VPN이 SonicWall이라면 인프라팀에 펌웨어 버전 확인을 요청하고, MFA를 걸어 두었다고 안심하지 말아야 한다.
+---
+title: Spring AI 2.1.0-RC2 출시... DecisionModel API·MCP 최신 서버·MariaDB 사전 계산 임베딩 지원
+category: IT
+importance: 4
+source: Spring Blog
+url: https://spring.io/blog/2026/11/09/spring-ai-2-1-0-RC2-available-now
+summary: Spring Boot 4.2.0-RC2 기반 Spring AI 2.1.0-RC2가 나왔다. Anthropic SDK 3.x 전환 등 업그레이드 시 깨질 수 있는 변경이 있다.
+detail: Spring AI 2.1.0-RC2가 11월 9일 Maven Central에 배포됐다. 기반은 Spring Boot 4.2.0-RC2(11월 6일 출시, 개선·수정 99건)다.
+- 확률이 붙은 예/아니오·선택·점수 판단을 돌려주는 DecisionModel API가 추가됐고, 이를 활용한 RAG 리랭커·필터와 도구 검색 전략도 들어갔다.
+- 도구 호출 인자를 스트리밍으로 받을 수 있게 됐다(Anthropic, OpenAI, Bedrock Converse, DeepSeek).
+- 사전 계산 임베딩을 지원하는 벡터 저장소에 Neo4j, MongoDB Atlas, Typesense, MariaDB, Chroma가 추가됐다.
+- MCP 2026-07-28 사양의 신규 서버 모드를 설정 하나로 켤 수 있으며 동기 API만 지원한다.
+- 주의할 점은 Anthropic SDK 3.x가 기본 API 버전에서 temperature, topP, topK를 거부하므로 설정에서 빼야 하고, 캐시 토큰이 입력 토큰 집계에 포함되도록 바뀌었다는 것이다.
+MariaDB를 벡터 저장소로 쓰는 RAG를 검토 중이라면 GA 전에 RC2로 미리 붙여 보고 Anthropic 관련 설정을 정리해 두는 게 좋다.
+---
+title: Binance, 3억3,500만 명 정보 판매 주장에 "유출 증거 없다, 사기 가능성"
+category: IT
+importance: 3
+source: BleepingComputer
+url: https://www.bleepingcomputer.com/news/security/binance-denies-data-breach-after-alleged-shinyhunters-claims/
+summary: ShinyHunters를 사칭한 해커가 Binance 사용자 3억3,500만 명 데이터를 90만 달러에 판다고 주장했지만 Binance는 침해 증거가 없다고 반박했다.
+detail: ShinyHunters 갱단을 자칭한 공격자가 새 사이버범죄 포럼에 Binance 사용자 3억3,500만 명 기록을 판매한다는 글을 올렸다.
+- 신원확인(KYC) 문서, 내부 인프라 정보, 계정 비밀번호, 지갑 개인키, 거래 내역, 이메일·전화번호가 포함됐다고 주장하며 90만 달러를 요구했다.
+- Binance는 침해 증거가 없고 사기일 가능성이 높으며, 과거 유사 판매 글은 사용자 PC를 감염시킨 정보탈취 악성코드 데이터인 경우가 많았다고 밝혔다.
+- 또 외부 지갑 개인키를 보관하지 않고 비밀번호를 평문 저장하지 않는다는 점을 들어 주장과 맞지 않는다고 반박했다.
+- Binance는 앞서 북한 TraderTraitor(Lazarus) 그룹이 가짜 채용 면접으로 직원에게 악성코드를 깔아 약 63억4천만 달러를 탈취했다고 확인한 바 있다.
+비밀번호는 반드시 단방향 해시로 저장하고 개인키 같은 비밀값은 KMS 등 별도 보관해야 한다는 기본 원칙을 다시 확인하게 되는 사례다.
+---
+title: SEGA 뉴스레터 구독자 220만 명 이메일 유출... 위탁 발송업체 ARARA 해킹 여파
+category: IT
+importance: 3
+source: BleepingComputer
+url: https://www.bleepingcomputer.com/news/security/sega-newsletter-data-breach-exposes-22-million-email-addresses/
+summary: 일본 메일 발송 서비스 ARARA가 뚫리면서 SEGA를 비롯해 약 380개 고객사의 이메일 7,700만 건이 노출됐다.
+detail: SEGA가 뉴스레터 위탁업체 ARARA 침해로 구독자 220만 명의 이메일 주소가 유출됐다고 공개했다.
+- 11개 뉴스레터가 영향을 받았고, 추가 정보가 담긴 9만2,300건은 아직 내용을 확인 중이다. 이름·주소·결제정보·비밀번호는 포함되지 않았다.
+- ARARA는 11월 2일 웹 서버 취약점 등으로 침해가 발생해 약 380개 고객사의 이메일 7,700만 건이 노출됐다고 밝혔다.
+- 공격자는 10월 말 이 서비스를 악용해 카드사를 사칭한 메일을 700만 통 넘게 발송했다.
+- ARARA는 10월 29일 SEGA에 피해가 없다고 했다가 11월 3일에야 유출 사실을 알렸다.
+- MOS Burger(750만 건), IIJmio(약 100만 건) 등도 피해를 입었다.
+메일 발송 같은 외부 위탁 서비스에 개인정보를 넘길 때는 최소 항목만 전달하고 위탁사의 보안 점검과 사고 통보 의무를 계약에 명확히 넣어야 한다.
+---
+title: Meta, AI 연령 추정으로 성인 생년월일 쓴 10대 찾아내는 기능 전 세계 확대
+category: IT
+importance: 2
+source: Al Jazeera
+url: https://www.aljazeera.com/news/2026/11/9/meta-rolls-out-automated-age-checks-for-teens-globally
+summary: Meta가 행동·게시물 분석으로 나이를 추정해 10대 의심 계정을 자동으로 청소년 보호 계정으로 전환하는 기능을 11월부터 전 세계에 적용한다.
+detail: Meta가 미국, 영국, 캐나다, 호주에서 시험한 AI 연령 추정 기술을 11월부터 전 세계로 확대한다.
+- 사용자의 행동과 게시물을 분석해 나이를 추정하며, 성인 생년월일을 입력한 10대도 찾아내 Teen Account 보호 설정을 적용한다.
+- 인스타그램에 먼저 적용하고 연내 Facebook과 Threads로 넓힌다.
+- Meta는 8월 미국 주정부들과 아동 피해 관련 180억 달러 합의를 했으며, 18세 미만은 하루 2시간 사용 제한과 자정~오전 6시 이용 제한을 받는다.
+- Meta는 TikTok과 YouTube에도 비슷한 조치를 도입하라고 촉구했다.
+연령 확인 규제가 강해지면서 국내 서비스도 자기신고 생년월일만으로는 부족해지는 흐름을 지켜볼 필요가 있다.
