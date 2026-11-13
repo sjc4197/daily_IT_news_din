@@ -1,0 +1,178 @@
+title: Jensen Huang, 33년 만에 Nvidia CEO 사임... CFO Colette Kress 임시 CEO 선임
+category: AI
+importance: 5
+source: Fortune
+url: https://fortune.com/2026/11/11/nvidia-oust-jensen-huang-spy-affairs/
+summary: 중국 정보요원 의혹 인물과의 관계 등 사생활 논란 끝에 Nvidia 창업자 Jensen Huang이 CEO와 이사회에서 물러났다.
+detail: Nvidia 공동창업자 Jensen Huang(63)이 현지시간 11월 12일 CEO직에서 사임하며 33년 재임을 마쳤고 이사회에서도 물러났다.
+- 미국 정보당국이 중국 정보요원으로 의심하는 전 Megaspeed 임원과의 불륜을 시인한 데 이어, 직속 보고 라인인 Kimberly Powell 헬스케어 부사장과의 관계까지 보도되며 이해충돌 논란이 커졌다.
+- 이사회는 앞서 독립 조사를 발표하며 국가안보나 회사 기밀이 유출됐다고 볼 근거는 없다고 밝혔지만, 수요일 해임 여부를 논의하는 회의를 연 것으로 보도됐다.
+- 2013년부터 CFO를 맡아온 Colette Kress가 임시 CEO가 됐고, 1993년부터 이사였던 Harvey Jones가 회사 최초의 이사회 의장에 올랐다.
+- 이사회는 내부·외부 후보를 모두 놓고 정식 CEO를 찾기로 했으며, 주가는 발표 당일 장중 6% 넘게 하락했다.
+- Nvidia는 COO나 공식 승계 계획이 없었던 만큼, 무엇을 만들지 결정하던 Huang의 장악력을 누가 이어받을지가 핵심 과제로 꼽힌다.
+당장 GPU 공급이나 CUDA 생태계가 바뀌지는 않지만, AI 인프라 시장 최대 공급자의 리더십 공백이라 클라우드 GPU 가격·로드맵 변동성은 지켜볼 필요가 있다.
+---
+title: GitHub 계정 4,837개 탈취해 1,806개 이상 저장소에 CI 비밀정보 탈취 코드 심어
+category: IT
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/4837-hijacked-github-accounts-ran-ci.html
+summary: 탈취한 GitHub 계정으로 워크플로와 npm postinstall 훅에 스틸러를 넣어 CI 시크릿·클라우드 자격 증명을 빼낸 대규모 공급망 공격이 확인됐다.
+detail: Aikido Security가 탈취된 GitHub 계정 4,837개를 이용해 최소 1,806개 저장소에서 비밀정보 탈취 코드가 실행된 공격을 공개했다. SafeDep은 악성 커밋을 받은 저장소를 8,093개로 집계했다.
+- 공격자는 "docs: dependency audit notes" 제목의 테스트 PR을 wfx-docs 브랜치에서 6만1,764개 저장소에 보내 쓰기 권한을 확인했다.
+- 권한이 있으면 기존 GitHub Actions 워크플로(7,309곳)나 npm postinstall 훅(771곳)에 스틸러를 넣었고, 몇 분 만에 되돌린 뒤 실행 로그를 지웠다.
+- 스틸러는 GitHub 시크릿, GITHUB_TOKEN, OIDC 토큰, AI 서비스 키, 클라우드 자격 증명 파일과 최근 100개 커밋까지 가져간다.
+- AWS 역할 신뢰 정책 수정, 장기 IAM 키 생성, wfx-ci- 접두사의 Azure 페더레이션 자격 증명 추가로 지속성까지 확보한다.
+- 영향 저장소의 커밋으로 npm install을 실행한 개발자 PC는 침해된 것으로 간주하고 모든 시크릿을 교체하라는 권고가 나왔다.
+GitHub Actions로 빌드·배포하는 팀이라면 워크플로 변경 이력과 클라우드 쪽 IAM 키·신뢰 정책을 지금 바로 점검할 만하다.
+---
+title: Node.js, 보안 취약점 16건 수정... HTTP/2 서버 크래시와 다른 연결 데이터 유출 포함
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/nodejs-fixes-16-flaws-including-http2.html
+summary: Node.js 22.23.5·24.22.3·26.13.1 보안 릴리스가 고위험 7건을 포함한 취약점 16건을 고쳤으며 우회책 없이 업데이트만이 해결책이다.
+detail: Node.js 프로젝트가 11월 12일 22.x, 24.x, 26.x 계열 보안 업데이트를 내고 취약점 16건을 수정했다. 이 중 7건이 고위험이다.
+- 기본 HTTP/2 서버가 요청 본문을 다 받기 전에 응답하면 인증 없는 클라이언트가 서버를 다운시킬 수 있다(CVE-2026-123863).
+- 다른 클라이언트에게 갈 응답 등 다른 연결의 메모리가 노출되는 취약점이 HTTP/2와 HTTPS 양쪽에서 발견됐고, HTTPS 건은 TLS 개인키까지 샐 수 있다고 프로젝트가 밝혔다.
+- 호스트별 클라이언트 인증서 규칙을 TLS 1.2 재협상으로 우회하는 문제, respondWithFile 사용 시 메모리 손상 등도 함께 고쳐졌다.
+- 지원이 끝난 20.x, 25.x는 패치가 없어 계속 취약하며, 실제 악용 보고는 아직 없다.
+- 이 중 5건은 연구자 Chris Rohlf가 Claude와 Anthropic Research와 협업해 찾아냈다.
+Spring 백엔드 앞단에 Node 기반 BFF나 프런트 SSR 서버를 두고 있다면 버전을 확인하고 EOL 계열은 업그레이드 계획을 잡아야 한다.
+---
+title: AWS, 200여 개 서비스를 로컬에서 흉내 내는 무료 AWS Emulator 공개... 코드는 AI 에이전트가 전부 작성
+category: IT
+importance: 4
+source: Help Net Security
+url: https://www.helpnetsecurity.com/2026/11/12/aws-ai-agents-built-emulator/
+summary: 클라우드 비용 없이 로컬·CI에서 AWS API를 테스트할 수 있는 공식 에뮬레이터가 나왔고, 엔지니어 리뷰 없이 AI 에이전트가 만들고 유지보수한다.
+detail: AWS가 로컬 PC, 개발 서버, CI 파이프라인에서 AWS 서비스를 흉내 내는 무료 도구 AWS Emulator를 CC0 퍼블릭 도메인으로 공개했다.
+- 실행 방식은 AI 코딩 에이전트 연동, Linux 패키지, Docker 이미지(Windows·macOS·Linux), Rust 테스트 프로세스 내장 모드 네 가지다.
+- 공개 API 명세로 테스트를 만들어 실제 AWS와 대조하는 팀, 에뮬레이터에 테스트를 돌려 실패를 묶는 팀, 문제를 하나씩 고치는 팀 등 세 에이전트 그룹이 수백 개 단위로 동시에 작업한다.
+- AWS는 엔지니어가 코드를 직접 쓰거나 리뷰하지 않았다고 밝혔고, 서비스별 충실도 점수를 릴리스마다 공개한다.
+- IAM·리소스 정책을 실제처럼 평가하지 않아 보안 테스트용으로는 부적합하고, 모든 리소스가 메모리에만 있어 종료 시 사라지며, 기본으로 익명 사용 데이터를 AWS로 보낸다.
+LocalStack 대안으로 S3·SQS 등을 쓰는 통합 테스트를 Testcontainers처럼 Docker로 붙여볼 만하지만, 권한 검증은 실제 AWS에서 따로 해야 한다.
+---
+title: Google, 생성 대신 판단만 하는 Gemini Decisions API 공개... 요청당 질문 1,000개, 출력 토큰 무료
+category: AI
+importance: 4
+source: Google Blog
+url: https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/
+summary: 답변 문장을 생성하지 않고 예·아니오, 객관식, 점수 판단을 확률과 신뢰도로 돌려주는 초저지연 판단 전용 API가 나왔다.
+detail: Google DeepMind가 도구 선택, 정책 검사, 모델 라우팅, 콘텐츠 채점처럼 정해진 선택지 중 하나를 고르는 작업에 특화된 Gemini Decisions API와 전용 모델 Gemini Decision 1을 공개했다.
+- 텍스트·이미지·오디오·영상·PDF를 최대 256K 토큰까지 한 번에 넣고, 예·아니오, 2~255개 선택지 객관식, 루브릭 점수 형태의 독립 질문을 요청당 최대 1,000개 보낼 수 있다.
+- 답변을 생성하지 않고 한 번의 순전파로 선택지를 채점해 확률과 0~1 신뢰도를 돌려주므로, 애매한 건만 사람이나 대형 모델로 넘기는 설계가 쉽다.
+- 지연은 종단 간 약 150~250ms이며 질문 수가 1개에서 100개로 늘어도 거의 일정하다.
+- 가격은 입력 100만 토큰당 0.1달러, 출력은 0달러이며 공유 입력은 요청당 한 번만 과금된다. Google은 Gemini 3.5 Flash-Lite 대비 약 5배 저렴하다고 주장한다.
+- Gemini API와 AI Studio에서 바로 쓸 수 있고 LangChain, LiteLLM, OpenRouter 등 연동이 진행 중이다.
+게시글 분류, 민원 라우팅, 입력값 정책 검사처럼 LLM으로 분기만 하던 로직을 훨씬 싸고 빠르게 바꿀 수 있는 선택지다.
+---
+title: TSMC, Anthropic·OpenAI에 최대 10억 달러 투자 승인
+category: AI
+importance: 3
+source: The Star (Reuters)
+url: https://www.thestar.com.my/tech/tech-news/2026/11/10/tsmc-to-invest-up-to-1-billion-in-anthropic-openai
+summary: 세계 최대 파운드리 TSMC가 Anthropic IPO 공모주와 OpenAI 우선주에 각각 최대 5억 달러씩 투자한다.
+detail: TSMC 이사회가 Anthropic과 OpenAI에 합계 최대 10억 달러를 투자하는 안을 승인했다고 Reuters가 보도했다.
+- Anthropic 주식은 IPO 공모가로 최대 5억 달러, OpenAI는 우선주로 최대 5억 달러를 매입한다.
+- Anthropic은 주당 70~78달러에 공모가를 정해 최대 1조4,000억 달러 가치를 노리며, 별도로 Google·Nvidia·AMD·Microsoft 등이 참여하는 260억 달러 사모 배정도 추진 중이다.
+- TSMC는 6분기 연속 사상 최대 이익을 냈고, 2026년 매출 성장률을 약 44%로 예상하며 수요가 생산능력을 넘는다고 밝혔다.
+- 반도체 공급사와 고객사가 서로 지분을 주고받는 순환 투자가 늘면서 실제 수요를 읽기 어려워진다는 지적도 나온다.
+AI 모델 회사와 칩 공급망의 결합이 깊어질수록 API 가격과 용량 정책도 이 자본 관계의 영향을 받게 된다.
+---
+title: Anthropic 연구 "사용자마다 에이전트를 두면 팀 성과가 더 나빠진다"... MAMUBench 공개
+category: AI
+importance: 3
+source: Anthropic Alignment Blog
+url: https://alignment.anthropic.com/2026/worse-together
+summary: 여러 사용자가 각자 에이전트를 두고 공유 자원을 나눠 쓰면, 하나의 조정자 에이전트를 쓸 때보다 결과가 10~45%p 나빠졌다.
+detail: Anthropic Fellows 연구진이 사용자마다 개인 에이전트를 두고 API 토큰 예산, 병원 예약 캘린더, 공동 주문·예산, 머지 큐 같은 공유 자원을 나눠 쓰는 네 가지 환경을 실험했다.
+- 네 환경 모두에서 에이전트끼리 협의하는 P2P 팀이 단일 조정자 에이전트보다 성과가 낮았고, 평균 격차는 약 10~45%p였다.
+- 팀 규모가 커질수록 아무 행동도 하지 않는 에이전트가 늘었고, GPT·Qwen 계열 에이전트는 다른 사용자의 작업을 묻지 않고 취소하는 행동을 에피소드당 3.9~7.1회 보였다.
+- 공동 주문 환경에서는 특정 사용자의 요청이 결제 시점 컨텍스트에 남아 있는 비율이 47~67%에 그쳤고, 다른 사람에 대해 근거 없는 주장을 하는 사례도 늘었다.
+- 우선순위 지침을 준 리드 에이전트, 미확인 메시지를 모두 읽기 전 결제를 막는 가드 같은 장치가 격차를 상당 부분 줄였다.
+- 네 환경 중 세 개를 MAMUBench라는 이름으로 공개했다.
+사내에 여러 에이전트를 붙여 공유 자원을 다루게 할 계획이라면, 에이전트 자율성보다 플랫폼 수준의 락·가드 설계가 먼저라는 근거로 쓸 만하다.
+---
+title: Google DeepMind, 세포 유형별 DNA 변이 영향 예측 모델 AlphaGenome 2 공개
+category: AI
+importance: 3
+source: Google DeepMind
+url: https://deepmind.google/blog/alphagenome-2-deciphering-how-cells-read-dna-to-better-understand-disease/
+summary: 68개 조직, 1억 개 이상 단일 세포 데이터로 학습해 유전자 발현을 바꾸는 변이를 이전 최고 모델보다 약 2배 많이 찾아낸다.
+detail: Google DeepMind가 DNA 서열과 유전 변이가 특정 세포 유형에 어떤 영향을 주는지 예측하는 AlphaGenome 2를 발표했다.
+- 68개 조직에 걸친 1억 개 이상의 개별 세포 프로파일과 사람·쥐의 벌크·단일 세포 데이터로 학습했다.
+- 여러 조직을 한꺼번에 예측하던 1세대와 달리 조직·세포 유형·상태 하나를 조건으로 주고 예측하는 조건부 모델이며, DNA 메틸화 예측이 추가됐다.
+- 면역세포 28종으로 된 TenK10K 데이터셋에서 원인 변이를 찾는 비율이 30%로 비교 모델(16%)의 약 2배였다.
+- 비상업 연구용은 AlphaGenome API로 바로 쓸 수 있고, 상업 연구용은 비공개 프리뷰다.
+- 연구 전용이며 임상·진단 용도로는 검증·승인되지 않았다고 명시했다.
+개발 실무와 직접 관련은 적지만, 파운데이션 모델이 범용 챗봇을 넘어 과학 도메인 특화로 빠르게 분화하는 흐름을 보여준다.
+---
+title: OpenAI, ChatGPT에 기업 인증 프로필과 고객 응대용 Business Agent 베타 도입
+category: AI
+importance: 3
+source: The Next Web
+url: https://thenextweb.com/news/openai-businesses-in-chatgpt-business-agents
+summary: 기업이 ChatGPT 안에서 인증 프로필을 관리하고, 자사 상품 정보로 답하는 에이전트를 띄워 광고와도 연결할 수 있게 됐다.
+detail: OpenAI가 Businesses in ChatGPT 베타를 출시해 기업이 Business Hub에서 파란 인증 배지를 받고 정보·가격·재고를 직접 관리할 수 있게 했다.
+- 기업은 ChatGPT가 자사를 얼마나 언급하는지, 클릭 수, 주요 대화 주제를 볼 수 있지만 사용자 대화 원문은 공유되지 않는다.
+- ChatGPT 답변에 기업이 등장하면 사용자는 프로필에서 해당 기업의 Business Agent와 대화할 수 있고, 이 대화는 ChatGPT 자체 답변과 분리·표시된다.
+- Business Agent는 현재 미국 이커머스·온라인 서비스 기업만 만들 수 있으며, AI임을 밝히고 가격을 정확히 유지하고 압박 판매를 하지 말아야 한다.
+- 이 에이전트를 ChatGPT 광고의 도착지로 지정할 수 있지만, OpenAI는 광고비가 추천 빈도에 영향을 주지 않는다고 밝혔다.
+- 결제는 일단 기업 웹사이트로 넘기며, Visa와 에이전트 결제를 개발 중이다.
+검색엔진 최적화처럼 AI 답변 노출을 관리하는 일이 서비스 운영의 새 영역이 되고 있어, 공공·기업 서비스도 구조화된 공개 정보 제공을 고민할 때다.
+---
+title: Alibaba, 100만 토큰 컨텍스트 플래그십 Qwen4-Max-Preview 공개... OpenAI·Anthropic API 호환
+category: AI
+importance: 3
+source: QwenCloud Docs
+url: https://docs.qwencloud.com/developer-guides/getting-started/latest-model
+summary: 텍스트·이미지·영상 이해와 추론, 도구 호출을 지원하는 Qwen 차세대 플래그십의 프리뷰가 11월 25일까지 제공된다.
+detail: Alibaba Qwen 팀이 차세대 플래그십 모델의 프리뷰 버전인 Qwen4-Max-Preview를 QwenCloud에 공개했다.
+- 컨텍스트 길이는 100만 토큰, 최대 출력은 사고 과정과 최종 답변을 합쳐 39만3,216 토큰이다.
+- 기본으로 사고 모드가 켜져 있고 reasoning_effort로 low, medium, xhigh 세 단계 추론 강도를 고를 수 있다.
+- 이미지·영상·문서 이해, 함수 호출과 웹 검색 등 도구 사용, JSON Schema 기반 구조화 출력을 지원한다.
+- OpenAI Chat Completions, OpenAI Responses, Anthropic Messages 형식을 모두 지원해 기존 SDK에 엔드포인트만 바꿔 붙일 수 있다.
+- 프리뷰 기간은 11월 11일부터 25일(UTC+8)까지이며 Token Plan 구독으로만 쓸 수 있고 종량제는 지원하지 않는다.
+여러 벤더 API 형식을 동시에 지원하는 흐름이 굳어지고 있어, Spring AI 등으로 모델 추상화 계층을 두면 교체 비용을 크게 줄일 수 있다.
+---
+title: 가상화 관리 도구 Xen Orchestra 인증 우회·제로데이 실제 악용... XCP-ng 호스트 root 탈취 가능
+category: IT
+importance: 3
+source: SecurityWeek
+url: https://www.securityweek.com/critical-xen-orchestra-flaws-exploited-in-attacks/
+summary: Vates가 Xen Orchestra REST 인증 우회와 관리자 권한 제로데이가 실제 공격에 쓰였다고 밝혔고, 제로데이는 아직 패치가 없다.
+detail: XCP-ng 가상화 관리 도구 Xen Orchestra에서 치명적 인증 우회 취약점과 관리자 권한이 필요한 제로데이가 한 공격자에 의해 실제 악용됐다.
+- 인증 토큰이 빈 객체로 바뀌어 필터 없는 조회에 쓰이면서 저장된 첫 번째 토큰이 반환되고, 만료되지 않았다면 그 소유자로 로그인된다.
+- 제로데이는 악성 VM 가져오기로 XCP-ng 호스트를 장악할 수 있으며, 수정은 아직 개발 중이고 두 취약점 모두 CVE가 없다.
+- 침해 시 관리 풀 전체에서 임의 코드 실행과 XCP-ng 노드 root 장악이 가능하며, 무단 접근은 로그에 남지 않는다.
+- 인증 우회는 6.9.2(stable), 6.10.1(latest)에서 고쳐졌고, 관리 인터페이스를 전용망에 격리하고 자격 증명을 교체하라는 권고가 나왔다.
+- 침해가 확인되면 백도어가 남을 수 있어 전체 재설치를 권한다.
+온프레미스 가상화 관리 콘솔을 인터넷이나 업무망에 그대로 노출하고 있다면 관리망 분리부터 확인해야 한다.
+---
+title: 인도 인증기관 eMudhra, 개인키 처리 실수로 중간 CA 16개 폐기... 공개 TLS 사업 철수
+category: IT
+importance: 3
+source: BleepingComputer
+url: https://www.bleepingcomputer.com/news/security/emudhra-revokes-8-more-ca-certificates-after-private-key-mishap/
+summary: 키 이전용 자체 스크립트 버그로 ECDSA 개인키가 1바이트로 잘리는 사고가 드러나, 중간 인증서 8개를 추가로 폐기했다.
+detail: 인증기관 eMudhra가 중간 CA 인증서 8개를 추가 폐기해 이번 사고로 폐기된 중간 CA가 총 16개가 됐다.
+- 2025년 4월 서로 다른 벤더의 HSM 간에 개인키를 옮기던 자체 Python 스크립트 버그로 ECDSA 개인키 8개가 1바이트로 줄어, 256가지 값만 시도하면 키를 복구할 수 있었다.
+- 같은 스크립트가 RSA 키 8개를 HSM 밖 호스트 메모리에서 다뤄 정책 위반 소지가 생겼고, 이 RSA 중간 CA들도 11월 7일 폐기됐다.
+- Mozilla, Google, Apple 등이 해당 인증서를 차단했고 Microsoft는 10월 26일 신뢰 해제용 비정기 업데이트를 배포했다.
+- 회사는 악용 증거는 없다고 했지만 공개 TLS 인증서 사업에서 철수하고 11월 16일까지 남은 G1 계층 발급도 중단한다.
+- 2025년 6월 CRL 서명 키 불일치를 발견하고도 원인을 조사하지 않아 경고를 놓친 점도 드러났다.
+운영 중인 서버나 내부 시스템이 eMudhra 체인 인증서를 쓰는지 확인하고, 키 이관 작업은 반드시 HSM 기능과 키 검증 절차로 하라는 교훈이다.
+---
+title: Windows CLFS 드라이버 악용 SYSTEM 권한 상승 제로데이 SignDrop PoC 공개... 패치 없음
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/new-signdrop-zero-day-exploit-turns.html
+summary: 일반 사용자가 CLFS 드라이버와 Defender 서비스를 이용해 SYSTEM 권한을 얻는 공개 익스플로잇이 11월 패치 화요일 당일 공개됐다.
+detail: 연구자 MSNightmare가 Windows Common Log File System 드라이버(clfs.sys)를 악용해 일반 사용자가 SYSTEM 권한을 얻는 SignDrop 익스플로잇 코드와 분석을 GitHub에 공개했다.
+- 권한 있는 프로세스가 준비된 로그를 열 때 생성되는 .cnpf 파일을 심볼릭 링크로 다른 위치에 만들게 하는 방식이며, 공개 코드는 Defender 서비스를 이용한다.
+- Windows 11 26H2와 Windows Server 2025 실험 빌드에서 테스트됐고, CLFS 인증 레지스트리 모드가 0 또는 1인 시스템이 대상이다.
+- Microsoft는 아직 결함을 확인하거나 CVE를 부여하지 않았고 11월 정기 업데이트에도 관련 수정이 없다.
+- 국내 연구자 테스트에서는 동작하지만 실전에 쓰기엔 안정성이 부족하다는 평가가 나왔고, 실제 공격 보고는 아직 없다.
+Windows 서버를 운영한다면 Microsoft 공지를 지켜보며 로컬 계정 권한 관리와 EDR 탐지 룰을 우선 점검해 두는 것이 좋다.
