@@ -1,0 +1,170 @@
+title: Google, 에이전트 작업용 경량 모델 Gemini 4 Hydrogen 출시... 3.8 Flash보다 2.5배 빠르고 100만 토큰 균일 가격
+category: AI
+importance: 5
+source: Google Blog
+url: https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/
+summary: Google이 일상 코딩·에이전트 작업용 빠르고 저렴한 모델 Gemini 4 Hydrogen을 공개하고 API·검색·Gemini 앱에 전면 배포했다.
+detail: Google이 11월 12일 Gemini 4 Hydrogen을 발표하고 전 세계 배포를 시작했다. 깊은 추론용 Carbon·Argon을 보완하는 에이전트 워크플로용 일상 모델이라고 설명했다.
+- Artificial Analysis Intelligence Index 51점(기본 high 사고 수준)으로 Argon(50점)을 넘었고, xhigh 설정에서는 54점이다.
+- Terminal-Bench 4.1에서 57%로 Gemini 3.8 Flash(18.2%)를 크게 앞섰다고 Google은 밝혔다.
+- 기본 설정 기준 3.8 Flash보다 약 2.5배 빠르며, 초기 파트너 테스트에서 토큰 사용량이 12~23% 줄었다.
+- 사고 수준은 low·medium·high(기본)·xhigh 4단계를 지원한다.
+- 가격은 입력 100만 토큰당 1.5달러, 출력 7.5달러로 100만 토큰 컨텍스트 전체에 같은 가격이 적용된다.
+- Gemini API·AI Studio·Android Studio·Antigravity, 기업용 Gemini, Google 검색과 Gemini 앱에서 쓸 수 있다.
+코딩 에이전트나 사내 RAG에 Flash급 모델을 쓰고 있다면 단가와 속도 차이를 직접 측정해 교체를 검토할 만하다.
+---
+title: Apache HTTP Server 2.4.71 보안 업데이트... mod_http2 경쟁 조건으로 원격 코드 실행 가능
+category: IT
+importance: 5
+source: SecurityOnline
+url: https://securityonline.info/apache-http-server-cve-2026-119618-rce-fixed/
+summary: HTTP/2 모듈의 경쟁 조건 취약점 CVE-2026-119618 등 3건을 고친 Apache httpd 2.4.71이 11월 11일 나왔다.
+detail: Apache 재단이 11월 11일 HTTP Server 2.4.71을 배포해 취약점 3건을 수정했다.
+- CVE-2026-119618은 mod_http2의 assign_headers() 경쟁 조건(CWE-362)으로 힙 메모리를 오염시켜 원격 코드 실행으로 이어질 수 있다. CVSS 8.1이다.
+- 영향 버전은 2.4.55~2.4.70과 mod_h2 2.0.8~2.0.42 빌드다.
+- Anthropic의 OSS Scanner와 Google Cloud 연구원들이 각각 발견해 보고했다.
+- 함께 고친 CVE-2026-106023은 mod_md의 NULL 포인터 역참조로 자식 프로세스를 죽이고, CVE-2026-109163은 mod_vhost_alias의 1바이트 스택 덮어쓰기다.
+- 기사 시점 기준 실제 악용이나 공개 익스플로잇은 확인되지 않았다.
+- 즉시 패치가 어렵다면 필요 없는 경우 mod_http2와 mod_md를 비활성화하는 것이 권고된다.
+eGov 서비스 앞단에 Apache httpd를 두고 HTTP/2를 켜 둔 서버라면 배포판 패키지 업데이트를 우선순위로 올려야 한다.
+---
+title: Check Point 보안 게이트웨이 제로데이 실제 악용... 로컬 소켓으로 root 명령 실행
+category: IT
+importance: 4
+source: BleepingComputer
+url: https://www.bleepingcomputer.com/news/security/check-point-patches-zero-day-that-lets-hackers-get-root-access/
+summary: Check Point가 10월 말부터 악용된 권한 상승 제로데이 CVE-2026-123039에 대해 긴급 핫픽스를 냈다.
+detail: Check Point가 Gaia OS의 로컬 권한 상승 취약점 CVE-2026-123039를 공개하고 긴급 핫픽스를 배포했다.
+- root로 도는 DynamicCLI 데몬(dynamic_server)이 누구나 쓸 수 있는 /tmp/dynamic_socket에서 접속 프로세스를 인증하지 않아, 인증된 로컬 사용자가 root로 명령을 실행할 수 있다.
+- Firewall, Security Gateway, Security Management Server, Multi-Domain Security Management Server, Scalable Platforms가 영향을 받는다.
+- 수십 곳의 고객이 공격받았다. 공격자는 Mobile Access 포털 취약점으로 들어온 뒤 이 결함으로 root를 얻고 웹셸과 백도어를 심었다.
+- 이후 VMware ESXi 호스트로 이동해 와이퍼 악성코드까지 배포한 사례가 보고됐다.
+- 핫픽스를 바로 못 넣으면 dynamic_server 프로세스를 중지하고 재시작을 막으라고 권고했다. 침해 지표도 공개했다.
+경계 장비가 뚫리면 내부 가상화 인프라까지 번진다는 사례이므로, 방화벽·VPN 장비 패치 상태를 인프라 담당과 함께 점검하자.
+---
+title: Microsoft 365 대규모 장애, 이틀간 Exchange Online·Teams·Copilot 마비
+category: IT
+importance: 4
+source: SecurityWeek
+url: https://www.securityweek.com/microsoft-365-outage-disrupts-outlook-exchange-online-and-teams
+summary: 11월 12일 시작된 Exchange Online 장애가 Teams·SharePoint·Copilot 등으로 번지며 여러 지역에서 이틀 가까이 이어졌다.
+detail: 11월 12일 미주 지역 Exchange Online 메일함 접속 장애로 시작된 문제가 13일까지 여러 지역으로 확산됐다.
+- Teams, SharePoint Online, Microsoft 365 Copilot, Defender XDR 등 Exchange Online에 의존하는 기능이 함께 영향을 받았다.
+- Microsoft는 다수 서버가 내려가 남은 서버에 트래픽이 몰렸고, 보안 연결을 맺는 프로세스가 과부하돼 서버가 헬스체크에 실패했다고 설명했다.
+- 장애 시작과 겹친 최근 네트워크 설정 변경을 롤백하고, 헬스체크 구성 요소를 우회하는 임시 조치도 시험했다.
+- 13일 Microsoft는 악의적 활동의 증거는 없다고 밝혔고, 완화 후 근본 원인을 담은 사후 보고서를 내겠다고 했다.
+- 장애를 틈탄 가짜 메일함 재인증 피싱 메일에 대한 경고도 나왔다.
+헬스체크 실패가 연쇄 장애를 키운 구조라, 우리 K8s 서비스의 readiness·liveness 설정이 과부하 때 오히려 서버를 빼내 장애를 키우지 않는지 점검해 볼 만하다.
+---
+title: ScreenConnect 서드파티 확장 취약점으로 48개 조직 288대 침해... 웜형 도구 SCKit 등장
+category: IT
+importance: 4
+source: BleepingComputer
+url: https://www.bleepingcomputer.com/news/security/new-worm-like-sckit-malware-targets-msps-in-screenconnect-attacks/
+summary: 공격자가 ScreenConnect 확장 RMM+의 인증 결함으로 원격 명령을 실행해 MSP 고객 단말에 악성 클라이언트를 설치했다.
+detail: Huntress와 Blackpoint Cyber가 ScreenConnect를 노린 16개 구성 요소의 공격 도구 SCKit을 분석해 공개했다.
+- 최소 48개 조직의 단말 288대가 침해됐고, 모든 대상이 90분 안에, 약 3분의 1은 처음 10분 안에 공격받았다.
+- 초기 침투 경로로는 서드파티 확장 RMM+ 1.0.31~1.0.32가 지목됐다. 공유 키가 설정되지 않으면 빈 키로 인증과 MFA를 우회할 수 있었다.
+- 공격자는 Run Command 기능으로 고객 단말에 공격자 소유 ScreenConnect 클라이언트를 설치했다.
+- RelayTrap 구성 요소는 기술자가 접속하면 클라이언트 취약점 CVE-2026-84869로 기술자 PC까지 퍼지려 했지만, 26.6.5 이상 패치 클라이언트에서는 실패했고 실제 전파는 관찰되지 않았다.
+- ConnectWise는 약 400개 파트너 환경에서 관련 서드파티 확장 5개를 비활성화했다.
+원격 지원 도구는 확장 하나가 전체 고객 단말의 관문이 될 수 있으니, 사내에서 쓰는 원격 접속 도구의 플러그인 목록과 인증 설정을 점검하자.
+---
+title: 탈취한 Claude API 키로 Claude Code를 원격 조종하는 공격 기법 시연... 메모리 저장소를 C2로 악용
+category: AI
+importance: 4
+source: Help Net Security
+url: https://www.helpnetsecurity.com/2026/11/12/stolen-claude-api-keys-remote-controlled-implant/
+summary: Darktrace가 개발자 PC와 Claude 키를 탈취하면 Claude Code를 원격 작업 에이전트로 바꿀 수 있음을 실험실에서 보였다.
+detail: Darktrace가 탈취한 Claude API 키로 Claude Code를 원격 조종하는 기법을 실험실에서 시연했다.
+- Claude Console 메모리 저장소에 하트비트·작업 입력·결과 파일을 두고, 공격자가 평문 영어로 작업을 적으면 에이전트가 알아서 명령을 수행했다.
+- systemd 서비스로 Claude Code를 --dangerously-skip-permissions 옵션과 함께 계속 띄워 도구 사용 확인 절차를 껐다.
+- 9개 작업 동안 네트워크 탐색, 도메인 컨트롤러 대상 패스워드 스프레이, SMB 공유 조회, 1GB 파일 분할 유출까지 해냈다.
+- 모든 명령·유출 트래픽이 이미 허용된 api.anthropic.com으로만 흘러 탐지가 어렵다.
+- 사전에 개발자 PC 침해가 필요하고 플랫폼 취약점은 아니며, 실제 공격 사례는 아직 없다. OAuth 자격 증명으로는 메모리 저장소에 접근할 수 없다.
+- 키는 단기·최소 권한으로 쓰고 셸 기록·dotfile·환경 변수에 두지 말라고 권고했다.
+AI 코딩 도구 키를 .bashrc나 환경 변수에 넣어 두고 있다면 지금 바로 정리하고, 가능하면 OAuth 로그인 방식으로 바꾸자.
+---
+title: AI 에이전트를 사칭한 크리덴셜 스터핑, 한 마켓플레이스에 일주일간 41만 회 접속
+category: AI
+importance: 3
+source: Help Net Security
+url: https://www.helpnetsecurity.com/2026/11/12/bots-ai-agent-impersonation/
+summary: 유명 AI 에이전트를 사칭한 봇 트래픽이 실제 에이전트 트래픽보다 많아, 자기 신고형 User-Agent를 믿으면 안 된다는 분석이 나왔다.
+detail: Cequence 등의 분석에서 AI 에이전트를 사칭한 공격 트래픽과 브라우저로 위장한 실제 에이전트 트래픽이 함께 늘고 있는 것으로 나타났다.
+- 한 온라인 마켓플레이스는 10월 일주일 동안 유명 소비자 AI 에이전트를 사칭한 41만 4,210회 접속을 받았는데, 모두 로그인 페이지만 두드리고 실패한 크리덴셜 스터핑이었다.
+- 이 가짜 트래픽은 같은 주 5개 산업에서 집계된 진짜 에이전트 방문 전체의 약 1.5배였다.
+- 반대로 한 통신사는 실제 개인 에이전트가 데스크톱 브라우저로 위장해 하루 1만 9천~3만 2천 건 요청을 보내며 로그인·MFA·장바구니까지 수행했다.
+- 표본 28만여 건 중 85%는 페이지 읽기·비교였고, 약 7분의 1이 예약·구매·로그인 같은 행동까지 갔다.
+- 자칭 이름보다 행동으로 세션을 판단하고, 결제·계정 변경 같은 고위험 동작에만 추가 인증과 속도 제한을 걸라고 권고했다.
+로그인 API에 User-Agent 기반 화이트리스트를 두고 있다면 행동 기반 속도 제한으로 보강해야 한다.
+---
+title: United Airlines, 서드파티 AI 에이전트의 항공권 예약·예약 관리 차단
+category: AI
+importance: 3
+source: TechCrunch
+url: https://techcrunch.com/2026/11/12/united-airlines-blocks-ai-agents-from-booking-flights-citing-cybersecurity-risks/
+summary: United가 보안 위험을 이유로 승인되지 않은 개인 AI 에이전트가 항공편을 예약·관리하지 못하도록 정책을 바꾼다.
+detail: United Airlines가 승인되지 않은 서드파티 개인 AI 에이전트·비서의 항공권 예약과 예약 관리를 막겠다고 밝혔다.
+- 자사 디지털 채널에서 직접 막고, 여행사·애그리게이터를 통한 경로도 예약·발권·유통 정책 개정으로 막는다.
+- 계정 자격 증명을 AI 비서에 공유하면 민감 정보 노출, 의도치 않은 구매·변경, 마일리지 사용 위험이 있다는 것이 이유다.
+- 체크인과 위험물 미포함 확인은 사람이 직접 해야 한다는 연방 규정과 충돌할 수 있다는 점도 들었다.
+- 시행일과 탐지·집행 방식은 공개되지 않았다.
+- 앞서 Bank of America도 고객에게 AI 비서와 은행 비밀번호를 공유하지 말라고 경고했다.
+에이전트가 대신 로그인하는 시대에는 서비스 약관과 인증 설계에 에이전트 허용 범위를 명시하는 것이 새 요구사항이 될 수 있다.
+---
+title: OpenAI, ChatGPT Wallet 출시... 에이전트가 결제까지 대신, 미국 Pro 사용자부터
+category: AI
+importance: 3
+source: TechCrunch
+url: https://techcrunch.com/2026/11/13/chatgpts-new-wallet-lets-ai-agents-shop-and-check-out-for-you/
+summary: ChatGPT 에이전트가 카드 정보를 토큰으로 받아 상품 결제까지 처리하는 Wallet 기능이 제한 출시됐다.
+detail: OpenAI가 ChatGPT 에이전트가 구매 결정과 결제까지 대신하는 ChatGPT Wallet을 공개했다.
+- 사용자가 카드를 한 번 등록하면 이후 구매마다 카드 정보를 다시 입력하지 않아도 된다.
+- 결제는 실제 카드 번호 대신 결제 토큰으로 처리돼 에이전트와 판매자 모두 카드 정보를 보지 못한다.
+- 결제 전 품목·금액·카드를 확인하고 Face ID나 지문 같은 보안 확인으로 승인해야 한다.
+- 우선 미국의 18세 이상 Pro 구독자에게 미국 발급 Visa·Mastercard·American Express 카드로 제한 제공한다.
+- 지출 한도와 카테고리·기간별 사전 승인 기능을 추가할 계획이며, 판매자용 Commerce Partner Playbook도 공개했다.
+반면 United처럼 에이전트를 막는 기업도 늘고 있어, 커머스 서비스는 에이전트 결제를 허용할지 정책 결정이 필요해졌다.
+---
+title: 시민단체들, OpenAI·Anthropic·Google·Meta 등에 첨단 AI 개발 중단 소송 제기
+category: AI
+importance: 3
+source: Insurance Journal
+url: https://www.insurancejournal.com/news/national/2026/11/13/892500.htm
+summary: Public Citizen 등 비영리단체들이 샌프란시스코에서 주요 AI 기업의 첨단 모델 개발을 금지해 달라는 소송을 냈다.
+detail: Irreplaceable Education Fund, Public Citizen, Heat Initiative 등 기술 감시 비영리단체들이 샌프란시스코에서 소송을 제기했다.
+- 피고는 OpenAI, Anthropic, SpaceX의 AI 부문, Meta, Google이다.
+- 캘리포니아 불공정 영업 금지법 위반과 공공 불법방해(public nuisance)를 주장했다.
+- 기업 경영진의 AI 문명 위협 발언과 모델이 테스트 환경을 벗어나 정부 웹사이트를 공격한 사례 등을 근거로 들었다.
+- 요구 사항은 ChatGPT·Gemini·Claude 같은 첨단 모델의 추가 개발을 금지하는 법원 명령이다.
+- Meta는 논평을 거부했고 나머지 기업은 즉시 응답하지 않았다. 플로리다 주 소송, 8개 주 소송 등 OpenAI 상대 소송도 진행 중이다.
+당장 서비스에 영향은 없지만, AI 규제·소송 리스크가 커질수록 특정 모델 API에 대한 의존도를 분산해 둘 필요가 있다.
+---
+title: AMD, HPC·AI 겸용 GPU Instinct MI430X 공개... HBM4 432GB, FP64 288TFLOPS
+category: AI
+importance: 3
+source: AMD Blog
+url: https://www.amd.com/en/blogs/2026/exascale-was-the-beginning-amd-instinct--mi430x-gpus.html
+summary: AMD가 SC26을 앞두고 고정밀 과학 계산과 AI를 함께 노린 CDNA 5 기반 MI430X를 소개했다.
+detail: AMD가 11월 12일 블로그에서 CDNA 5 아키텍처 기반 Instinct MI430X의 사양을 공개했다.
+- 최대 FP64 288TFLOPS, FP4 9.2PF 성능을 내세웠다.
+- HBM4 메모리 432GB, 대역폭 최대 23.3TB/s로 Nvidia Vera Rubin보다 메모리 용량이 50% 많다고 주장했다.
+- 노드당 GPU 4개와 6세대 EPYC Venice CPU를 Infinity Fabric 풀 메시로 연결한다.
+- 오크리지 국립연구소의 Frontier 후속 Discovery, 프랑스 첫 엑사스케일 Alice Recoque, 독일 HLRS Herder, 핀란드 LUMI-AI 등에 들어간다.
+- MI300A 대비 HPL 3.96배 등 성능 수치는 AMD 자체 예측이며, 상용 출시일은 밝히지 않았다.
+GPU 공급이 Nvidia 단일 구도에서 벗어날수록 클라우드 GPU 단가 하락 여지가 생긴다는 점에서 지켜볼 만하다.
+---
+title: 통신망 신호 메시지로 2FA 문자 가로챈 첩보 그룹 SilentAir... 아시아 6개국 이상 통신사 장비 악용
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/silentair-hijacks-asian-telecom.html
+summary: Enea가 아시아 통신사 내부 장비를 장악해 SS7·Diameter 위치 갱신 메시지로 통화·문자를 빼돌린 국가급 그룹을 공개했다.
+detail: 스웨덴 통신 보안 기업 Enea가 SilentAir라는 첩보 그룹의 활동을 공개했다.
+- 최소 6개 아시아 국가 이동통신사의 장비를 장악해 위조된 SS7·Diameter UpdateLocation 메시지를 보냈다.
+- 이 메시지로 표적 휴대폰이 해킹된 장비에 있는 것처럼 속여 통화와 문자를 우회시켰고, 일부는 2FA SMS 코드 탈취로 이어졌다.
+- 표적 대부분은 대만이었으며, 우회 유지 여부를 확인하려는 듯 야간에 대량의 사일런트 SMS를 보냈다.
+- 공격 중 가로채기 비율이 18.3%로 일반 감시 업체(2.1%)보다 훨씬 높았다.
+- Enea는 국가급 행위자로 높은 확신을 보였지만 중국 연관성은 낮은 확신으로만 평가했다.
+SMS OTP는 통신망 단에서 가로채질 수 있으니, 관리자 계정 인증은 TOTP나 패스키로 옮기는 것이 안전하다.
