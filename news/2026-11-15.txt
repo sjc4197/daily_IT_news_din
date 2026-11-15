@@ -1,0 +1,162 @@
+title: PostgreSQL, 보안 취약점 52건 일괄 패치... 22년 된 타입 혼동 버그로 인증 사용자 원격 코드 실행 가능
+category: IT
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/postgresql-patches-52-flaws-including.html
+summary: PostgreSQL이 18.7·17.12·16.16·15.20·14.25를 내고 52건을 고쳤으며, 객체 생성 권한만 있으면 서버에서 코드를 실행할 수 있는 CVE-2026-6460(CVSS 8.8)이 핵심이다.
+detail: PostgreSQL 프로젝트가 지원 중인 모든 메이저 버전에 보안 업데이트를 내고 취약점 52건을 수정했다. 이 중 32건이 CVSS 8.8 등급이다.
+- 핵심인 CVE-2026-6460은 복합 타입(composite type)의 타입 혼동 버그로, 객체를 만들 수 있는 DB 사용자가 PostgreSQL을 실행하는 OS 계정 권한으로 코드를 실행할 수 있다.
+- 연구자 Mehmet Ince는 원인이 컬럼 타입 변경 기능이 들어간 2004년 5월까지 거슬러 올라간다고 밝혔고, 18.6에서 동작하는 익스플로잇을 시연했다. 실제 악용 보고는 아직 없다.
+- 로그인 없이 쓸 수 있는 유일한 취약점 CVE-2026-116322는 인증 없는 클라이언트가 PostgreSQL 18 서버를 재시작시킬 수 있다.
+- 조작된 아카이브로 pg_restore가, 악성 원본 서버의 pg_dump tar 출력으로 psql이 코드를 실행하는 클라이언트 도구 취약점도 함께 고쳐졌다.
+- C 확장은 함께 다시 빌드해야 하고, 새 composite_type_mismatch 설정은 끄지 말라는 권고다. 업데이트 후 릴리스 공지의 재인덱싱 절차를 따르고, 증분 백업을 쓰면 새 전체 백업을 받아야 한다.
+- PostgreSQL 14는 14.25가 마지막 릴리스로 지원이 끝났고, 업데이트 불가 서버를 위한 우회책은 없다.
+MariaDB 주력이라도 PostgreSQL이나 pg_dump 기반 백업 파이프라인이 있다면 서버·클라이언트 도구를 모두 이번 마이너 버전으로 올리는 일정을 바로 잡자.
+---
+title: Red Hat Quay 치명적 취약점 2건... 익명 토큰으로 서명 키 심어 모든 비공개 컨테이너 이미지 읽기·덮어쓰기
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/critical-red-hat-quay-flaw-lets.html
+summary: Quay 3·5 전 버전에 영향을 주는 CVE-2026-123710(9.8)과 CVE-2026-110697(9.9)로 공격자가 다른 테넌트 이미지를 읽고 변조할 수 있다.
+detail: Red Hat이 자사 컨테이너 레지스트리 Quay에서 치명적 취약점 2건을 같은 날 공개했다.
+- CVE-2026-123710(CVSS 9.8)은 키 서버가 토큰이 키 교체용으로 발급됐는지 확인하지 않는 문제로, /v2/auth에서 받은 익명 토큰만으로 신뢰된 서비스 키를 등록할 수 있다. 익명 접근이 기본 켜져 있어 계정 없이도 공격 가능하다.
+- 공격자는 비공개 이미지와 그 안의 시크릿을 읽고, 이미지를 푸시·덮어써 이후 pull하는 모든 시스템에 변조본을 퍼뜨릴 수 있다. 심어진 키는 만료가 없고 재시작 후에도 남는다.
+- CVE-2026-110697(CVSS 9.9)은 로봇 계정 조회 SQL LIKE 패턴에서 밑줄 와일드카드를 이스케이프하지 않아, 네임스페이스만 만들 수 있으면 다른 테넌트의 로봇 토큰을 복호화된 상태로 가져올 수 있다.
+- Red Hat은 Quay 3 브랜치 8개에 수정 빌드를 냈고 Quay.io는 이미 조치됐다. 업데이트 전까지는 /keys 엔드포인트를 내부 구성요소 외에 차단하고, 감사 로그에서 만료일 없는 service_key 이벤트를 찾아 모르는 키를 지우라고 권고했다.
+- 익명 접근을 꺼도 첫 번째 취약점은 막히지 않으며, 키 삭제만으로는 다시 등록될 수 있어 패치가 유일한 근본 해결책이다.
+사내 Harbor나 Quay 같은 프라이빗 레지스트리를 운영한다면 K8s 배포 파이프라인 전체가 이미지 무결성에 의존한다는 점에서 레지스트리 패치와 이미지 서명 검증을 우선순위에 올릴 만하다.
+---
+title: Citrix, NetScaler·Console·Secure Access Client 취약점 12건 패치... Console 인증 우회 포함
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/citrix-patches-12-netscaler-and-secure.html
+summary: NetScaler ADC·Gateway의 메모리 손상 9건(CVSS 최대 9.5)과 NetScaler Console 인증 우회(9.4), 클라이언트 권한 상승 2건이 수정됐다.
+detail: Citrix가 NetScaler ADC, NetScaler Gateway, NetScaler Console, Secure Access Client에 걸친 취약점 12건을 패치했다.
+- ADC·Gateway의 9건은 모두 메모리 오버플로·손상으로 서비스 거부를 일으킬 수 있으며, 패킷 처리(CVE-2026-120868)는 모든 배포에 영향을 준다. 최고 점수는 Gateway·AAA vserver 관련 CVE-2026-107412(9.5)다.
+- 수정 버전은 14.1-73.57, 13.1-64.39 이상이며 FIPS·NDcPP 빌드도 별도로 나왔다.
+- NetScaler Console의 CVE-2026-120869(9.4)는 인증 없는 공격자가 제한된 자원에 접근하는 인증 우회로, 14.1-74.34 이상에서 고쳐졌다.
+- Secure Access Client는 Windows에서 SYSTEM, Linux에서 root로 권한 상승이 가능한 취약점(각 8.5)이 수정됐다.
+- Citrix는 실제 악용 사례는 없다고 밝혔고, AI 보조 코드 분석으로 코드베이스를 재검토하는 과정에서 찾아낸 결함이라고 설명했다.
+NetScaler는 과거 대형 침해의 단골 진입점이었던 만큼, 앞단 로드밸런서나 VPN으로 쓰는 환경이라면 악용 보고 전에 미리 패치해 두는 편이 안전하다.
+---
+title: AMD SEV-SNP 기밀 VM을 노리는 Mior·Skyfall 공격 공개... 악성 클라우드 호스트가 VM 내부 비밀 탈취
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/new-mior-and-skyfall-attacks-let-rogue.html
+summary: ETH Zurich·Google 연구진이 호스트 운영자조차 못 보게 설계된 SEV-SNP 기밀 VM의 메모리와 암호키를 읽어내는 두 가지 공격을 시연했다.
+detail: 같은 주에 공개된 두 공격이 AMD EPYC의 SEV-SNP 기밀 컴퓨팅 보장을 깨뜨릴 수 있음을 보였다.
+- Mior(ETH Zurich)는 SEV-SNP 초기화 때 보안 프로세서(PSP)의 쓰기를 공격자 PCIe 장치로 돌려 RMP 테이블 일부를 초기화되지 않은 채로 남긴다. 이후 하이퍼바이저가 보호를 고쳐 VM 메모리를 읽고 쓰며, 증명(attestation) 보고서까지 위조할 수 있었다. 단 BIOS 조작과 PCIe 장치가 필요하다.
+- Skyfall(ETH Zurich·Google, IEEE S&P 채택)은 2025년 공개된 TSA 계열 타이밍 결함을 이용해, 일부러 시작에 실패시킨 VM의 캐시 잔여 상태에서 레지스터 값과 디스크 암호화 키를 복구했다. 하드웨어 조작은 필요 없다.
+- AMD는 CVE-2026-0462(Mior), CVE-2026-40671(Skyfall) 등을 배정했고 EPYC 7003·8004·8005·9004·9005 라인을 영향 대상으로 명시했다. 플랫폼 펌웨어는 11~12월 배포 예정이다.
+- 수정이 호스트 펌웨어에 있어 기밀 VM을 빌려 쓰는 고객은 클라우드 사업자의 적용을 기다릴 수밖에 없으며, 두 팀 모두 PoC 코드를 공개했다.
+일반 VM은 원래 호스트를 신뢰하므로 영향이 없지만, 공공·금융 프로젝트에서 기밀 컴퓨팅을 보안 요건 근거로 내세운다면 사업자의 펌웨어 적용 여부를 확인해야 한다.
+---
+title: 국제 공조 Operation Endgame, Gootloader·CastleRAT·StealC 서버 235대 압수... 탈취 로그인 640만 건 확보
+category: IT
+importance: 2
+source: The Hacker News
+url: https://thehackernews.com/2026/11/operation-endgame-takes-down-gootloader.html
+summary: 독일 BKA와 Europol 등이 악성코드 3종의 서버 235대·도메인 257개를 압수하고 4만여 피해자의 로그인 정보 약 640만 건을 확보했다.
+detail: 독일 BKA, Europol, 네덜란드·덴마크 경찰, 미국 법무부 등이 참여한 Operation Endgame의 새 단계에서 악성코드 3종의 인프라가 무너졌다.
+- Gootloader는 해킹된 WordPress 사이트에 가짜 법률 문서를 올리고 SEO 포이즈닝으로 검색 상위에 노출시켜 랜섬웨어 등을 내려받게 하던 로더다. 서버 14대·도메인 218개가 내려졌고 감염 사이트 681곳에서 악성코드가 제거됐다.
+- 원격 접속 트로이목마 CastleRAT은 서버 120대·도메인 39개가, 인포스틸러 StealC도 새로 구축한 인프라가 압수됐다.
+- 미 법무부는 Gootloader가 2018년 이후 최소 2만5천 대를 감염시키고 미국 랜섬웨어 피해 44건, 약 2,880만 달러 손실과 연관됐다고 밝혔다.
+- 이번 조치에서 체포 발표는 없었고, 유출 데이터는 Have I Been Pwned, Shadowserver 등과 공유돼 피해자 통보에 쓰인다.
+WordPress 기반 홈페이지를 운영하는 기관이라면 관리자 계정 비밀번호 교체와 플러그인·백도어 점검을 정기 작업으로 넣어 두자.
+---
+title: Fireworks AI 침해로 Notion AI 대화 기록 유출... AI 추론 공급망 리스크 현실화
+category: AI
+importance: 4
+source: TechCrunch
+url: https://techcrunch.com/2026/11/12/cyberattack-on-fireworks-ai-allowed-hackers-to-access-notion-customers-chat-transcripts/
+summary: 오픈 모델 추론 플랫폼 Fireworks AI가 뚫리면서 고객사 Notion의 AI 채팅 기록이 탈취됐고, Notion은 Fireworks와의 연결을 끊었다.
+detail: 공격자가 Fireworks AI의 클라우드 제공자를 침해한 뒤 Fireworks 개발 시스템에 접근해 일부 고객 데이터를 가져갔다.
+- Fireworks는 고객 결제 정보와 일부 데이터셋이 유출됐다고 밝혔으며, 공격자가 LLM 접근 토큰을 팔아 남의 비용으로 모델을 쓰게 하려는 금전 목적이라고 본다.
+- Notion은 Insights 기능용으로 처리된 Notion AI 대화 기록이 탈취됐고, 영향 범위는 전체의 약 1% 미만이라고 밝혔다. 기록에는 모델 입출력이 담길 수 있지만 대부분 사용자·워크스페이스 식별 정보는 없었다.
+- Notion은 11월 3일 Fireworks와의 연결을 끊고 저장 데이터를 삭제했으며 Insights를 비활성화했다. 노출된 서드파티 API 키는 발급처에 통보했다.
+- Fireworks는 기본 무보존(zero-data-retention) 서비스는 영향을 받지 않았다고 밝혔고, 10월에도 보안 사고가 있었다.
+사내 서비스에 외부 LLM API를 붙일 때 프롬프트에 개인정보·키가 들어가지 않게 마스킹하고, 벤더의 데이터 보존 정책을 계약 단계에서 확인해야 한다는 교훈이다.
+---
+title: 금수 대상 Nvidia Blackwell, 중국 최강 오픈 모델 학습에 쓰인 흔적... 가중치 분석으로 드러나
+category: AI
+importance: 4
+source: TechCrunch
+url: https://techcrunch.com/2026/11/13/export-banned-nvidia-chips-are-behind-chinas-most-powerful-ai-models-uh-oh-jensen/
+summary: 전 OpenAI 연구원 Will DePue가 DeepSeek V4·Kimi K3 등의 가중치를 분석한 결과 수출 금지된 Blackwell로 학습한 흔적이 보인다고 밝혔다.
+detail: 비영리 Unemployment Labs를 이끄는 Will DePue가 DeepSeek, Moonshot AI, MiniMax, Ant Group의 공개 가중치 모델을 분석했다.
+- 가장 주목받는 Moonshot의 Kimi K3와 DeepSeek V4 모델에서 중국 수출이 금지된 Nvidia Blackwell GPU로 학습한 징후가 나타났다.
+- Epoch AI는 2024~2025년 최종 목적지를 숨기는 방식으로 고급 칩 약 200만 개가 중국에 들어갔다고 추정하며, 같은 기간 말레이시아로 Nvidia 가속기 약 27만5천 개가 수입됐다.
+- 다만 모델 전체를 Nvidia 칩으로 학습했다는 증거는 아니며, 말레이시아 등 해외 데이터센터를 썼다면 수출 규제 위반이 아닐 수도 있다.
+- 이번 주 Jensen Huang이 중국 정보요원 의혹을 받는 인물과의 관계로 Nvidia를 떠난 가운데, 수출 위반에 대한 회사 책임 문제가 사임의 배경으로 거론된다.
+- 규제를 칩의 소유·위치가 아니라 실제 사용 주체 기준으로 바꿔야 한다는 주장이 힘을 얻고 있다.
+중국계 오픈 모델을 사내에 자체 호스팅하려는 경우, 성능과 별개로 규제·평판 리스크가 커질 수 있다는 점을 도입 검토에 포함하자.
+---
+title: llama.cpp, 3년 반 만에 v1.0.0 정식 버전... 시맨틱 버저닝 도입으로 API 안정성 약속
+category: AI
+importance: 4
+source: Hugging Face Blog
+url: https://huggingface.co/blog/ggml-org/llama-cpp-v1
+summary: 로컬 LLM 추론의 사실상 표준인 llama.cpp와 ggml이 1.0.0을 내고, 앞으로 C API·ABI 호환성 파괴는 메이저 버전으로만 하겠다고 밝혔다.
+detail: ggml-org가 libllama(llama.cpp)와 텐서 라이브러리 libggml의 1.0.0 출시를 발표했다. 첫 커밋 후 약 3년 반 만이다.
+- 앞으로 ./include의 공개 C API를 깨는 변경은 MAJOR, 하위 호환 기능·백엔드·모델 추가는 MINOR, API 변화 없는 버그 수정은 PATCH로 올린다.
+- 하드웨어별 ggml 백엔드를 동적 라이브러리로 빌드해 런타임에 로드할 수 있고, NVIDIA·AMD·Qualcomm·Arm·IBM·Intel이 지원에 참여한다.
+- 150개 이상의 모델 아키텍처 변형, 멀티모달 LLM, 주요 추측 디코딩 기법, 양자화를 지원한다.
+- Docker, Debian, Homebrew, conda-forge, Winget 등으로 배포되며, Hugging Face Buckets·Jobs로 master에 병합되는 모든 변경을 CI 테스트한다.
+- 팀은 개발 과정에 LLM을 쓰지만 코드 품질과 아키텍처 통제를 우선한다고 밝혔다.
+폐쇄망 공공 프로젝트에서 로컬 LLM을 Docker로 띄워야 한다면, 이제 버전 고정과 업그레이드 계획을 세우기 훨씬 쉬워졌다.
+---
+title: Cloudflare, AI 에이전트용 브라우저 엔진 Kitesurf 오픈소스 공개... Apache 2.0, Workers에서 실행
+category: AI
+importance: 3
+source: Cloudflare Blog
+url: https://blog.cloudflare.com/kitesurf-open-source/
+summary: 브라우저 컨테이너 없이 HTML·CSS·JavaScript를 처리하는 Rust 기반 에이전트 전용 브라우저 엔진 Kitesurf의 전체 코드가 GitHub에 공개됐다.
+detail: Cloudflare가 8월에 선보인 에이전트 전용 무상태 브라우저 Kitesurf를 Apache 2.0 라이선스로 공개했다.
+- Rust 패키지를 WebAssembly로 컴파일해 Cloudflare Workers에서 실행하며, 대체 JavaScript 엔진으로 Boa를 WebAssembly 안에서 돌린다.
+- HTML 파싱, CSS 적용, 페이지 JavaScript 실행, 스크린샷 렌더링을 브라우저 컨테이너 없이 처리하며 Blitz, Stylo, Linebender, Krilla 등 오픈소스 위에 만들어졌다.
+- 엔진, Rust 코어, DOM 심, 렌더러, CLI를 포함한 저장소 전체가 공개됐고, 로컬에서 띄운 뒤 Puppeteer 등 CDP 클라이언트로 붙을 수 있다.
+- 자체 계정 배포에는 Dynamic Workers를 쓰는 Workers 유료 플랜이 필요하며, 여전히 실험 단계로 호환성과 안정성 개선이 진행 중이다.
+크롤링이나 화면 캡처용으로 헤드리스 Chrome 컨테이너를 무겁게 돌리던 배치가 있다면 경량 대안으로 눈여겨볼 만하다.
+---
+title: LangChain, 3억 달러 시리즈 C 유치하며 기업가치 30억 달러... 에이전트 관리 플랫폼 LangSmith에 집중
+category: AI
+importance: 3
+source: TechCrunch
+url: https://techcrunch.com/2026/11/13/ai-agent-startup-langchain-hits-3b-valuation/
+summary: CapitalG가 주도한 투자로 LangChain의 기업가치가 약 1년 만에 12억5천만 달러에서 30억 달러로 두 배 넘게 뛰었다.
+detail: AI 에이전트 프레임워크 LangChain이 CapitalG 주도로 3억 달러 규모 시리즈 C를 마무리했다.
+- GIC, DFJ Growth, IVP, Sapphire Ventures가 참여했고, 약 1년 전 IVP 주도 1억2,500만 달러 투자 때의 기업가치 12억5천만 달러에서 30억 달러로 올랐다.
+- LangSmith 고객이 7,000곳이라고 밝혔으며 Harvey, Rippling, Clay 같은 스타트업과 Nvidia, Toyota, Salesforce 등 대기업이 포함된다. 매출은 공개하지 않았다.
+- 2022년 오픈소스 프로젝트로 출발했지만, 프런티어 랩들이 웹 검색·API 호출 도구를 직접 내놓자 에이전트 생성·관리·통제 쪽으로 무게를 옮겼다.
+- 모델·클라우드에 종속되지 않는 중립성을 내세워 기업이 자체 지능을 소유해야 한다는 메시지를 강조한다.
+Spring AI와 비슷한 역할의 Python 생태계 대표 주자인 만큼, 에이전트 관측·거버넌스 기능이 어떤 방향으로 표준화되는지 참고할 가치가 있다.
+---
+title: OpenAI·Databricks, Unity Catalog 거버넌스 아래 GPT·Codex·ChatGPT 연동 확대
+category: AI
+importance: 3
+source: Databricks Blog
+url: https://www.databricks.com/blog/openai-and-databricks-enterprise-ai-your-governed-data
+summary: 기업이 Databricks에 쌓인 데이터를 권한 체계 그대로 유지한 채 GPT 모델, Codex, ChatGPT에서 쓸 수 있게 하는 통합 기능들이 공개됐다.
+detail: Databricks가 2025년 9월 시작한 OpenAI와의 다년 파트너십을 확장하는 통합 기능을 발표했다.
+- GPT-6 계열과 공개 가중치 gpt-oss 모델이 Unity Catalog 거버넌스 아래 데이터 옆에서 실행되며, Databricks가 서빙하는 모델은 외부 API 키가 필요 없다.
+- Codex 요청은 Unity Gateway를 거쳐 Databricks 자격증명으로 로그인하고, 모든 요청이 기록되며 팀별 예산과 비용을 관리할 수 있다.
+- Genie 플러그인은 Genie MCP로 ChatGPT를 Databricks 데이터에 연결하고, 사용자는 자기 권한 범위의 데이터만 본다.
+- SQL·노트북·에이전트에서 GPT 모델을 호출할 수 있고, 관리형 Postgres인 Lakebase가 에이전트 메모리와 상태 저장소로 쓰인다.
+- Databricks는 새 OpenAI 모델에 대한 조기 접근권도 받는다. 가격은 공개되지 않았다.
+사내 데이터에 LLM을 붙일 때 권한·감사 로그·비용 통제를 게이트웨이 한 곳에서 처리하는 구조는 우리 시스템 설계에도 그대로 가져다 쓸 수 있는 패턴이다.
+---
+title: IBM, 지시와 데이터를 특수 토큰으로 분리하는 LLMON 공개... Granite 프리뷰로 프롬프트 인젝션 대응
+category: AI
+importance: 3
+source: Hugging Face Blog
+url: https://huggingface.co/blog/ibm-granite/llmon-an-llm-native-markup-language-now-in-granite
+summary: IBM이 지시·데이터·요구사항을 예약 토큰으로 구분하는 마크업 LLMON과 이를 학습한 Granite 4.1 3B·8B 실험 모델을 내놨다.
+detail: IBM Granite 팀이 파서가 아닌 LLM을 위한 마크업 언어 LLMON(LLM Object Notation)을 발표했다.
+- XML과 비슷한 태그를 쓰되 구조 구분자를 예약된 특수 토큰으로 만들어, 모델이 지시와 검색해 온 데이터를 구조적으로 구분하게 한다.
+- Granite 4.1 베이스에서 파생한 3B·8B 프리뷰 모델을 Hugging Face에 공개했으며, 일반 성능은 Granite 4.1 Instruct와 비슷하다고 밝혔다.
+- OPI 벤치마크에서 가장 나은 프런티어 모델보다 47%, 가장 나은 오픈소스 모델보다 95% 더 많은 공격을 막았다고 주장한다.
+- 다만 실험적 프리뷰로 운영용이 아니며, 권한 구분은 학습된 행동일 뿐 강제 보장이 아니다. 여러 턴에 걸친 적응형 공격은 아직 해결하지 못했다.
+RAG로 외부 문서를 프롬프트에 넣는 서비스라면, 지시와 데이터를 명확히 분리하는 이런 흐름이 앞으로 모델 선택 기준이 될 수 있다.
