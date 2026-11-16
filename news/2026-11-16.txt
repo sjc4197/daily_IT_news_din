@@ -1,0 +1,145 @@
+title: FBI, AI 자율 해킹 프레임워크 ARTEX 경보... 국내 은행 3곳 공격에도 사용
+category: IT
+importance: 5
+source: BleepingComputer
+url: https://www.bleepingcomputer.com/news/security/fbi-warns-artex-ai-hacking-tool-is-powering-global-cyberattacks/
+summary: Claude·GPT 등 외부 LLM을 붙여 정찰부터 권한 상승·데이터 탈취까지 자동화하는 ARTEX가 전 세계 공격에 쓰이고 있다며 FBI가 FLASH 경보를 냈다.
+detail: FBI가 13쪽 분량 FLASH 경보로 오픈소스 자율 침투 테스트 프레임워크 ARTEX의 악용 실태와 침해 지표(IOC)를 공개했다.
+- Go로 작성됐고 자체 모델 없이 Claude, GPT, DeepSeek, GLM, Grok, Kimi 등 외부 LLM에 연결해 공격 목표를 전문 에이전트용 명령으로 쪼개 실행한다.
+- 2026년 8월부터 여러 위협 그룹이 사용했고, 일부 침투는 최초 표적화에서 특권 획득까지 3시간이 채 걸리지 않았다.
+- 개발자가 10월 8일 GitHub에서 내렸지만 포크·아카이브와 상용판 ARTEX PRO로 계속 유통되며, 노출된 콘솔만 1,600개 이상 확인됐다.
+- 신한·KB국민·하나은행 공격에서 Claude Code 에이전트와 함께 쓰여 약 6만 7천 명의 개인정보가 노출됐고, 국내 경찰은 90여 개 기관 공격과 관련해 7명을 검거했다.
+- FBI는 외부 노출 앱·파트너 포털 점검, 클라우드 관리 인터페이스 접근 제한, 민감 API 속도 제한, 자동화 요청 급증 모니터링을 권고했다.
+공개된 eGov 서비스나 관리 콘솔을 운영한다면 API rate limit과 비정상 요청 패턴 탐지를 지금 점검해야 한다.
+---
+title: Fireworks AI에서 유출된 키로 Cursor 침해... 마켓플레이스 Claude Code 확장에 SSH 백도어 심어
+category: IT
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/stolen-fireworks-ai-key-led-to-cursor.html
+summary: Cursor가 Fireworks AI에 발급한 키가 털리면서 에이전트 트레이스 속 자격증명이 새고, 확장 마켓플레이스 캐시에 트로이목마화된 Claude Code 확장이 배포됐다.
+detail: Cursor가 Fireworks AI 경유 침해 조사 결과를 공개했다. 앞서 알려진 Fireworks AI 침해의 연쇄 피해다.
+- 공격자는 Fireworks에 노출된 Cursor 발급 키로 공유용 읽기 전용 버킷의 코딩 에이전트 트레이스를 복사했고, 여기 남아 있던 평문 자격증명으로 Cursor 내부 SaaS 도구에 접근했다.
+- 10월 29일 Claude Code 확장 2.1.312, 2.1.313 버전의 악성 빌드가 마켓플레이스 캐시에 올라가 약 11시간 노출됐고, 최대 5,000명이 받았을 수 있다. 영구 SSH 백도어 설치를 시도했다.
+- 비운영 소스 저장소, 일부 고객지원 데이터, 지원팀에 보낸 자격증명 등도 접근됐다. Privacy Mode 사용자와 고객 코드 저장소, 운영 환경 피해 증거는 없다고 밝혔다.
+- Cursor는 Fireworks 키 폐기, 추론 트래픽 이전, 자격증명 교체, 마켓플레이스 일시 중단 조치를 했다.
+AI 코딩 도구에 붙여 넣은 DB 비밀번호나 토큰은 학습·추론 공급망 어딘가에 남는다고 가정하고, 해당 버전을 설치했다면 SSH authorized_keys 점검과 키 교체부터 하자.
+---
+title: Lovable로 만든 앱 2만 4천여 개, 인증 없이 DB 노출... 여권번호·채팅 20만 건 유출
+category: IT
+importance: 4
+source: Cybernews
+url: https://cybernews.com/security/lovable-ai-apps-expose-personal-information/
+summary: 바이브 코딩 플랫폼 Lovable 앱 상당수가 Supabase Row Level Security를 설정하지 않아 로그인 없이 데이터베이스를 읽을 수 있었다.
+detail: 연구진이 Lovable 프로젝트 159,041개를 스캔한 결과, Supabase를 쓰는 34,545개 중 24,664개가 인증 없이 DB 레코드를 반환했다.
+- 원인은 Lovable 자체 해킹이 아니라 백엔드 DB의 Row Level Security(RLS) 규칙 누락·미설정이다.
+- 노출 데이터에는 여권번호와 만료일·국적, 결제 정보, 7,403개 사이트의 이메일, 한 커뮤니티의 채팅 20만 건과 프로필 8만 건, 계약서·인보이스가 포함됐다.
+- UpGuard 별도 조사에서도 Supabase 연동 도메인 약 30만 개 중 16,326개 DB의 테이블이 읽혔다.
+- Lovable은 업계 전반에 알려진 Supabase 설정 문제라고 해명했다.
+AI가 생성한 백엔드라도 접근 제어는 개발자 책임이다. 프론트에서 DB를 직접 호출하는 구조라면 행 단위 권한 정책을 반드시 검증해야 한다.
+---
+title: Anthropic Amodei "컴퓨팅이 가장 깊은 경영 딜레마"... 2027년 9월까지 약 710억 달러 지급 예정
+category: AI
+importance: 4
+source: Business Standard (Bloomberg)
+url: https://www.business-standard.com/world-news/anthropic-ceo-dario-amodei-calls-computing-power-deepest-business-dilemma-126111400181_1.html
+summary: IPO를 앞둔 Anthropic CEO가 투자자 행사에서 컴퓨팅 확보 규모 예측이 회사의 가장 큰 경영 난제라고 밝혔다.
+detail: Dario Amodei가 11월 13일 JPMorgan 행사에서 컴퓨팅 수요를 1~2년 앞서 예측하기 어렵다며 이를 회사의 가장 깊은 경영 딜레마로 꼽았다.
+- 너무 적게 사면 고객 대응과 연구가 막히고, 너무 많이 사면 재무가 과도하게 늘어나는 구조다. 높은 매출총이익률과 현금 보유로 위험을 완화하겠다고 했다.
+- 최신 공시상 총 약정은 약 9,010억 달러로 대부분 컴퓨팅·칩이며, 2027년 9월 30일까지 약 710억 달러가 지급될 예정이다.
+- IPO로 최대 644억 달러, 사모 배정으로 260억 달러를 조달하려 하며, 청약 수요는 공모 물량의 약 6배다.
+- 10월 31일 기준 연환산 매출은 810억 달러로 9월 말보다 100억 달러 늘었다.
+LLM API 가격과 공급이 결국 이런 컴퓨팅 투자 사이클에 묶여 있다는 점을 장기 도입 계획에 반영할 필요가 있다.
+---
+title: Google Antigravity에 멀티 에이전트 /teamwork 공개... Lean 증명 5천만 줄, Rust 포팅으로 C++보다 20~30% 빨라
+category: AI
+importance: 4
+source: Google Research
+url: https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/
+summary: 전문 에이전트와 독립 검증기를 묶는 Antigravity의 /teamwork 기능이 수학·화학·시스템 소프트웨어 난제에서 성과를 냈고 외부에도 열렸다.
+detail: Google Research가 Antigravity의 멀티 에이전트 협업 기능 /teamwork의 연구 성과를 공개했다.
+- 병렬 탐색과 Lean 4 증명기, 테스트 스위트, 시뮬레이터 같은 독립 검증기를 짝지우고, 각 에이전트에는 필요한 파일·도구만 주며, 비평 에이전트가 원 작성자의 추론 없이 결과를 검토한다.
+- Courtade–Kumar 추측을 일반형으로 증명했고 형식 증명은 약 5천만 줄이다. Weil 추측도 약 180만 줄로 Lean 형식화했다.
+- libgav1을 Rust로 포팅해 비트 단위로 동일한 결과를 내면서 원본 C++·어셈블리보다 20~30% 빨라졌고, JAXBench 커널 17개에서 기하평균 4.09배 속도 향상을 얻었다.
+- Gemini 4 모델로 /teamwork와 /boost를 외부 사용자도 쓸 수 있고, 학계 연구자 1만 명에게 6개월 최고 등급 무료 이용권을 제공한다.
+레거시 코드 마이그레이션에서 테스트를 검증기로 두고 에이전트를 돌리는 패턴은 eGov 프로젝트 버전 업그레이드에도 참고할 만하다.
+---
+title: Jensen Huang 퇴진 이후 Nvidia 리더십 공백... AI 업계 투자 생태계 흔들릴까
+category: AI
+importance: 3
+source: TechCrunch
+url: https://techcrunch.com/2026/11/15/is-bad-news-for-jensen-huang-also-bad-news-for-the-ai-industry/
+summary: 승계 계획 없이 CEO를 잃은 Nvidia가 AI 업계 곳곳에 걸어둔 대규모 투자·약정의 향방이 불확실해졌다.
+detail: TechCrunch가 Huang 사임 이후 Nvidia와 AI 업계에 미칠 영향을 짚었다.
+- 이사회는 11월 8일 무렵 조사를 시작했고, Huang은 Nvidia 고객사이자 중국 정보기관 연계 의혹이 있는 Megaspeed 전 임원과의 관계 보도 이후 사임했다. CFO Colette Kress가 임시 CEO를 맡았다.
+- Nvidia에는 승계 계획이 없었고, Elon Musk 등 업계 인사들이 복귀를 요구하는 청원에 서명했다.
+- Nvidia는 AI GPU 시장의 약 80%를 차지하며, 990억 달러 투자와 250억 달러 약정, 360억 달러 클라우드 서비스 약정으로 CoreWeave, Nebius, OpenAI, Anthropic 등에 얽혀 있다.
+- Huang은 대중국 칩 수출 완화를 주장해 왔기 때문에 수출 정책 방향에도 변수가 생겼다.
+AI 순환 경제의 중심축이 흔들리면 GPU 클라우드 가격과 공급에도 파장이 올 수 있으니 당분간 지켜볼 이슈다.
+---
+title: Nathan Lambert "Huang 없는 Nvidia, 미국 오픈 모델 생태계에 큰 타격"
+category: AI
+importance: 3
+source: Interconnects AI
+url: https://www.interconnects.ai/p/open-source-ai-without-jensen
+summary: Huang의 개인적 후원에 기대던 미국 오픈 가중치 모델 생태계가 자금 축소 위기를 맞았다는 분석이다.
+detail: Interconnects의 Nathan Lambert가 Huang 퇴진이 미국 오픈 모델 진영에 주는 의미를 분석했다.
+- Nvidia는 고객사의 권력 집중과 자체 칩 개발을 막기 위해 오픈 모델을 지원할 재무적 동기가 여전히 있지만, 그간 지원은 Huang 개인의 의지에 크게 기댔다고 봤다.
+- Nvidia의 오픈 모델 Nemotron은 야심과 인재는 있으나 아직 확실한 성공작은 아니라고 평가했다.
+- Thinking Machines의 Inkling 2 Small을 오랜만의 최고 서구 오픈 가중치 모델로 꼽았지만 Kimi K3.1 Pro에는 크게 뒤진다고 했다.
+- 주 단위의 허술한 규제와 오픈 가중치 모델이 촉발할 보안 사고 가능성도 위험 요인으로 들었다.
+- 해법은 인재·규모·연합을 갖춘 진짜 프런티어급 미국 오픈 모델 기업을 세우는 것뿐이라고 결론지었다.
+사내 자체 호스팅 모델을 고를 때 미국계 오픈 모델의 지속성도 함께 따져봐야 하는 이유다.
+---
+title: 미국, 딥페이크 화상회의로 암호화폐 4억 달러 턴 북한 FaceStealer 작전 인프라 압수
+category: IT
+importance: 3
+source: BleepingComputer
+url: https://www.bleepingcomputer.com/news/security/us-disrupts-north-korean-campaign-behind-400-million-crypto-theft/
+summary: 탈취한 메신저 계정으로 화상회의에 초대한 뒤 가짜 오류와 수정 프로그램으로 악성코드를 심은 북한 BlueNoroff 캠페인을 미국이 무력화했다.
+detail: 미국 정부가 18개월간 이어진 북한 사회공학 캠페인 FaceStealer의 클라우드 인프라를 압수했다. Arctic Wolf는 이를 BlueNoroff 그룹 소행으로 봤다.
+- Telegram, LinkedIn, Slack, Discord 계정을 탈취해 지인을 사칭하며 화상회의에 초대하고, 기존 피해자 녹화 영상과 딥페이크를 틀어 신뢰를 얻었다.
+- 회의 중 기술 문제를 핑계로 가짜 오류를 띄운 뒤 업데이트나 설치 파일 링크를 주는 ClickFix 방식으로 악성코드를 설치했다.
+- 악성코드는 암호화폐 데이터와 Zoom, Google Meet, Teams 자격증명, 웹캠 영상 등을 빼돌렸고, 피해액은 4억 달러 이상이다.
+- 58개국 677명이 표적이었고 주로 창업자·고위 임원을 노렸으며, 몰래 녹화된 웹캠 영상 900개 이상이 확인됐다.
+회의 중 "이걸 실행하면 해결된다"는 스크립트나 설치 파일은 상대가 아는 사람이라도 절대 실행하지 말아야 한다.
+---
+title: UnrealIRCd 15년 만의 최악 취약점 실제 악용... 서버 간 명령 주입, CISA KEV 등재
+category: IT
+importance: 2
+source: The Hacker News
+url: https://thehackernews.com/2026/11/attackers-exploit-unrealircd-flaw-that.html
+summary: 오픈소스 IRC 서버 UnrealIRCd의 labeled-response 모듈 취약점이 패치 하루 만에 공격에 쓰였다.
+detail: UnrealIRCd 6.0.0부터 6.2.7.1 이전 버전에 있는 CVE-2026-114713(CVSS 8.6)이 실제 공격에 악용되고 있다.
+- labeled-response 모듈이 IRCv3 label 메시지 태그를 이스케이프하지 않고 응답에 그대로 넣어, 연결된 서버 사이에 명령을 주입할 수 있다.
+- 두 대 이상 서버가 연결된 네트워크라면 일반 사용자도 공격할 수 있고, 주입된 명령은 서버(IRCOp) 권한으로 실행된다.
+- 11월 7일 핫픽스 공개 약 하루 뒤부터 공격 시도가 시작됐고, 메인테이너는 15년 만에 가장 치명적인 문제라고 했다.
+- CISA는 11월 13일 KEV 목록에 추가했다. 수정 버전은 6.2.7.1이며 spamfilter 기반 임시 우회책도 있다.
+입력값을 프로토콜 메시지에 그대로 되돌려 쓰는 패턴은 웹 API의 헤더·로그 인젝션과 같은 계열이니 출력 이스케이프를 습관화하자.
+---
+title: Salesforce, 오픈 가중치 음성인식 모델 SOV-Transcribe-1 공개... 오픈 모델 중 WER 1위
+category: AI
+importance: 2
+source: Hugging Face Blog
+url: https://huggingface.co/blog/salesforce-sovereign-intelligence/sov-transcribe-1
+summary: Apache 2.0 라이선스로 자체 호스팅 가능한 비스트리밍 음성인식 모델로, Artificial Analysis 기준 오픈 가중치 모델 1위를 기록했다.
+detail: Salesforce Sovereign Intelligence가 비스트리밍 음성인식(ASR) 모델 SOV-Transcribe-1을 Apache 2.0으로 공개했다.
+- 활성 파라미터 40억 개, 전체 260억 개 규모의 음성 결합 언어 모델이다.
+- Artificial Analysis의 AA-WER에서 2.28%로 오픈 가중치 모델 중 1위(전체 7위)를 기록했다. Nemotron 3.5 Transcribe는 2.81%, Voxtral Small은 2.77%였다.
+- 영어 억양 14종의 콜센터 대화 평균 WER 8.21%로 14개 중 8개 억양에서 가장 낮았다.
+- 자연어 지시로 숫자 표기나 말더듬 제거 같은 스타일을 바꾸고, 키워드나 오디오 설명으로 희귀 고유명사 인식을 높일 수 있다.
+- 벤치마크는 자체 발표이며 기술 보고서는 아직 나오지 않았다.
+민원 녹취 텍스트화처럼 데이터를 외부로 못 내보내는 공공 프로젝트라면 자체 호스팅 후보로 검토해 볼 만하다.
+---
+title: Replit Agent, 결제 대행 커머스와 Google 광고 집행 기능 추가
+category: AI
+importance: 2
+source: Replit Blog
+url: https://replit.com/blog/replit-agent-ads-commerce
+summary: Replit Agent가 사업 물품 구매와 Google 광고 운영까지 대신하되, 최종 금액과 광고 집행은 사용자 승인을 받도록 했다.
+detail: Replit이 Agent에 에이전트 커머스와 Google 광고 연동 기능을 추가했다.
+- 커머스 기능은 Link와 Visa 기반으로, 브라우저 하위 에이전트가 판매처 사이트에서 직접 장바구니를 채우고 결제 직전에 멈춰 승인을 기다린다.
+- 결제 중에는 셸 접근과 일반 브라우징을 막고, 승인 검사는 프롬프트가 아닌 코드로 강제한다.
+- 미국 Core·Pro 사용자 대상이며 일회성 구매만 지원한다.
+- Google 광고 기능은 사이트를 분석해 문구와 이미지를 만들고 일일 예산을 추천하며, 검토 후 Search, YouTube, Display 등에 집행한다. Pro 사용자에게 전 세계 제공된다.
+에이전트에 결제 같은 위험 동작을 줄 때 승인 검사를 코드 레벨에서 강제하는 설계는 사내 에이전트 개발에도 그대로 가져올 만한 원칙이다.
