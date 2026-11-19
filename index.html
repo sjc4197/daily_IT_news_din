@@ -77,6 +77,17 @@ a{color:inherit}
 .chip{font:inherit; font-size:12px; font-weight:500; padding:5px 11px; border-radius:999px; border:1px solid var(--rule); background:transparent; color:var(--muted); cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
 
+/* overview (day summary) */
+.overview{margin:14px 0 6px; padding:16px 18px 14px; background:var(--surface); border-top:2px solid var(--ink); border-bottom:1px solid var(--ink); display:flex; flex-direction:column; gap:9px}
+.ov-label{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.ov-lead{font-family:var(--display); font-weight:700; font-size:20px; line-height:1.35; margin:0; text-wrap:balance}
+.overview p{margin:0; max-width:70ch}
+.ov-list{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:5px}
+.ov-list li{position:relative; padding-left:16px; max-width:70ch}
+.ov-list li::before{content:""; position:absolute; left:2px; top:.6em; border:4px solid transparent; border-left:6px solid var(--muted)}
+.ov-note{padding-left:12px; border-left:2px solid var(--accent); font-weight:500; margin-top:2px}
+@media (max-width:520px){ .ov-lead{font-size:18px} .overview{padding:14px 14px 12px} }
+
 /* articles */
 main{padding-block:8px}
 .status{padding-block:40px; text-align:center; color:var(--muted); font-size:14px}
@@ -171,7 +182,7 @@ footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1
   const BRANCH = 'main';
   const DIR = 'news';
   const IMP = {5:'필독', 4:'중요', 3:'보통', 2:'참고', 1:'가벼움'};
-  const KEYS = new Set(['title','category','importance','source','url','summary','detail']);
+  const KEYS = new Set(['title','category','importance','source','url','summary','detail','overview']);
 
   const $ = s => document.querySelector(s);
   const main = $('#main'), dateSel = $('#dateSel'), impSel = $('#impSel'), q = $('#q');
@@ -183,7 +194,7 @@ footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1
 
   function parse(txt){
     const blocks = txt.replace(/\r\n?/g, '\n').split(/^\s*-{3,}\s*$/m);
-    const out = [];
+    const out = []; let overview = '';
     for (const b of blocks){
       const o = {}; let k = null;
       for (const raw of b.split('\n')){
@@ -192,13 +203,13 @@ footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1
         if (m && KEYS.has(m[1].toLowerCase())){ k = m[1].toLowerCase(); o[k] = m[2].trim(); }
         else if (k && line.trim()){ o[k] = (o[k] ? o[k] + '\n' : '') + line.trim(); }
       }
-      if (!o.title) continue;
+      if (!o.title){ if (o.overview && !overview) overview = o.overview; continue; }
       let imp = parseInt(o.importance, 10); if (!(imp >= 1 && imp <= 5)) imp = 3;
       o.importance = imp;
       o.category = (o.category || '').trim().toUpperCase() === 'AI' ? 'AI' : 'IT';
       out.push(o);
     }
-    return out;
+    return { items: out, overview };
   }
 
   async function listFiles(){
@@ -215,9 +226,27 @@ footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1
     let txt;
     try { const r = await fetch(`${DIR}/${f.name}`, {cache:'no-cache'}); if (!r.ok) throw 0; txt = await r.text(); }
     catch { const r = await fetch(f.dl, {cache:'no-cache'}); txt = await r.text(); }
-    const items = parse(txt).map((it, i) => ({...it, date: f.date, idx: i}));
-    cache.set(f.date, items);
-    return items;
+    const parsed = parse(txt);
+    const day = { overview: parsed.overview, items: parsed.items.map((it, i) => ({...it, date: f.date, idx: i})) };
+    cache.set(f.date, day);
+    return day;
+  }
+
+  // overview block: first line = lead, "- " lines = bullets, trailing plain line = note
+  function overviewHTML(text, total, shown, must){
+    const lines = text.split('\n').map(s => s.trim()).filter(Boolean);
+    if (!lines.length) return '';
+    const lead = lines.shift();
+    const note = lines.length && !lines[lines.length - 1].startsWith('- ') ? lines.pop() : '';
+    let body = '', ul = [];
+    const flush = () => { if (ul.length){ body += '<ul class="ov-list">' + ul.map(l => `<li>${esc(l)}</li>`).join('') + '</ul>'; ul = []; } };
+    for (const l of lines){ if (l.startsWith('- ')) ul.push(l.slice(2)); else { flush(); body += `<p>${esc(l)}</p>`; } }
+    flush();
+    const count = `${total}건` + (shown !== total ? ` 중 ${shown}건 표시` : '') + (must ? ` · 필독 ${must}` : '');
+    return `<section class="overview" aria-label="오늘의 요약">
+      <div class="ov-label">오늘의 요약 · ${count}</div>
+      <p class="ov-lead">${esc(lead)}</p>${body}${note ? `<p class="ov-note">${esc(note)}</p>` : ''}
+    </section>`;
   }
 
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -253,8 +282,8 @@ footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1
       const all = await Promise.all(files.map(loadDay));
       const needle = state.q.toLowerCase();
       let html = '', total = 0;
-      all.forEach((items, i) => {
-        const hit = items.filter(pass).filter(a => [a.title, a.summary, a.source].join(' ').toLowerCase().includes(needle)).sort(sortImp);
+      all.forEach((day, i) => {
+        const hit = day.items.filter(pass).filter(a => [a.title, a.summary, a.source].join(' ').toLowerCase().includes(needle)).sort(sortImp);
         if (!hit.length) return;
         total += hit.length;
         html += `<div class="day-head"><span>${fmtDate(files[i].date)}</span><span>${hit.length}건</span></div>` + hit.map(artHTML).join('');
@@ -268,9 +297,11 @@ footer{font-family:var(--mono); font-size:11px; color:var(--muted); border-top:1
     const f = files[idx]; if (!f) return;
     main.innerHTML = '<div class="status">불러오는 중…</div>';
     try {
-      const items = (await loadDay(f)).filter(pass).sort(sortImp);
-      main.innerHTML = items.map(artHTML).join('') || '<div class="status">조건에 맞는 기사가 없습니다.</div>';
+      const day = await loadDay(f);
+      const items = day.items.filter(pass).sort(sortImp);
       const must = items.filter(a => a.importance === 5).length;
+      const ov = day.overview ? overviewHTML(day.overview, day.items.length, items.length, day.items.filter(a => a.importance === 5).length) : '';
+      main.innerHTML = ov + (items.map(artHTML).join('') || '<div class="status">조건에 맞는 기사가 없습니다.</div>');
       $('#footLeft').textContent = `${items.length}건${must ? ` · 필독 ${must}` : ''}`;
       $('#footRight').innerHTML = `<code>${DIR}/${f.name}</code>`;
     } catch (e) {
