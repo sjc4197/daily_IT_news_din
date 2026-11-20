@@ -8,7 +8,7 @@
 <h3 align="center">Daily IT · AI News</h3>
 
 <p align="center">
-  매일 아침 Claude Cowork가 IT/AI 뉴스를 스크랩해 <code>news/</code>에 푸시하면,<br>
+  매일 아침 9시 30분, Claude Cowork가 IT/AI 뉴스를 스크랩해 <code>news/</code>에 푸시하면,<br>
   GitHub Pages가 그 폴더를 읽어 날짜별·중요도순으로 보여주는 페이지입니다.
 </p>
 
