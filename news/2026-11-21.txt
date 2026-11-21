@@ -1,0 +1,159 @@
+overview: 오늘은 가상화·경계 장비 취약점과 AI 도구를 쓴 공격이 겹치고, AI 쪽에서는 리만 가설 증명 주장과 에이전트 운영 자동화가 눈에 띈 날이다.
+- 보안: AMD 호스트의 Linux KVM 결함(CVE-2026-99312)은 패치가 아직 덜 풀렸고, Cisco Expressway 결함은 실제 공격에서 GitLab 자격증명 탈취까지 이어졌다.
+- 공격 동향: AI 침투 도구 ARTEX가 EU 집행위와 Barracuda 침해에 연결됐고, N-able 장애도 사이버 공격으로 확인됐다.
+- AI: Anthropic 소속 수학자가 Claude로 리만 가설 Lean 증명을 찾았다고 주장했고, OpenAI는 Codex 에이전트로 성능 회귀 원인 600건 이상을 자동 규명한 사례를 공개했다.
+- 플랫폼: Docker가 에이전트 격리·거버넌스 중심으로 브랜드를 바꿨고, Tencent Hy4 flash와 Google Genie 4가 개발자에게 열렸다.
+Docker·K8s를 AMD 가상화 호스트 위에서 운영 중이라면 KVM nested 설정 확인이 오늘 가장 먼저 할 일이다.
+---
+title: Linux KVM 취약점 CVE-2026-99312... AMD 호스트에서 게스트 VM이 호스트 메모리 읽기·쓰기 가능
+category: IT
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/new-linux-kvm-flaw-cve-2026-99312-lets.html
+summary: 중첩 가상화가 켜진 AMD KVM 호스트에서 게스트가 호스트 RAM을 읽고 커널 페이지에 쓸 수 있는 결함이 공개됐고, 주요 배포판 패치는 아직 대부분 미배포 상태다.
+detail: Terra Security의 Oren Yomtov가 DigitalOcean 버그바운티로 보고한 Linux KVM 결함으로, 중첩 가상화를 켠 AMD 호스트에만 해당하고 Intel 호스트는 영향이 없다.
+- DigitalOcean Droplet 테스트에서 게스트가 호스트 RAM 약 127GB를 읽기 전용으로 볼 수 있었고, 연구진 자체 베어메탈 서버에서는 호스트 커널 페이지에 32바이트를 써넣었다.
+- 원인은 중첩 VM이 INIT으로 리셋된 뒤 KVM이 바깥 VM의 페이지 테이블 포인터를 복원하지 않아 해제된 메모리를 가리키는 것으로, 2022년 CVE-2022-3344 수정에서 유입됐다.
+- 점수는 커널 CVE 팀 8.8, Red Hat 예비 평가 5.6(DoS 한정)으로 엇갈린다.
+- 업스트림 수정은 stable 7.3.5, LTS 6.18.64·6.12.118에 들어갔지만 Debian은 unstable만, Ubuntu는 수정 패키지 없음, RHEL 9·10은 수정 보류 상태다(RHEL 8은 비해당).
+- 완화책은 kvm_amd 모듈의 nested=0 설정 후 재부팅이며 기본값은 켜져 있다. 실제 악용이나 공개 익스플로잇은 아직 없다.
+AMD 기반 가상화 호스트 위에서 K8s 노드나 Docker 호스트를 돌리고 있다면 nested 파라미터부터 확인하고, 클라우드라면 사업자 공지를 챙겨야 한다.
+---
+title: Cisco Expressway CVE-2026-76466(CVSS 9.8) 실제 악용 첫 확인... 클러스터 타고 내부망까지 침투
+category: IT
+importance: 4
+source: The Hacker News
+url: https://thehackernews.com/2026/11/hackers-exploit-critical-cisco.html
+summary: 공개 PoC가 나온 직후 인증 없는 root 명령 실행 결함이 실제 공격에 쓰였고, 공격자는 GitLab 저장소까지 접근해 자격증명을 빼냈다.
+detail: 러시아 보안업체 F6가 Cisco Expressway 취약점 CVE-2026-76466의 첫 실제 악용 사례를 보고했다.
+- 네트워크 접근만 있으면 인증 없이 root 권한으로 OS 명령을 실행할 수 있으며, 원인은 영구 쿠키와 클러스터링용 TLS Verify 모드의 클라이언트 인증서 검증 미흡이다.
+- Cisco는 10월 21일 수정판을 냈고, X15.5.3 이하는 X15.5.20으로, X14 이하는 수정 릴리스로 이전해야 한다.
+- 공격자는 인터넷에 노출된 장비 2대를 먼저 장악한 뒤 같은 클러스터의 내부 노드 2대로 이동했다.
+- 이후 Python 스크립트로 내부망을 스캔해 SMB 공유, SQL Server, WinRM을 건드리고 GitLab 저장소에서 자격증명을 빼냈으며, F6는 스크립트가 AI 도움을 받았을 가능성을 언급했다.
+- 특정 위협 그룹과 연결되지는 않았고 피해 기관은 러시아 조직으로만 알려졌다.
+경계 장비 하나가 뚫리면 사내 GitLab의 비밀값까지 털린다는 사례이므로, 저장소에 평문 자격증명이 남아 있는지 점검해 볼 만하다.
+---
+title: 유럽연합 집행위원회, AI 침투 도구 ARTEX 이용한 공격으로 급여·의료비 시스템 10일 넘게 차질
+category: IT
+importance: 4
+source: The Register
+url: https://www.theregister.com/cyber-crime/2026/11/19/european-commission-scrambles-to-contain-ai-assisted-cyberattack/5311103
+summary: 공개된 AI 침투 테스트 프레임워크 ARTEX를 쓴 공격으로 EU 집행위 내부 시스템이 열흘 넘게 흔들렸고, 같은 도구가 Barracuda 침해에도 연결됐다.
+detail: Politico 취재원을 인용한 보도에 따르면 공격자들이 공개 AI 침투 테스트 프레임워크 ARTEX로 EU 집행위원회 내부 IT 시스템을 노렸다.
+- 급여·근태·휴가를 다루는 Sysper와 의료비 환급 시스템 MyPMO가 오프라인됐고, 복구 후 Sysper가 다시 중단됐으며 번역 서비스도 영향을 받았다.
+- 집행위 대변인은 개별 시스템이 표적이 됐다고만 밝혔고 직원 데이터 유출 여부는 공개하지 않았다. 급여는 정상 지급됐다.
+- CERT-EU는 11월 5일 ARTEX 기반 공격을 경고했고, FBI는 인터넷에 노출된 ARTEX 콘솔 1,600개 이상과 표적 식별부터 특권 획득까지 3시간이 안 걸린 사례를 알렸다.
+- 개발자는 10월 GitHub 저장소를 내렸지만 포크가 여전히 돌아다닌다.
+- Barracuda도 11월 16일, 퇴역시키지 않은 외부 AI 업체용 클라우드 접근 키로 44시간 동안 클라우드 계정 약 10개가 침해된 사건을 ARTEX 패턴과 연결했다.
+AI 도구로 공격 속도가 시간 단위로 줄어든 만큼, 안 쓰는 액세스 키 회수와 설정 파일 속 비밀값 정리가 더 급해졌다.
+---
+title: N-able, Mail Assure·SpamExperts 장애 원인은 사이버 공격이라고 인정
+category: IT
+importance: 3
+source: SecurityWeek
+url: https://www.securityweek.com/n-able-blames-service-disruption-on-cyberattack/
+summary: 처음엔 설정 문제라던 이메일 보안 서비스 장애가 웹 서버 침해로 확인됐고, N-able은 API 토큰 폐기와 비밀번호 초기화를 진행했다.
+detail: N-able의 이메일 보안 서비스 Mail Assure와 SpamExperts Hosted Cloud가 11월 16일부터 전 리전에서 장애를 겪었다.
+- 회사는 처음에 플랫폼 설정과 서비스 의존성 문제라고 설명했다가 18일 사이버 공격을 확인했다.
+- 침해는 웹 서버 한 대로 한정됐지만, 공격자가 플랫폼에 저장된 일부 자격증명에 접근했을 가능성이 있다고 밝혔다.
+- 메일 흐름과 필터링은 정상이지만 로그, 메일박스 동기화, 관리 포털, 격리함이 내려갔고 포털·API 접근은 계속 막혀 있다.
+- 대응으로 내부 자격증명 교체, 고객 API 토큰 폐기, OAuth 토큰 무효화, 로컬 사용자 비밀번호 초기화를 했다.
+- N-able은 고객 데이터 유출 증거는 없고 최근 N-central 사건과도 무관하다고 했다.
+외부 SaaS 장애가 보안 사고로 바뀌는 경우가 잦으니, 연동 중인 서비스의 API 토큰은 사고 공지 즉시 재발급할 수 있게 관리해 두는 게 좋다.
+---
+title: 랜섬웨어 조직 Gentlemen, Nvidia를 유출 사이트에 올려... Nvidia "자사 시스템 영향 없어"
+category: IT
+importance: 2
+source: BleepingComputer
+url: https://www.bleepingcomputer.com/news/security/nvidia-investigating-gentlemen-ransomware-breach-claims/
+summary: 증거 없이 Nvidia를 피해자로 등록한 랜섬웨어 조직의 주장에 대해 Nvidia는 협력사 관련 사고를 조사 중이라고 밝혔다.
+detail: Gentlemen 랜섬웨어 조직이 다크웹 유출 사이트에 Nvidia를 올리고 11월 28일까지 카운트다운을 걸었지만 탈취 증거는 공개하지 않았다.
+- Nvidia는 자사 시스템과 네트워크가 영향을 받은 징후는 없으며, 제3자 협력사에 영향을 줬을 수 있는 사고를 조사하고 있다고 밝혔다.
+- Nvidia는 2026년 5월 GeForce NOW 지역 협력사 해킹으로 아르메니아 일부 사용자 정보가 노출된 일도 확인했다.
+- Gentlemen은 비공개 그룹으로 시작해 RaaS로 전환했으며, 제휴자에게 몸값의 최대 90%를 주고 1,100곳 이상 피해를 주장해 왔다.
+- 이중 갈취 방식이라 실제 데이터 공개 여부는 카운트다운 종료 시점에 드러날 전망이다.
+대형 벤더 침해 주장이 나올 때는 확인된 사실과 공격자 주장을 구분해서 보고, 협력사 경로를 통한 공급망 위험에 주목하면 된다.
+---
+title: Docker, AI 에이전트 시대 겨냥해 '신뢰' 중심 브랜드 개편... Sandboxes·AI Governance 전면에
+category: IT
+importance: 3
+source: Docker Blog
+url: https://www.docker.com/blog/meet-the-new-docker-built-to-run-on-trust/
+summary: Docker가 컨테이너는 그대로 두되, 스스로 판단하는 AI 에이전트를 격리·통제하는 회사로 정체성을 다시 잡았다.
+detail: Docker가 새 브랜드를 공개하며 에이전트 시대의 신뢰를 핵심 메시지로 내세웠다.
+- 컨테이너가 워크로드를 격리한다면, 스스로 결정하는 행위자인 에이전트에는 별도의 격리와 거버넌스가 필요하다는 논리다.
+- 전면에 내세운 제품은 코딩 에이전트용 격리 환경 Docker Sandboxes와 팀 전체의 에이전트를 관리하는 Docker AI Governance다.
+- 사이트 메뉴에는 MCP Enterprise Gateway, Hardened Images, Hub, Desktop, Offload도 함께 놓였다.
+- 컨테이너는 계속 핵심이며 개방성과 개발자 우선 원칙은 변하지 않는다고 강조했고, 고래 마스코트 Moby도 새로 디자인했다.
+- 가격이나 버전 관련 발표는 없었다.
+Docker를 쓰는 입장에서 당장 바뀌는 건 없지만, 사내에서 코딩 에이전트를 도입할 때 Sandboxes 같은 격리 실행 환경을 검토할 근거가 된다.
+---
+title: Anthropic 소속 수학자 "Claude로 리만 가설 Lean 증명 찾았다"... 같은 날 인간 단독 증명도 공개
+category: AI
+importance: 4
+source: TechCrunch
+url: https://techcrunch.com/2026/11/20/ai-claimed-a-solution-to-the-167-year-old-riemann-hypothesis-and-a-human-did-too/
+summary: 167년 된 난제에 AI 도움을 받은 Lean 형식 증명과 12년 작업의 인간 증명이 같은 날 나와 수학계가 검증에 들어갔다.
+detail: Anthropic에 고용된 수학자 Levent Alpöge가 Lean으로 컴파일되는 리만 가설 증명을 확보했다고 에세이로 발표했다.
+- 그는 증명을 Claude와 함께 찾았다고 밝혔고, 사람이 이해할 수 있는 설명 없이 공개하는 데 불편함을 느껴 해설을 쓰겠다고 했다.
+- Lean Zulip 스레드에서 수학자들이 검토 중이며, 대체로 형식화된 결과는 유지될 것으로 보는 분위기다. 다만 기사는 이를 검증 완료가 아닌 주장으로 다룬다.
+- Alpöge는 NYU의 Tristan Buckmaster와 함께 Navier-Stokes 방정식 관련 증명도 따로 냈다.
+- 같은 날 Stanford 박사후연구원 Alessandro Masullo가 일반화된 리만 가설 증명을 공개했고, AMS 회장 Ravi Vakil은 AI 없이 사람이 쓴 것이라고 강조했다. Masullo는 12년의 작업 결과라고 밝혔다.
+- 기사는 이를 Anthropic 상장 주간, 그리고 프런티어 AI 연구소와 수학자 간의 미해결 문제 경쟁 흐름 속에 놓았다.
+형식 검증기와 결합한 AI가 최고 난도 추론까지 손대기 시작했다는 신호라, 코드 검증·테스트 자동화 쪽 도구 발전 속도도 더 빨라질 것으로 볼 수 있다.
+---
+title: OpenAI 'Performance Factory' 공개... Codex 에이전트가 ChatGPT 성능 저하 원인 600건 이상 자동 규명
+category: AI
+importance: 4
+source: OpenAI
+url: https://openai.com/index/how-openai-performance-factory-keeps-chatgpt-fast/
+summary: 성능 알림이 울리면 에이전트가 원인을 조사해 수정안을 내고, 배포 후 회복까지 확인하는 사내 시스템의 구조와 성과가 공개됐다.
+detail: OpenAI가 Codex와 자사 모델로 성능 회귀를 자동으로 찾고 고치는 클라우드 시스템 Performance Factory를 소개했다.
+- 첫 워크플로인 Regression Workflow는 성능 알림이 오면 작업을 열고, 에이전트가 조사 후 수정안을 내 엔지니어 리뷰를 받으며, 다른 에이전트가 회복 여부를 확인한다.
+- 3개월 남짓 동안 1,700건 이상을 조사해 600건 넘게 원인을 규명했으며, 하루 약 17건의 자동 조사에 해당한다.
+- 원인 제안 100건을 사람이 검토한 결과 70%가 정확했고 30%는 보완이 필요하거나 인과를 충분히 밝히지 못했다.
+- 별도의 Codex 세션이 진단을 반박하려 시도하는 적대적 리뷰 단계와, 과다한 레플리카를 찾아내는 오토스케일링 적정화 스킬도 포함됐다.
+- 기존 성능 도구 30여 개와 조사 절차를 perf-forensics라는 공유 스킬로 묶어 에이전트가 쓰게 했다.
+운영 장애 분석을 에이전트에 맡기는 구체적 설계도라서, 모니터링 알림과 런북을 정리해 둔 팀이라면 비슷한 자동화를 작게 시도해 볼 만하다.
+---
+title: Apple, Mac을 대신 조작하는 자체 AI 에이전트 개발 중... macOS 27.3엔 타사 에이전트 경고 추가
+category: AI
+importance: 3
+source: TechCrunch
+url: https://techcrunch.com/2026/11/19/apple-may-be-developing-its-own-ai-agent-that-runs-your-mac/
+summary: Bloomberg가 Apple 채용 공고에서 컴퓨터를 쓰는 AI 에이전트 개발 정황을 포착했고, 동시에 타사 에이전트의 전체 권한 부여를 막는 경고가 준비 중이다.
+detail: Bloomberg가 Apple의 시니어 엔지니어링 매니저 채용 공고에서 컴퓨터를 사용하는 AI 에이전트 개발 정황을 발견했다.
+- 공고는 웹 브라우징, 앱 간 작업, 명령 실행, 코드 작성·디버깅, 서비스 호출을 개인정보를 지키며 수행하는 에이전트를 설명한다.
+- Bloomberg는 이르면 내년 말 출시를 검토하지만 아직 초기 단계라고 전했고, Apple은 TechCrunch 문의에 답하지 않았다.
+- macOS 27.3에는 타사 에이전트에 전체 접근 권한을 주지 말라는 경고가 들어갈 예정이다.
+- Apple은 10월 개발자들에게 이런 접근에 매우 명시적인 사용자 동작을 요구하는 통제를 추가하겠다고 밝힌 바 있다.
+- Meta, Anthropic, OpenAI 등이 이미 비슷한 에이전트 경쟁을 벌이고 있다.
+Mac에서 에이전트 도구로 개발하는 경우 앞으로 권한 부여 절차가 더 까다로워질 수 있다는 점을 알아 두면 된다.
+---
+title: Tencent, Hy4 flash 가중치 공개... 총 224B·활성 12B 파라미터, 100만 토큰 컨텍스트
+category: AI
+importance: 3
+source: TechNode
+url: https://technode.com/2026/11/19/tencent-releases-hy4-flash-model-weights-for-local-deployment/
+summary: Tencent가 앱·API 출시 이틀 만에 Hy4 flash의 표준·FP8·베이스 모델 가중치를 로컬 배포용으로 풀었다.
+detail: Tencent가 Hy4 flash 모델을 앱과 클라우드 API로 출시한 지 이틀 만에 가중치를 공개했다.
+- 표준 모델, FP8 양자화 버전, 추가 학습용 베이스 모델 세 가지를 내려받을 수 있다.
+- 텍스트와 이미지를 입력받으며 컨텍스트는 최대 100만 토큰이다.
+- 전체 파라미터 약 2,240억 개 중 토큰당 약 120억 개만 활성화되는 구조다.
+- 리서치, 문서 작성, 스프레드시트 작업 같은 일상 업무를 겨냥했다.
+- 배포 자료는 Tencent Hy License로 공개돼 상업 이용 조건은 라이선스를 따로 확인해야 한다.
+사내 문서 처리용 로컬 모델을 찾고 있다면 후보가 될 수 있지만, 라이선스와 GPU 요구량부터 확인하는 게 순서다.
+---
+title: Google, 인터랙티브 월드 모델 Genie 4를 Gemini API로 개방
+category: AI
+importance: 2
+source: Google Blog
+url: https://blog.google/innovation-and-ai/technology/developers-tools/genie-4-in-gemini-api/
+summary: 텍스트나 이미지로 720p·24fps의 조작 가능한 세계를 만드는 Genie 4를 개발자가 Gemini API와 AI Studio에서 쓸 수 있게 됐다.
+detail: Google이 출시 하루 만에 Genie 4를 Gemini API의 Interactions API와 Google AI Studio로 개발자에게 열었다.
+- 모델 ID는 genie-4이며, 720p 24fps의 연속된 세계를 주변음·효과음·대사가 포함된 네이티브 오디오와 함께 생성한다.
+- 텍스트 프롬프트, 참조 이미지, 또는 둘 다를 입력으로 받는다.
+- 실시간 키보드 조작과 텍스트 지시로 날씨, 조명, 사물, 이벤트를 바꿀 수 있고, Gemini 추론이 세계 상태의 일관성을 유지한다.
+- 활용처로 인터랙티브 경험 프로토타이핑, 공간 설계 시각화, 로봇·AI 에이전트 훈련을 제시했고, 모든 출력에 SynthID 워터마크가 들어간다.
+- 가격은 블로그에 없고 Gemini API 문서에서 확인하라고 안내했다.
+백엔드 실무와는 거리가 있지만, 에이전트 훈련용 시뮬레이션 환경이 API 상품으로 나오는 흐름으로 참고하면 된다.
