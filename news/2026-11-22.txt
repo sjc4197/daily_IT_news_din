@@ -1,0 +1,128 @@
+overview: 오늘은 백엔드 핵심 스택(Spring Cloud·NGINX) 보안 패치와 AI 에이전트가 공격·방어 양쪽에서 판을 바꾸는 흐름이 겹친 날이다.
+- 백엔드: Spring Cloud 2026.0.0이 Spring Boot 4.2.0 기반으로 나오며 Gateway·Config Server·Eureka 등 CVE 12건을 함께 고쳤다.
+- 보안: NGINX2Root 취약점이 HTTP/2 경유 RCE와 컨테이너 탈출까지 시연됐고, Bell Canada·FBI NCIC 침해 소식도 이어졌다.
+- AI 공격: 중국 연계 공격자의 Cairn 에이전트가 MONAI Label 제로데이를 스스로 찾아 11분 만에 서버를 장악했고, Meta Muse는 악성 웹페이지 하나로 장악되는 시연이 나왔다.
+- AI 모델·연구: Inkling 2 Mini가 활성 3.4B 파라미터로 27B급 성능을 냈고, METR은 판단형 과제에서 AI가 아직 사람에 못 미친다고 갱신했다.
+Spring/Docker 운영 입장에서는 NGINX 이미지 버전과 Spring Cloud CVE 영향 범위 확인이 오늘 최우선이다.
+---
+title: Spring Cloud 2026.0.0(Paddington) GA... Spring Boot 4.2.0 기반, CVE 12건 수정
+category: IT
+importance: 5
+source: Spring Blog
+url: https://spring.io/blog/2026/11/20/spring-cloud-2026-0-0-has-been-released/
+summary: Spring Boot 4.2.0 기반 새 릴리스 트레인이 나왔고 Gateway·Config Server·Eureka 등에서 보안 취약점 12건이 함께 수정됐다.
+detail: Spring Cloud 2026.0.0(코드명 Paddington)이 11월 20일 GA로 Maven Central에 배포됐다. Spring Boot 4.2.0 기반이며 대부분 모듈이 5.1.0으로 올라갔다.
+- 보안 수정 12건: Gateway 4건(CVE-2026-59425~59428), Eureka 대시보드 자격증명 노출(59433), Kubernetes ConfigMap/Secret YAML을 통한 RCE(59434), Config Server 자격증명 노출·SSH 호스트 키 미검증·Git/SSH 중간자 공격(59435~59437), Function 2건, Stream 역직렬화 1건이다.
+- Spring Cloud Bus는 독립 프로젝트에서 빠져 Spring Cloud Stream 5.1.0의 bus 패키지로 들어갔고, 아티팩트 좌표는 그대로다.
+- 신규 기능은 Config Server의 Google Cloud Storage 백엔드, Config 클라이언트 OAuth 2 지원, Gateway MVC 웹소켓, Kubernetes Configuration Watcher 고가용성 등이다.
+- Function의 RSocket·gRPC 모듈, reactive Kafka Binder, Schema Registry는 deprecated 처리됐다.
+Config Server·Gateway·Eureka를 쓰는 서비스라면 업그레이드 전이라도 해당 CVE 영향 여부부터 확인해야 한다.
+---
+title: NGINX 'NGINX2Root' 취약점 5건 패치... HTTP/2 경유 RCE, 컨테이너 탈출까지 시연
+category: IT
+importance: 5
+source: BleepingComputer
+url: https://www.bleepingcomputer.com/news/security/critical-nginx-nginx2root-bugs-let-attackers-hijack-servers/
+summary: NGINX 1.30.7·1.31.9에서 메모리 손상 RCE 취약점들이 수정됐고 Censys는 약 880만 개 서비스가 잠재 노출됐다고 집계했다.
+detail: NGINX에서 'NGINX2Root'로 불리는 메모리 손상 취약점들이 공개돼 Open Source 1.30.7(stable)·1.31.9(mainline), NGINX Plus 37.0.8.1·37.3.0.1에서 수정됐다.
+- CVE-2026-123007은 흐름 제어 버그로 1.9.5부터 1.31.8까지 영향을 받고, CVE-2026-123633은 HTTP/2 연결을 받아 백엔드로 프록시할 때의 use-after-free로 1.19.7~1.31.8이 대상이다.
+- Wiz는 정적 파일 서버에서 HTTP/2+TLS 경유 비인증 RCE를 시연했고, Xint는 Linux 커널 SCTP 취약점과 엮어 Docker 컨테이너에서 호스트 root까지 탈출했다.
+- 이 밖에 HTTP/3 프록시, 서브리퀘스트 DNS 처리, 메일 프록시 인증 관련 use-after-free 3건과 TLS 1.3 요청 본문 무한루프 DoS(CVE-2026-118899)도 함께 고쳐졌다.
+- Censys는 11월 19일 기준 약 880만 개 서비스가 CVE-2026-123007에 잠재 노출됐다고 봤고, 비기본 설정에서만 악용 가능하다는 반론도 있다.
+- 즉시 업그레이드가 어렵다면 HTTP/2 비활성화가 임시 완화책이지만 두 핵심 취약점만 막는다.
+Docker·K8s 앞단에 NGINX나 nginx 기반 Ingress를 쓰고 있다면 이미지 버전부터 확인하고 패치 일정을 잡아야 한다.
+---
+title: 중국 연계 공격자의 AI 에이전트 Cairn, MONAI Label 제로데이를 스스로 찾아 11분 만에 서버 장악
+category: IT
+importance: 4
+source: AWS Security Blog
+url: https://aws.amazon.com/blogs/security/chinese-nexus-actors-cairn-ai-agents-found-a-zero-day-on-their-own/
+summary: Amazon 위협 인텔리전스가 오픈소스 AI 침투 테스트 프레임워크 Cairn이 실전 공격 중 의료 영상 AI 앱의 제로데이를 자율적으로 발견·악용한 사례를 공개했다.
+detail: Amazon 위협 인텔리전스는 9월 10일 인증 없이 노출된 Cairn 서버를 발견해 공격자의 작업 기록을 분석했다. 프롬프트는 중국어 간체, 타임스탬프는 중국 표준시였고, 중국 연계로 중간 수준 신뢰도로 판단했다.
+- 9월 8일부터 약 48시간 동안 중국 본토 외 동아시아 대학들의 IP를 노렸고 목표는 셸 획득이었다.
+- 에이전트는 의료 영상 AI 앱 MONAI Label 업로드 엔드포인트의 파일명 경로 조작 취약점을 찾아내 API 탐색부터 임의 파일 쓰기까지 약 11분 만에 도달했다.
+- 이후 sitecustomize.py에 리버스 셸을 심고 학습 API를 호출해 root 셸을 얻었으며, 같은 소프트웨어를 쓰는 두 번째 대학망도 침해된 것으로 추정된다.
+- 반면 인증 없는 Redis에 16시간·148단계를 시도하고 GPU 서버에 3만 건 넘는 계정 조합을 대입한 작업은 실패했다.
+- 메인테이너는 수정과 GitHub 권고 GHSA-qc22-rmgc-vg94를 냈다.
+AI 에이전트가 실시간으로 제로데이를 찾는 단계에 온 만큼, 인증이 꺼진 채 외부에 노출된 업로드 API가 있는지 점검하는 게 기본이다.
+---
+title: Bell Canada, 'agentic' 공격자에게 기업 고객 데이터 탈취당했다고 확인
+category: IT
+importance: 3
+source: BleepingComputer
+url: https://www.bleepingcomputer.com/news/security/bell-canada-says-agentic-hacker-stole-enterprise-customer-data/
+summary: 11월 17일 Maximo 사전 운영(pre-production) 환경이 침해돼 기업 고객의 업무 연락처와 티켓 정보 등이 유출됐다.
+detail: 캐나다 통신사 Bell Canada가 'agentic' 위협 행위자가 11월 17일 자사 시스템에 침입해 기업 고객 데이터를 가져갔다고 고객들에게 통지했다.
+- 침해 대상은 통신 회선 주문·개통에 쓰는 Maximo 시스템의 사전 운영 환경이었다.
+- 이름·직함·회사 이메일·전화번호·주소 같은 업무 연락처, 티켓 제목에 담긴 정보, 일부 네트워크 장비 IP가 노출됐을 수 있다.
+- Bell은 자격증명이나 고민감 개인정보, 첨부 파일은 포함되지 않았고 서비스 영향도 없다고 밝혔다.
+- 공격 주체와 피해 고객 수, 유출 규모는 공개되지 않았으며, 침해 지표는 고객사와 캐나다 사이버보안센터에만 공유하고 있다.
+- BleepingComputer는 'agentic'이라는 표현이 AI 도구 사용을 시사한다고 해석했다.
+운영이 아닌 개발·스테이징 환경도 실데이터를 품고 있으면 똑같이 털린다는 사례로, 사내 스테이징 DB의 실데이터 사용 여부를 돌아볼 만하다.
+---
+title: FBI 두 달 새 또 침해 보도... 이번엔 전국 수사 공유 DB NCIC
+category: IT
+importance: 3
+source: BleepingComputer
+url: https://www.bleepingcomputer.com/news/security/fbi-reportedly-hacked-again-this-time-targeting-nationwide-police-database/
+summary: CNN 보도에 따르면 FBI가 수배·실종자·체포영장 등을 공유하는 National Crime Information Center 침해 정황을 조사하고 있다.
+detail: CNN은 11월 20일 조사 상황을 보고받은 두 명을 인용해 FBI가 NCIC(National Crime Information Center) 침해 정황을 조사 중이라고 보도했다.
+- NCIC는 수배자·실종자, 체포영장, 도난 차량·총기, 보호명령 등 형사사법 기록을 전국 수사기관이 공유하는 FBI 운영 DB다.
+- 침입은 최근 며칠 사이 발견됐지만 발생 시점, 침입 경로, 데이터 유출 여부는 불분명하다.
+- FBI는 공식 확인을 하지 않았고 CNN과 BleepingComputer의 문의에도 답하지 않았다.
+- 앞서 9월경 ShinyHunters가 미패치 Oracle PeopleSoft 취약점으로 FBIJobs.gov 관련 제3자 플랫폼을 침해했다고 주장한 바 있으나, 이번 건과의 연관성은 확인되지 않았다.
+공공기관 시스템도 두 달 새 연속 침해될 수 있다는 점에서, eGov 기반 공공 SI 환경의 패치 주기와 외부 노출 점검이 중요하다는 걸 다시 보여준다.
+---
+title: Thinking Machines, 루프형 트랜스포머 오픈 가중치 모델 Inkling 2 Mini 공개
+category: AI
+importance: 4
+source: Thinking Machines Lab
+url: https://thinkingmachines.ai/news/inkling-2-mini/
+summary: 총 26.4B·활성 3.4B 파라미터 MoE 모델로 중간 레이어를 세 번 반복 실행하며, Apache 2.0으로 공개돼 MacBook에서도 돌아간다.
+detail: Thinking Machines Lab이 11월 20일 오픈 가중치 모델 Inkling 2 Mini를 공개했다. 24개 레이어를 6개씩 4블록으로 나누고 가운데 두 블록을 토큰마다 세 번 반복하는 루프형 구조다.
+- MoE 구조로 총 26.4B, 활성 3.4B 파라미터이며 루프를 포함하면 토큰당 5.4B 가중치가 활성화된다.
+- SWE-bench Verified 79.2%(bash only), DeepSWE v1.1 48.2%, BrowseComp 79.0%를 기록했고, 100B 미만 오픈 모델 중 DeepSWE·Vals Index 1위라고 밝혔다.
+- Artificial Analysis 지능 지수 20으로 Qwen3.8 27B(xhigh)와 같은 점수를 약 5배 적은 활성 파라미터로 냈고, 과제당 비용은 0.59달러로 약 6배 저렴했다.
+- 가중치는 대부분 NVFP4로 메모리 약 20GB이며, M5 Pro 48GB MacBook Pro에서 오프라인 데모를 돌렸다. 컨텍스트는 100만 토큰이다.
+- 다만 MultiChallenge 등 지시 준수 계열 벤치마크에서는 Qwen3.8-27B에 뒤졌다.
+사내 코드를 외부 API로 보내기 어려운 환경이라면 로컬 코딩 보조 모델 후보로 시험해 볼 만하다.
+---
+title: 보안 연구진, 악성 웹페이지 하나로 Meta AI 에이전트 Muse 장악... 대화·메모리 유출 시연
+category: AI
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/a-single-malicious-webpage-let.html
+summary: NebuSec이 Muse의 내장 브라우저 결함과 Linux 커널 취약점을 엮어 사용자 클라우드 머신 전체를 장악하는 공격을 시연했고, 공개 전 모두 수정됐다.
+detail: 보안 업체 NebuSec은 Muse 에이전트가 악성 페이지를 여는 것만으로 사용자의 대화 기록과 저장된 메모리를 승인 프롬프트 없이 외부 서버로 빼내고 변조할 수 있음을 보였다.
+- Muse 내장 브라우저 결함과 Linux 커널 취약점을 연결해 사용자 클라우드 머신의 자격증명 저장소, 저장 파일, Sentinel 감시 계층까지 장악했다.
+- 침해 범위는 해당 사용자의 VM에 머물렀고 공유 서버나 다른 사용자 머신으로는 넘어가지 못했다.
+- 실제 사용자 공격이 아닌 실험실 시연이며, NebuSec은 보고 후 모든 익스플로잇이 수정됐다고 밝혔다. Meta는 공식 입장을 내지 않았다.
+- Muse는 9월 8일 출시된 Meta의 개인 AI 에이전트로, 연결된 계정을 통해 구매 등 실제 행동을 할 수 있다.
+웹을 읽는 에이전트에 자격증명을 쥐여 주면 웹페이지 하나가 공격 벡터가 된다는 점을 사내 에이전트 도입 시 설계 원칙으로 삼아야 한다.
+---
+title: Signal, 모바일 스크린샷 기본 차단... "OS 내장 AI 에이전트는 실존적 위협"
+category: AI
+importance: 3
+source: TechCrunch
+url: https://techcrunch.com/2026/11/21/signal-restricts-mobile-screenshots-as-it-confronts-existential-threat-of-ai-surveillance/
+summary: Signal이 Android·iOS 앱에서 스크린샷을 기본 제한해 OS 수준 AI 에이전트가 대화 화면을 읽지 못하게 했지만 스스로도 불완전한 대책이라고 인정했다.
+detail: Signal이 Android와 iOS 앱에서 사용자의 스크린샷 촬영을 기본적으로 제한한다고 발표했다. Windows 앱에서는 이미 기본 차단하고 있었다.
+- Meredith Whittaker 회장은 에이전트형 AI가 통합된 운영체제를 "실존적 위협"이라고 표현했다.
+- Windows·Android·macOS/iOS가 AI 에이전트에게 화면 내용을 스캔하게 하면서 앱이 독자적으로 프라이버시를 보장하기 어려워졌다는 주장이다.
+- 사용자는 설정을 끌 수 있지만, 그러면 프라이버시 보장이 깨진다고 경고했다.
+- Whittaker는 이번 조치가 AI 에이전트가 앱 데이터에 접근하는 다른 경로까지 막지는 못하는 불완전한 해법이라고 인정했다.
+OS 차원의 AI 에이전트가 화면을 읽는 시대에는 민감 정보를 다루는 웹·앱 화면에도 노출 최소화 설계를 고민해야 한다.
+---
+title: METR, AI 시간 지평 그래프 대폭 갱신... 판단형 과제에선 여전히 사람에 못 미쳐
+category: AI
+importance: 3
+source: MIT Technology Review
+url: https://www.technologyreview.com/2026/11/20/1149399/the-most-misunderstood-graph-in-ai-just-got-a-major-update/
+summary: METR이 판단력이 필요한 개방형 과제를 추가해 능력 추세를 다시 측정했고, 일부는 여전히 지수적으로 늘지만 평가 설계 같은 과제는 뒤처졌다.
+detail: AI 평가 기관 METR이 Q4 2026 능력 업데이트에서 유명한 시간 지평(time horizon) 그래프를 갱신했다. 원래 그래프는 최전선 모델이 완수하는 과제 길이가 약 4개월마다 두 배가 된다고 보여줬다.
+- 이번에는 사람이 훨씬 오래 걸리는 과제와 개방형·판단 중심 과제를 추가했다.
+- 일부 능력은 여전히 지수적 궤적을 따르지만, 모델은 코딩보다 판단이 필요한 과제에서 약했다.
+- AI가 설계한 평가 중 METR 직원이 연구에 쓸 만하다고 본 것은 하나도 없었고, 철학적 논증 채점에서도 사람 수준에 못 미쳤다.
+- 다만 Opus 5.5 같은 최신 모델은 평가 설계 과제에서 기준선 바로 위에 도달했으며, 1년 전에는 모든 모델이 명확히 기준 아래였다.
+- 새 과제의 완료 시간은 대부분 추정치이고 채점자가 한 명이라는 한계도 있다.
+코딩 자동화는 빠르게 늘지만 설계·판단은 여전히 사람 몫이라는 점에서, 개발자는 요구사항 정의와 아키텍처 판단 역량에 더 무게를 둘 때다.
