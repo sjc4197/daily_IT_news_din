@@ -1,0 +1,151 @@
+overview: 오늘은 AI 추론 업체의 프롬프트 탈취와 업로드 파일 처리 취약점이 겹쳐, AI·백엔드 모두 데이터가 지나가는 경로를 다시 봐야 하는 날이다.
+- AI 보안: Dragos 실험으로 추론 업체 3곳이 수개월간 프롬프트를 탈취당한 사실이 드러나 OpenRouter가 125개 엔드포인트를 ZDR에서 뺐다.
+- 취약점: Ghostscript 샌드박스 탈출이 업로드·메일·인쇄 경로로 원격 악용 가능함이 시연됐고, GPGME·Ruby도 메모리 손상 패치를 냈다.
+- 인프라: OpenAI는 PostgreSQL 읽기 레플리카 2대 동시 장애로 ChatGPT 실패율이 75%까지 오른 장애 원인을 공개했다.
+- 엔드포인트·경계: SonicWall은 Gen 6 방화벽 패치를 끊었고, Windows 잠금 화면 우회 제로데이 FastUnlock은 아직 패치가 없다.
+- 업계: 1Password는 비밀번호를 넘기지 않는 에이전트 로그인을 내놨고, Cognition은 750억 달러 가치로 추가 투자를 협상 중이다.
+Spring·Docker 환경에서는 업로드 변환에 쓰는 컨테이너 속 Ghostscript 버전 확인과 LLM 프롬프트 속 비밀값 제거를 오늘 가장 먼저 챙기자.
+---
+title: Dragos 카나리아 실험서 AI 추론 업체 3곳 수개월간 프롬프트 탈취 확인... OpenRouter, 125개 엔드포인트 ZDR 자격 박탈
+category: AI
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html
+summary: 프롬프트에 심은 가짜 자격증명 약 200만 건을 추적한 결과, 공격자가 AI 추론 업체 세 곳 내부에서 수개월간 요청 데이터를 훔쳐본 사실이 드러났다.
+detail: 산업보안 업체 Dragos가 7월부터 11월까지 고유 링크와 자격증명을 심은 프롬프트 약 200만 건을 여러 AI 추론 업체에 흘려보내, 누가 그 비밀을 실제로 쓰는지 추적했다.
+- 공격자는 세 곳의 추론 업체 내부에 수개월간 머물렀고, 가장 이른 침해는 7월 중순에 시작됐다. 업체들은 연구진이 알려주기 전까지 몰랐다.
+- 가장 큰 사례에서는 10월 말 특정 시간대에 한 업체로 보낸 AWS 키 수백 개가 모두 탈취됐고, 공격자는 이를 이용해 AWS API를 수만 번 호출했다.
+- 한 공격자는 11월 1일 AI 침투 프레임워크 ARTEX로 탈취한 키의 유효성을 확인했으며, user agent "artex-agent", "artex-judge-r121"을 탐지 룰에 넣으라고 권고했다.
+- OpenRouter는 업체 3곳과 엔드포인트 125개를 Zero Data Retention 대상에서 빼고 영향 가능 고객에게 통보했으며, 자사 자체 침해는 없었다고 밝혔다.
+- Phala는 10월 21일부터 11월 8일까지 DeepSeek V4 Flash 요청이 노출됐다고 공개했고, Together AI는 AI 코딩 에이전트가 공개 GitHub에 올린 자격증명 때문에 저장된 프롬프트 샘플이 유출됐다고 밝혔다.
+- 이름이 공개되지 않은 중국 AI 연구소는 데이터 수집 거부나 ZDR로 표시된 요청까지 포함해 심어둔 링크를 대량으로 열어봤다.
+LLM API에 코드·설정·키가 섞인 프롬프트를 보내는 서비스라면 라우터나 재판매 업체를 거치지 말고 1차 공급자나 자체 호스팅을 쓰고, 프롬프트 속 비밀값 제거부터 점검해야 한다.
+---
+title: Ghostscript 샌드박스 탈출 RCE(CVE-2026-125396) 시연... 인쇄 작업·메일 첨부·웹 업로드만으로 원격 코드 실행
+category: IT
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/researchers-demonstrate-ghostscript.html
+summary: 폰트 로딩 코드의 use-after-free로 -dSAFER 샌드박스를 끄는 취약점이 업로드 파일 처리 경로를 통해 원격으로 악용 가능함이 시연됐다.
+detail: 보안업체 pwn.ai가 Ghostscript의 폰트 로딩 use-after-free 취약점 CVE-2026-125396을 이용해 조작된 문서로 -dSAFER 샌드박스 검사를 무력화하는 공격을 공개했다.
+- CVE 분류상은 로컬 취약점이지만, 공유 인쇄 큐 익명 작업, Roundcube로 처리되는 메일 첨부, WordPress 플러그인 Forminator·Essential Addons for Elementor의 공개 업로드 폼 등 약 10개 앱에서 로그인 없이 명령 실행에 성공했다.
+- ImageMagick, Pillow, libvips 등은 파일 이름이 .png·.jpg·.pdf여도 내용이 PostScript·EPS면 Ghostscript로 넘길 수 있다.
+- 수정 버전은 9월 8일 나온 Ghostscript 10.08.0이며, Debian 12는 취약, Amazon Linux와 SUSE 일부는 패치 대기 상태로 조사됐다.
+- 실제 공격 보고는 아직 없고, 공개 PoC는 메모리 기법만 보여주며 10.08.0에서는 실패한다.
+- 호스트만 업데이트해서는 컨테이너 이미지에 번들된 Ghostscript가 바뀌지 않는다는 점이 강조됐다.
+파일 업로드 후 썸네일·PDF 변환을 하는 서비스라면 Docker 이미지 안의 Ghostscript·ImageMagick 버전부터 확인하고 이미지 재빌드를 해야 한다.
+---
+title: OpenAI, 11월 21일 ChatGPT 실패율 75% 장애 원인 공개... PostgreSQL 유지보수 중 읽기 레플리카 2대 동시 다운
+category: IT
+importance: 4
+source: OpenAI Status
+url: https://status.openai.com/incidents/01JMYB602A6H2E04Y1497J434X/write-up
+summary: 인증을 담당하는 Primary API 서비스의 PostgreSQL 읽기 레플리카 두 대가 유지보수 중 동시에 죽으면서 API와 ChatGPT 요청 상당수가 실패했다.
+detail: OpenAI가 11월 21일 오후 1시 48분부터 5시 21분(PT)까지 이어진 API·ChatGPT 장애의 사후 분석을 공개했다.
+- 유료·무료 ChatGPT 모두 실패율이 최대 75%까지 치솟았다.
+- 원인은 Primary API 서비스가 쓰는 PostgreSQL 서비스의 정기 유지보수였고, 이 과정에서 읽기 레플리카 두 대가 동시에 실패했다.
+- Primary API 서비스는 전체 스택의 사용자 인증과 서비스 간 인증을 담당해 장애가 전방위로 번졌다.
+- 레플리카 복구와 다른 리전 대체 레플리카 투입이 실패했고, 레플리카 지연이 끝없이 늘어나다가 같은 리전에 새 레플리카 두 대를 투입하고서야 완화됐다.
+- 후속 조치로 유사 유지보수 중단, 커넥션 churn 감소 설정, 레플리카 트래픽을 비율 단위로 옮기는 기능 플래그, 전체 쿼리를 primary로 보내는 테스트 등을 진행했다.
+- 유지보수 사전 검토 절차와 hot standby 여유 용량 확보, 인프라 전반의 이중화 검토도 예고했다.
+MariaDB 레플리카에 읽기를 분산하는 구조라면 레플리카 동시 장애 시 primary로 즉시 우회할 수 있는지, 인증 같은 공통 경로가 단일 DB에 묶여 있지 않은지 점검해 볼 사례다.
+---
+title: GnuPG, GPGME 이중 해제 취약점 CVE-2026-129975 경고... 악성 OpenPGP 키 하나로 앱 메모리 손상
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/gnupg-warns-critical-gpgme-flaw-could.html
+summary: 비정상적으로 긴 사용자 ID를 가진 OpenPGP 키로 GPGME에서 double free를 일으킬 수 있으며, 2.3.1과 1.24.4에서 수정됐다.
+detail: GnuPG 프로젝트가 GPGME 라이브러리의 read_status()와 read_colon_line()에서 발생하는 double free 취약점 CVE-2026-129975를 공개했다.
+- 버퍼 크기 조정 중 오류가 나면 이미 해제한 포인터를 다시 해제하는 구조로, 긴 사용자 ID를 가진 악성 키로 촉발된다.
+- 2.3.0 이전 GPGME를 쓰는 모든 소프트웨어가 영향을 받으며, 공유 라이브러리·Windows DLL·정적 링크 모두 해당된다.
+- 수정 버전은 GPGME 2.3.1이고 레거시 브랜치는 1.24.4이며, Windows용 Gpg4win 5.1.2에 수정본이 포함됐다.
+- 대부분의 메일 클라이언트, 다수 XMPP 클라이언트, Samba, Gpg4win 등이 영향 대상으로 거론됐다.
+- 실제 악용 보고는 없지만 프로젝트는 원격 코드 실행 가능성을 배제할 수 없다고 밝혔고, 임시 우회책은 제시하지 않았다.
+- 정적 링크나 번들된 사본은 시스템 패키지 업데이트로 고쳐지지 않아 각 앱의 재빌드 릴리스가 필요하다.
+서버에서 GPG로 파일 서명 검증이나 암호화를 하는 배치가 있다면 OS 패키지와 컨테이너 이미지의 gpgme 버전을 함께 확인하자.
+---
+title: Ruby, 정규식·대소문자 변환 취약점 7건 패치... Ruby2Shell(CVE-2026-132825)은 기본 Rails에 인증 없이 도달 가능
+category: IT
+importance: 3
+source: SecurityWeek
+url: https://www.securityweek.com/ruby-patches-ruby2shell-vulnerability-that-could-lead-to-rce/
+summary: 단일 바이트 인코딩 문자열의 대소문자 변환에서 힙 버퍼 오버플로가 발생하며, Ruby 4.0.10·3.4.13·3.3.14로 업데이트해야 한다.
+detail: Ruby가 정규식 엔진과 문자열 대소문자 변환에서 발견된 취약점 7건을 수정했고, 이 중 5건은 원격 코드 실행 PoC가 존재한다.
+- 핵심인 CVE-2026-132825(CVSS 7.4)는 ISO-8859-1, Windows-1252 같은 단일 바이트 인코딩에서 독일어 "ß"를 대문자 "SS"로 바꿀 때 출력 버퍼를 1바이트 넘겨 쓰는 문제다.
+- Veria Labs는 Rails와 classic 방식 Sinatra의 기본 설정에서 인증 없는 공격자가 이 경로에 도달할 수 있다고 밝혔고, GitHub Enterprise Server도 영향 대상으로 꼽았다.
+- Chatwoot, GitLab, Mastodon, OpenProject, Discourse 기본 이미지는 이미 패치를 적용했다.
+- WatchTowr는 실제 운영 환경에서 코드 실행까지 가려면 메모리 배치 조작과 ASLR 우회 등이 필요해 어렵고, 현실적인 결과는 서비스 거부일 가능성이 높다고 봤다.
+- 나머지 RCE PoC 4건은 double free, 정수 오버플로 2건, 힙 버퍼 오버플로이며 CVE 번호는 아직 배정 전이다.
+- 실제 악용 보고는 없다.
+Ruby를 직접 쓰지 않더라도 사내에서 운영하는 GitLab이나 Ruby 기반 도구가 있다면 버전을 확인할 필요가 있다.
+---
+title: SonicWall, Gen 6 방화벽 치명적 취약점도 더는 패치 안 해... "AI 공격 시대, 즉시 교체하라"
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/sonicwall-warns-gen-6-firewalls-wont.html
+summary: SonicOS 6.x를 쓰는 Gen 6 장비는 치명적 취약점이 나와도 보안 패치를 받지 못하며, SonicWall은 인터넷 경계에서 즉시 빼라고 권고했다.
+detail: SonicWall이 Generation 6 방화벽 사용 고객 전체에게 장비를 즉시 퇴역·교체하고 인터넷 경계에 노출하지 말라고 공지했다.
+- 회사는 AI 보조 공격을 이유로 들며, 인터넷에 노출된 Gen 6 장비가 적극적으로 표적이 될 것으로 예상했다.
+- 대상은 SonicOS 6.x 장비로 TZ300~TZ600, NSA 2600~6600, NSa 2650~6650, SuperMassive 9200~9800, NSv 가상 어플라이언스 등이 포함되며, 권장 대체품은 SonicOS 8 기반 Gen 8이다.
+- 교체 전까지는 WAN 쪽 HTTPS·SSH·SNMP 관리 차단, SSL VPN 비활성화 또는 출발지 제한, 모든 원격·관리자 계정 MFA 적용과 로컬 비밀번호 재설정을 권고했다.
+- 기사에 인용된 Mandiant M-Trends 2026은 평균 악용 소요 시간을 약 -7일, 즉 패치 공개 전에 이미 악용되는 수준으로 집계했다.
+- 특정 CVE나 실제 악용 사례는 언급되지 않았다.
+사내나 고객사 망 경계에 오래된 SonicWall 장비가 있다면 모델과 OS 버전을 확인해 교체 일정을 잡아야 한다.
+---
+title: 패치 없는 Windows 제로데이 'FastUnlock' 공개... 잠긴 PC 앞에서 로그인 없이 프로그램 실행
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/new-unpatched-windows-0-day-fastunlock.html
+summary: 물리적으로 접근 가능한 공격자가 잠금 화면에서 내레이터와 Microsoft 계정 복구 옵션을 이용해 제한된 계정으로 프로그램을 실행할 수 있다.
+detail: "MSNightmare"로 알려진 연구자가 GitHub에 짧은 글과 영상으로 Windows 잠금 화면 우회 제로데이 FastUnlock을 공개했다.
+- 공격에는 물리적 접근, 잠금 화면 복구 옵션으로 접근 가능한 Microsoft 계정, Windows 내레이터가 필요하며 모든 PC에서 통하지는 않는다.
+- ThreatLocker는 공개 당일 재현에 성공했고, 획득한 계정은 관리자가 아닌 WSIAccount라는 제한 계정이었다.
+- BitLocker 암호화 자체를 깨거나 키를 빼내지는 않지만, 부팅 시 TPM으로 자동 잠금 해제되는 흔한 구성에서는 이미 열린 디스크 위에서 동작한다.
+- Microsoft의 패치나 권고문, 영향 버전 목록은 아직 없고 실제 악용도 보고되지 않았다.
+- BitLocker 시작 PIN 설정, 자리를 비울 때 종료나 최대 절전 사용, 노트북 물리 보안 강화가 권고됐다.
+개발용 노트북을 들고 다닌다면 잠금 화면만 믿지 말고 BitLocker 시작 PIN을 켜 두는 게 현실적인 대응이다.
+---
+title: 1Password for Agents 공개... AI 에이전트가 비밀번호를 보지 않고도 로그인 대행
+category: AI
+importance: 3
+source: 1Password
+url: https://1password.com/personal-ai-agent-integrations
+summary: 에이전트가 로그인 폼에 도달하면 사용자가 자기 기기에서 승인하고 1Password가 비밀번호나 OTP를 대신 채워 넣는 방식이다.
+detail: 1Password가 AI 에이전트용 로그인 기능 1Password for Agents를 Individual·Family 요금제에 포함해 공개했다.
+- 에이전트는 자격증명을 받거나 보지 않고 로그인할 수 있으며, 사용자가 자기 기기에서 요청을 승인하면 1Password가 비밀번호나 일회용 코드를 자동 입력한다.
+- 에이전트를 연결해도 금고 전체에 접근 권한이 생기지 않고, 일치하는 로그인이 여러 개면 사용자가 고를 수 있다.
+- 현재 연동 목록에는 Meta의 Muse, SpaceXSI Grok Bot, Perplexity 등이 있고 다른 에이전트는 대기 명단을 받고 있다.
+- 소개 문구에는 Anthropic의 Claude도 연동 대상으로 언급됐지만 페이지의 파트너 카드에는 아직 없다.
+- 에이전트를 연결하지 않으면 기존과 똑같이 쓸 수 있다.
+최근 은행들이 에이전트 사용 시 해킹 책임을 고객에게 넘기는 흐름에서, 에이전트에 비밀번호를 직접 주지 않는 구조가 표준이 될지 지켜볼 만하다.
+---
+title: Devin 개발사 Cognition, 750억 달러 가치로 20억 달러 이상 추가 투자 협상
+category: AI
+importance: 2
+source: Bloomberg via Yahoo Finance
+url: https://finance.yahoo.com/technology/ai/articles/cognition-talks-75-billion-value-204755865.html
+summary: 9월 480억 달러 가치로 투자받은 지 두 달 만에 기업가치를 750억 달러로 올려 올해 세 번째 투자 유치를 추진 중이다.
+detail: Bloomberg에 따르면 AI 코딩 에이전트 Devin을 만드는 Cognition이 750억 달러 기업가치로 20억 달러 이상을 조달하는 협상을 진행 중이다.
+- 성사되면 올해 세 번째 투자 유치로, Cognition은 2026년에만 이미 30억 달러 넘게 조달했다.
+- 직전 라운드는 9월에 480억 달러 가치로 20억 달러 이상을 받은 것이었다.
+- 회사는 9월에 연환산 매출 10억 달러 달성이 가능하다고 밝혔으며, 이는 4개월 전보다 약 두 배 늘어난 수준이다.
+- 경쟁사로는 올해 초 SpaceX가 600억 달러에 인수한 Cursor가 꼽혔고, 고객사로 Citigroup과 Nvidia가 언급됐다.
+- 협상은 진행 중이라 조건이 바뀔 수 있고, Cognition은 논평 요청에 응하지 않았다.
+AI 주가가 크게 흔들린 주간에도 코딩 에이전트 업체 가치가 계속 오르는 건, 개발 업무 자동화에 대한 기업 수요가 그만큼 강하다는 신호다.
+---
+title: AI 마이크로드라마 스타트업 Shortical, 실제 배우 얼굴 라이선스로 만든 전편 AI 드라마 공개
+category: AI
+importance: 1
+source: TechCrunch
+url: https://techcrunch.com/2026/11/21/is-selling-an-ai-version-of-your-face-to-this-microdrama-startup-the-future-of-hollywood/
+summary: 이스라엘 배우 Aki Avni의 얼굴을 라이선스해 전부 AI로 제작한 마이크로드라마 "Inevitable"이 LA에서 공개됐다.
+detail: 구독형 마이크로드라마 스타트업 Shortical이 배우 Aki Avni의 얼굴을 라이선스해 전편을 AI로 제작한 작품 "Inevitable"을 로스앤젤레스에서 공개했다.
+- 작품 속에서 Avni는 영화 스튜디오에 자기 얼굴을 라이선스하는 자신의 버전을 연기한다.
+- 회사 웹사이트는 "LICENSE YOUR FACE" 신청을 받고 있지만, 아직 이 경로로 체결된 계약은 없다고 밝혔다.
+- Avni의 보수는 공개되지 않았고, 회사는 비슷한 비AI 배역의 업계 기준에 맞췄다고만 설명했다.
+- 첫 7~10화는 무료이고 이후 소액 월정액으로 나머지를 보는 구조이며, 시청자 대부분은 미국에 있다.
+- 기사가 인용한 Rest of World 보도에 따르면 중국 마이크로드라마 업체들은 얼굴 사용권에 15~700달러를 지급하고 있다.
+초상권 라이선스가 상품화되는 흐름이라, 사용자 이미지를 다루는 서비스라면 AI 학습·생성 활용 동의 항목을 약관에 어떻게 둘지 고민할 시점이다.
