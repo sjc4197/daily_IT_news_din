@@ -1,0 +1,152 @@
+overview: 오늘은 패치 없는 레거시 라이브러리 악용과 AI 기반 공격 가속, 그리고 이를 막을 런타임 방어 도구가 한꺼번에 나온 보안 중심의 날이다.
+- 보안: 2008년 이후 방치된 ASP.NET 모듈 Idunno.AntiCsrf의 인증 없는 RCE가 실제 악용 중이고, Okta는 법무팀 사칭 보이스피싱 그룹의 새 유출 사이트를 경고했다.
+- 방어: OpenAI·Cisco가 eBPF로 재시작 없이 취약 경로를 막는 Shirudo를 공개했고, 영국 NCSC는 AI 공격이 새 취약점이 아니라 묵은 약점을 빠르게 뚫는다고 짚었다.
+- AI 모델: GPT-6.2 Sol이 ChatGPT 채팅에 배포됐고 Zhipu GLM-5.4, Ant Group LingSante가 나왔지만, ShellBench는 최상위 에이전트도 일상 과제의 3분의 1 이상을 실패한다고 보여줬다.
+- 인프라: Amazon은 Decart 기술을 75억 달러에 사들여 Trainium 판매를 준비하고, 데이터센터 전력은 태양광+저장장치 논쟁으로 번지고 있다.
+Spring·Docker·K8s 운영 입장에서는 사내 레거시 서드파티 라이브러리 점검과 외부 노출 API·기본 계정 정리부터 하고, Shirudo는 긴급 CVE 대응용으로 눈여겨보자.
+---
+title: ASP.NET 안티-CSRF 라이브러리 Idunno.AntiCsrf 역직렬화 RCE(CVE-2026-131914) 실제 악용... 패치 없음
+category: IT
+importance: 5
+source: The Hacker News
+url: https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html
+summary: 2008년 이후 방치된 ASP.NET WebForms용 안티-CSRF 모듈에서 인증 없이 POST 한 번으로 원격 코드 실행이 가능한 취약점이 실제 공격에 쓰이고 있다.
+detail: Google Cloud·Mandiant 조사팀이 서드파티 ASP.NET 안티-CSRF 모듈 Idunno.AntiCsrf에서 CVSS 9.3의 치명적 취약점 CVE-2026-131914를 공개했다.
+- 영향 버전은 0.9.1.0과 0.9.1 Beta이며, 원인은 CSRF 폼 데이터를 MAC·서명 검증 없이 ObjectStateFormatter로 역직렬화하는 구조다.
+- 인증이나 유효한 CSRF 토큰 없이 HTTP POST 한 번으로 IIS 워커 프로세스(w3wp.exe) 권한의 코드 실행이 가능하다.
+- Mandiant는 실제 공격에서 악용이 관측됐다고 밝혔고 악용 가능성을 High로 평가했다.
+- 프로젝트가 2008년 12월 이후 갱신되지 않아 공식 패치는 없으며, System.Web.Helpers.AntiForgery나 ASP.NET Core IAntiforgery 등으로 교체하라는 권고다.
+- Web.config와 bin 폴더에서 Idunno.AntiCsrf·AntiCsrfModule 흔적을 찾고, 침해가 의심되면 machineKey와 DB 자격증명을 교체해야 한다.
+Java 스택이 주력이어도 사내에 남은 레거시 .NET WebForms 시스템이 있다면 오래된 서드파티 DLL부터 전수 점검할 사례다.
+---
+title: OpenAI·Cisco, eBPF로 패치 전 취약 경로를 막는 오픈소스 런타임 Shirudo 공개
+category: IT
+importance: 5
+source: OpenAI
+url: https://openai.com/index/introducing-shirudo/
+summary: 재시작 없이 실행 중인 Linux 시스템의 취약 코드 경로를 eBPF 실드로 차단해 패치 배포 전까지 시간을 버는 오픈소스 런타임이다.
+detail: OpenAI와 Cisco가 패치가 배포되기 전까지 실행 중인 Linux 시스템을 보호하는 오픈소스 런타임 Shirudo(일본어로 방패)를 공개했다.
+- eBPF 기반 실드가 시스템 재시작 없이 취약한 코드 경로를 차단하며, 적용 전 모니터링 모드로 영향을 먼저 확인할 수 있다.
+- 통제된 시험에서 Codex가 생성한 실드가 Java Base64 디코더에 입력 검사를 추가해, 실행 중인 Elasticsearch 서비스에 대한 Java4Shell 익스플로잇을 재시작 없이 막았다.
+- 실드는 암호학적으로 서명·검증된 뒤 로드되고, TPM으로 실드 적용·해제 이력을 검증 가능하게 남긴다.
+- 라이선스는 BSD 2-Clause이며 BPF 프로그램은 BSD·GPL 듀얼 라이선스다. 12월 15일 기술 웨비나가 예정돼 있다.
+JVM 기반 서비스를 Docker·K8s 노드에서 운영하는 입장에서 긴급 CVE 대응 시 재배포 전 임시 차단 수단으로 PoC 해볼 만하다.
+---
+title: 영국 NCSC "AI 기반 사이버 공격 뚜렷한 증가"... 새 취약점이 아니라 묵은 약점이 빨리 뚫린다
+category: IT
+importance: 4
+source: TechCrunch
+url: https://techcrunch.com/2026/11/24/uk-warns-ai-driven-cyberattacks-are-exposing-years-of-weak-security/
+summary: 자율 침투 테스트 도구가 공격에 쓰이면서 수년간 방치된 약한 비밀번호·노출 시스템이 몇 분 만에 공략되고 있다고 영국 NCSC가 경고했다.
+detail: 영국 국가사이버보안센터(NCSC)가 최근 몇 달간 AI 기반 사이버 공격이 뚜렷하게 늘었다고 밝혔다.
+- 9월 이후 자율 해킹 도구(침투 테스트 도구 포함)가 침입과 서비스 중단을 일으킨 사고를 여러 건 확인했다.
+- 악용된 취약점 중 새로운 것은 없었고, 달라진 것은 악용 속도라고 NCSC는 설명했다.
+- 올해 공개된 Artex, Cairn 같은 오픈소스 자율 침투 도구는 누구나 무료로 내려받을 수 있다.
+- 에이전트형 도구는 인터넷에 노출된 시스템을 찾아 약하거나 추측 쉬운 비밀번호를 대입하고, 개발자용 API 엔드포인트를 악용한다.
+- NCSC는 AI가 기존 보안 통제를 무력화하는 것이 아니며 기본기가 어느 때보다 중요하다고 강조했다.
+외부 노출된 관리 콘솔, 기본 계정, 인증 없는 내부 API를 다시 훑어보는 것이 가장 비용 대비 효과가 큰 대응이다.
+---
+title: Okta, ShinyHunters 연계 보이스피싱 그룹이 새 유출 사이트 INCEPTION으로 리브랜딩했을 가능성 제기
+category: IT
+importance: 3
+source: The Hacker News
+url: https://thehackernews.com/2026/11/okta-links-shinyhunters-associated.html
+summary: 음성 피싱과 MFA 코드 탈취 키트를 쓰는 O-UNC-053 그룹이 법무팀을 사칭한 도메인으로 공격을 이어가며 새 유출 사이트를 운영하는 정황이 포착됐다.
+detail: Okta 위협 인텔리전스팀이 3월부터 추적해 온 보이스피싱 클러스터 O-UNC-053이 INCEPTION이라는 이름으로 리브랜딩했을 수 있다고 밝혔다.
+- 전화로 접근한 뒤 피싱 키트로 자격증명과 MFA 코드를 가로채는 방식이며, 패스키나 Okta FastPass 같은 피싱 저항형 인증은 우회하지 못한다.
+- 11월 16일 기준 INCEPTION 유출 사이트에 O-UNC-053 표적 기업의 데이터가 올라와 있었다.
+- 10월부터 legal-기업명.com 같은 법무 테마 도메인을 쓰기 시작했고, Palo Alto Unit 42는 10월 이후 70개 이상의 법무 테마 도메인을 보고했다.
+- 기술·의료·금융·소매·법률 등 여러 업종이 표적이며, 데이터의 진위와 운영 주체는 아직 확인되지 않았다.
+사내 SSO에 OTP·SMS 기반 MFA만 쓰고 있다면 패스키 등 피싱 저항형 인증으로의 전환 근거로 삼을 만하다.
+---
+title: 일상 업무 에이전트 벤치마크 ShellBench 공개... 최상위 모델도 3분의 1 이상 실패
+category: AI
+importance: 4
+source: TechCrunch
+url: https://techcrunch.com/2026/11/24/even-the-best-ai-agents-struggle-with-everyday-life/
+summary: 1천만 건 이상의 실제 에이전트 상호작용으로 만든 벤치마크에서 OpenAI·Anthropic·Meta의 최상위 모델이 모두 3분의 1 넘게 실패했다.
+detail: OpenClaw Foundation, Hugging Face, Red Hat, UC Berkeley 등이 함께 만든 개인 에이전트 벤치마크 ShellBench 연구 결과가 공개됐다.
+- 1천만 건 이상의 익명화된 실제 에이전트 상호작용을 바탕으로 일상 업무 과제를 구성했다.
+- OpenAI·Anthropic·Meta의 최상위 모델이 모두 3분의 1 이상 실패했고, 전체 시도의 15.7%가 안전 요건을 하나 이상 위반했다.
+- 최고점 모델 GPT-6 Astra도 같은 과제를 세 번 반복해 모두 통과한 비율은 절반에 못 미쳤다.
+- 인보이스 과제에서는 40.3%가 중복·오류 결제를 권했고, 아이 하원 일정을 제대로 반영하지 못한 비율은 79.5%였다.
+- 같은 모델도 하니스에 따라 점수가 크게 달라졌는데, Meta Muse Wonder Full은 Pi에서 56%, Claude Code에서 38.1%를 기록했다.
+업무 자동화에 에이전트를 붙일 때는 결제·권한 같은 되돌리기 어려운 동작에 반드시 사람 승인 단계를 두어야 한다는 근거다.
+---
+title: OpenAI, GPT-6.2 Sol을 ChatGPT 채팅 탭에 배포... 안전 정책 준수율 91~94%로 상승
+category: AI
+importance: 4
+source: MacRumors
+url: https://www.macrumors.com/2026/11/23/openai-gpt-6-2-sol-chatgpt/
+summary: Work·Codex에 먼저 나온 GPT-6.2가 일주일 만에 일상 대화용으로 조정돼 ChatGPT Plus·Pro·Business·Enterprise에 풀렸다.
+detail: OpenAI가 채팅 탭용으로 조정한 GPT-6.2 Sol을 Plus, Pro, Business, Enterprise 요금제에 배포하기 시작했다.
+- 일상 대화에 맞춰 튜닝됐으며 세부 지시가 많은 복잡한 요청과 온라인 정보 검색 처리가 개선됐다.
+- GPT-6 대비 사진 속 세부 요소를 더 잘 잡아내고, 후속 제안을 언제 할지 판단하는 능력도 나아졌다고 한다.
+- 까다로운 대화에서 안전 정책을 지킨 비율이 GPT-6의 77~80%에서 91~94%로 올랐다.
+- Work·Codex용 GPT-6.2는 일주일 전에 나왔고 그대로 유지되며, Free·Go 요금제에서는 쓸 수 없다.
+업무에 ChatGPT를 쓰고 있다면 기존 프롬프트 결과가 달라질 수 있으니 자주 쓰는 템플릿을 한 번 재점검해 두자.
+---
+title: Amazon, Decart의 AI 최적화 기술·핵심 인력을 75억 달러에 인수... Trainium 외부 판매 대비
+category: AI
+importance: 4
+source: TechCrunch
+url: https://techcrunch.com/2026/11/23/amazon-snaps-up-decarts-ai-optimization-tech-for-7-5b-as-it-prepares-to-sell-trainium-chips/
+summary: 여러 칩에서 AI 모델을 효율적으로 돌리는 Decart Optimization Stack과 창업팀을 확보해 자체 칩 Trainium 판매 경쟁력을 높이려는 행보다.
+detail: Amazon이 이스라엘 스타트업 Decart의 상당 부분을 인수하기로 했으며, Bloomberg에 따르면 인수가는 75억 달러다.
+- 인수 대상은 Decart Optimization Stack(DOS) 기술과 창업팀, AI 연구원·엔지니어들이다.
+- DOS는 AI 모델이 Nvidia, Amazon, Google 하드웨어에서 효율적으로 돌아가도록 돕는 소프트웨어다.
+- Decart는 실시간 인터랙티브 월드 모델 Oasis 3와 AI 영상 생성 도구로 알려진 회사다.
+- Amazon은 자체 데이터센터에서 쓰던 Trainium 칩을 Nvidia 대항마로 고객에게 판매할 준비를 하고 있다.
+AWS에서 추론 워크로드를 돌린다면 향후 Trainium 기반 인스턴스가 GPU 대비 비용 선택지로 커질 가능성을 염두에 둘 만하다.
+---
+title: Google DeepMind, Gemini 4 에이전트 팀으로 양자 알고리즘 개선... Lean으로 결과 형식 검증
+category: AI
+importance: 3
+source: Google DeepMind
+url: https://deepmind.google/blog/finding-faster-quantum-algorithms-with-agents-and-formal-verification/
+summary: 에이전트 팀이 찾은 개선안을 정리 증명기 Lean으로 검증해 핵융합 시뮬레이션 회로 비용을 11.8배 줄였다.
+detail: Google DeepMind와 Google Quantum AI가 Gemini 4 에이전트 팀으로 잘 알려진 양자 알고리즘을 개선한 연구를 공개했다(arXiv 2611.09822).
+- 각 결과는 형식 정리 증명기 Lean으로 증명했고, Lean 라이브러리와 문제 명세, 검증된 해답을 오픈소스로 풀었다.
+- 관성 가둠 핵융합 회로의 계산 비용을 11.8배 줄였고, 오류 정정 큐비트 메모리를 5,650개에서 4,338개로 낮췄다.
+- Cytochrome P450 분자 시뮬레이션은 2.5배 개선되며 큐비트가 481개에서 333개로 줄었고, 특정 arcsin 루틴은 290배 빨라졌다.
+- 문제마다 독립된 에이전트 팀을 배치하고 4시간마다 가상 학회 형태로 결과를 공유하게 했다.
+당장 실무 영향은 없지만, 에이전트 결과를 형식 검증으로 걸러내는 구조는 코드 생성 에이전트 검증에도 참고할 만한 패턴이다.
+---
+title: Zhipu, 100만 토큰 컨텍스트·비전 지원 GLM-5.4를 코딩 플랜에 출시
+category: AI
+importance: 3
+source: TechNode
+url: https://technode.com/2026/11/23/zhipu-rolls-out-glm-5-4-with-vision-and-million-token-context/
+summary: 중국 Zhipu가 루프 트랜스포머 방식을 키워 온 신모델 GLM-5.4를 기술 문서 없이 코딩 구독 서비스에 먼저 풀었다.
+detail: 중국 AI 기업 Zhipu가 코딩 구독 서비스 Coding Plan에 GLM-5.4를 출시했다.
+- 비전 입력을 지원하고 컨텍스트 창은 100만 토큰이다.
+- 모델명을 glm-5.4로 지정하면 쓸 수 있고, V2·V3·팀 플랜 구독자는 GLM-5.4 사용 한도가 50% 늘어난다.
+- 회사 측은 지난 3개월간 모델 규모와 Loop Transformer 방식을 함께 키워 왔다고 밝혔다.
+- 보도 시점까지 파라미터 수, 아키텍처, 벤치마크 등 기술 자료는 공개되지 않았다.
+성능 수치가 나오기 전이라 도입 판단은 이르고, 중국 모델의 루프형 아키텍처 경쟁 흐름 정도로 체크해 두면 된다.
+---
+title: Ant Group, 의료 특화 공개 가중치 모델 LingSante 2종을 MIT 라이선스로 공개
+category: AI
+importance: 2
+source: TechNode Global
+url: https://technode.global/2026/11/24/ant-group-open-weight-lingsante-medical-ai-models/
+summary: 560B MoE 텍스트 모델과 124B 멀티모달 모델을 Hugging Face inclusionAI에 올렸으며 벤치마크는 아직 없다.
+detail: Ant Group이 의료용 AI 모델 LingSante 계열 2종을 공개 가중치로 내놨다.
+- LingSante-3.1-flash는 의료 추론용 텍스트 모델로 총 560B 파라미터, 토큰당 약 25B 활성, 최대 100만 토큰 컨텍스트다.
+- LingSante-3.1-air-VL은 텍스트·이미지 멀티모달 모델로 총 124B, 토큰당 5.5B 활성, 256,000 토큰 컨텍스트다.
+- 두 저장소 모두 MIT 라이선스이며 Hugging Face inclusionAI 계정에 게시됐다.
+- Ant의 헬스 서비스 Afu는 사용자 1억 5천만 명, 하루 약 2천만 건 상담을 처리한다고 회사는 밝혔지만 독립 검증된 수치는 아니다.
+의료 도메인 과제가 있다면 상업 이용이 자유로운 MIT 라이선스라는 점에서 후보 모델로 메모해 둘 만하다.
+---
+title: Crusoe 투자사 G2VP "AI 데이터센터 전력, 가스보다 태양광+장주기 저장장치가 답"
+category: IT
+importance: 2
+source: TechCrunch
+url: https://techcrunch.com/2026/11/24/why-a-crusoe-investor-is-betting-on-solar-and-batteries-to-power-future-ai-data-centers/
+summary: Crusoe 시리즈 C를 이끈 G2 Venture Partners가 AI 데이터센터 전력원으로 천연가스 대신 태양광과 장주기 저장장치를 밀고 있다.
+detail: Crusoe 시리즈 C를 주도한 G2 Venture Partners(G2VP)의 파트너 Brook Porter가 AI 데이터센터 전력 전략을 밝혔다.
+- 미국 전력망은 거의 성장하지 않던 상태에서 매년 수 GW씩 늘어나는 상황으로 바뀌었고, 기업들은 가스 발전기를 사거나 빌려 전력을 확보해 왔다.
+- Porter는 전 세계 천연가스 발전 설비 증가가 연 60~70GW인 반면 태양광은 1TW를 훌쩍 넘는다며 태양광+저장장치를 주장했다.
+- G2VP는 데이터센터 투자가 2030년까지 4조 달러를 넘을 것으로 본다.
+- 리튬이온은 24시간 전력용으로는 비싸다며 Form Energy, Antora Energy 같은 장주기 저장 기업을 대안으로 꼽았다.
+개발 실무와 직접 연결되진 않지만, 클라우드·GPU 요금이 결국 전력 비용에 묶여 있다는 배경으로 알아둘 만하다.
